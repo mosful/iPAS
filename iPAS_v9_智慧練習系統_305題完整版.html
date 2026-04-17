@@ -1,0 +1,1805 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iPAS AI 應用規劃師 ─ 智慧練習系統 v9</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07090f;--surface:#0d1120;--surface2:#131929;--surface3:#1a2236;
+  --border:#1e2d47;--border2:#253450;
+  --accent:#4c8dff;--accent2:#00e5b0;--warn:#ff5f5f;--gold:#f0c040;
+  --text:#dde4f0;--text-dim:#8fa8cc;--text-muted:#3d5278;
+  --r:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+#app{display:flex;min-height:100vh;}
+#sidebar{width:232px;min-width:232px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;transition:transform .28s cubic-bezier(.4,0,.2,1);}
+.logo{padding:22px 18px 18px;border-bottom:1px solid var(--border);}
+.logo-tag{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:var(--accent);background:rgba(76,141,255,.1);border:1px solid rgba(76,141,255,.25);border-radius:4px;padding:3px 8px;letter-spacing:2px;display:inline-block;margin-bottom:8px;}
+.logo h1{font-size:14px;font-weight:700;line-height:1.45;color:var(--text);}
+.logo h1 em{color:var(--accent2);font-style:normal;}
+nav{flex:1;padding:14px 10px;overflow-y:auto;}
+.nav-section{margin-bottom:18px;}
+.nav-label{font-size:9px;font-weight:700;color:var(--text-muted);letter-spacing:2.5px;text-transform:uppercase;padding:0 8px 6px;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:7px;cursor:pointer;font-size:13px;color:var(--text-dim);transition:all .18s;margin-bottom:1px;border:1px solid transparent;}
+.nav-item:hover{background:var(--surface2);color:var(--text);}
+.nav-item.active{background:rgba(76,141,255,.1);color:var(--accent);border-color:rgba(76,141,255,.2);}
+.nav-icon{font-size:15px;width:18px;text-align:center;}
+.nav-badge{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:9px;background:rgba(0,229,176,.1);color:var(--accent2);border:1px solid rgba(0,229,176,.2);border-radius:3px;padding:1px 5px;}
+.sidebar-stats{padding:14px;border-top:1px solid var(--border);}
+.stats-row{display:flex;gap:6px;}
+.stat-box{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:9px 8px;text-align:center;}
+.stat-box .v{font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600;color:var(--accent2);}
+.stat-box .l{font-size:9px;color:var(--text-muted);margin-top:1px;}
+#main{margin-left:232px;flex:1;display:flex;flex-direction:column;min-height:100vh;}
+#topbar{position:sticky;top:0;z-index:50;background:rgba(7,9,15,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;}
+.page-title{font-size:14px;font-weight:600;}
+.page-title span{color:var(--text-dim);font-weight:400;margin-left:8px;font-size:12px;}
+.top-btns{display:flex;gap:7px;align-items:center;}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;border:none;transition:all .18s;font-family:inherit;}
+.btn-ghost{background:transparent;color:var(--text-dim);border:1px solid var(--border);}
+.btn-ghost:hover{background:var(--surface2);color:var(--text);}
+.btn-primary{background:var(--accent);color:#fff;}
+.btn-primary:hover{background:#6aa3ff;transform:translateY(-1px);}
+.btn-sm{padding:5px 10px;font-size:11px;}
+#content{flex:1;padding:28px;max-width:920px;}
+.page{display:none;}
+.page.active{display:block;}
+.hero{border-radius:var(--r);padding:32px;margin-bottom:24px;background:linear-gradient(135deg,rgba(76,141,255,.07),rgba(0,229,176,.04));border:1px solid var(--border2);position:relative;overflow:hidden;}
+.hero::after{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(76,141,255,.06),transparent 70%);}
+.hero h2{font-size:24px;font-weight:700;margin-bottom:6px;}
+.hero h2 em{color:var(--accent);font-style:normal;}
+.hero p{color:var(--text-dim);font-size:13px;line-height:1.7;max-width:480px;}
+.hero-actions{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;}
+.btn-hero{padding:10px 22px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .2s;display:inline-flex;align-items:center;gap:7px;}
+.btn-hero-p{background:var(--accent);color:#fff;}
+.btn-hero-p:hover{background:#6aa3ff;transform:translateY(-1px);}
+.btn-hero-s{background:var(--surface2);color:var(--text-dim);border:1px solid var(--border2);}
+.btn-hero-s:hover{color:var(--text);border-color:var(--accent);}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px;}
+.card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.card-title{font-size:11px;font-weight:700;color:var(--text-dim);letter-spacing:.5px;text-transform:uppercase;}
+.subj-list{display:flex;flex-direction:column;gap:6px;}
+.subj-item{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--surface2);border-radius:7px;cursor:pointer;border:1px solid transparent;transition:all .18s;}
+.subj-item:hover{border-color:var(--accent);background:rgba(76,141,255,.04);}
+.subj-name{font-size:13px;font-weight:500;}
+.subj-cnt{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);margin-top:3px;}
+.tag{font-size:9px;padding:2px 7px;border-radius:20px;font-weight:700;letter-spacing:.5px;}
+.t1{background:rgba(76,141,255,.14);color:var(--accent);}
+.t2{background:rgba(0,229,176,.12);color:var(--accent2);}
+.tg{background:rgba(240,192,64,.12);color:var(--gold);}
+.prog-list{display:flex;flex-direction:column;gap:10px;}
+.prog-item .prog-lbl{display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;color:var(--text-dim);}
+.prog-bar{height:5px;background:var(--surface3);border-radius:3px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .9s ease;}
+.source-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:24px;}
+.source-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:10px;}
+.source-card-top{display:flex;align-items:flex-start;gap:12px;}
+.source-icon{width:38px;height:38px;min-width:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.si-pdf{background:rgba(255,95,95,.12);}
+.si-q{background:rgba(76,141,255,.12);}
+.si-ref{background:rgba(0,229,176,.1);}
+.source-info{flex:1;min-width:0;}
+.source-name{font-size:13px;font-weight:600;line-height:1.4;word-break:break-all;}
+.source-meta{font-size:11px;color:var(--text-muted);margin-top:3px;}
+.source-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.source-tag{font-size:10px;padding:2px 8px;border-radius:4px;font-weight:600;}
+.source-btn{font-size:11px;padding:5px 10px;border-radius:6px;cursor:pointer;border:none;font-family:inherit;background:var(--surface2);color:var(--text-dim);border:1px solid var(--border);transition:all .15s;text-align:center;}
+.source-btn:hover{color:var(--accent);border-color:var(--accent);}
+.exam-hd{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;}
+.exam-meta{display:flex;align-items:center;gap:16px;}
+.em-item{text-align:center;}
+.em-v{font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:700;}
+.em-v.a{color:var(--accent);}
+.em-l{font-size:10px;color:var(--text-muted);margin-top:1px;}
+.em-sep{width:1px;height:34px;background:var(--border);}
+#timer{font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:700;color:var(--accent2);}
+#timer.urgent{color:var(--warn);animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:24px;margin-bottom:14px;animation:fadeUp .25s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.q-meta{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.q-num{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:2px;}
+.q-source-tag{font-size:9px;padding:2px 7px;border-radius:3px;font-weight:700;letter-spacing:.5px;}
+.q-text{font-size:15px;line-height:1.75;font-weight:500;margin-bottom:20px;}
+.opts{display:flex;flex-direction:column;gap:8px;}
+.opt{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-radius:8px;border:1px solid var(--border);cursor:pointer;transition:all .18s;background:var(--surface2);font-size:13px;line-height:1.55;}
+.opt:hover{border-color:var(--accent);background:rgba(76,141,255,.05);}
+.opt.sel{border-color:var(--accent);background:rgba(76,141,255,.1);}
+.opt.ok{border-color:var(--accent2);background:rgba(0,229,176,.08);}
+.opt.no{border-color:var(--warn);background:rgba(255,95,95,.08);}
+.opt-k{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;width:26px;height:26px;min-width:26px;display:flex;align-items:center;justify-content:center;border-radius:5px;background:var(--border);color:var(--text-dim);transition:all .18s;}
+.opt.sel .opt-k{background:var(--accent);color:#fff;}
+.opt.ok .opt-k{background:var(--accent2);color:#fff;}
+.opt.no .opt-k{background:var(--warn);color:#fff;}
+.exp-box{margin-top:14px;padding:14px;background:rgba(0,229,176,.04);border:1px solid rgba(0,229,176,.18);border-radius:8px;font-size:12px;line-height:1.7;color:var(--text-dim);display:none;}
+.exp-box.show{display:block;animation:fadeUp .2s ease;}
+.exp-box strong{color:var(--accent2);}
+.exam-nav{display:flex;align-items:center;justify-content:space-between;margin-top:20px;}
+.result-hero{text-align:center;padding:44px 28px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:20px;}
+.ring-wrap{width:130px;height:130px;margin:0 auto 20px;position:relative;}
+.ring-wrap svg{transform:rotate(-90deg);}
+.ring-bg{fill:none;stroke:var(--surface3);stroke-width:7;}
+.ring-fill{fill:none;stroke-width:7;stroke-linecap:round;transition:stroke-dashoffset 1.1s ease;}
+.ring-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
+.ring-num{font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:700;}
+.ring-sub{font-size:10px;color:var(--text-muted);}
+.result-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+.rs{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;text-align:center;}
+.rs .v{font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:700;margin-bottom:3px;}
+.rs .l{font-size:11px;color:var(--text-muted);}
+.rev-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:10px;}
+.rev-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;margin-bottom:10px;}
+.rb-ok{background:rgba(0,229,176,.12);color:var(--accent2);}
+.rb-no{background:rgba(255,95,95,.12);color:var(--warn);}
+.study-tab-nav{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap;}
+.stab-btn{padding:7px 14px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--text-dim);transition:all .18s;font-family:inherit;}
+.stab-btn:hover{color:var(--text);border-color:var(--accent);}
+.stab-btn.active{background:rgba(76,141,255,.12);color:var(--accent);border-color:var(--accent);}
+.study-chapter{display:none;}
+.study-chapter.active{display:block;}
+.chapter-header{background:linear-gradient(135deg,rgba(76,141,255,.08),rgba(0,229,176,.05));border:1px solid var(--border2);border-radius:var(--r);padding:20px 22px;margin-bottom:18px;}
+.chapter-header h3{font-size:16px;font-weight:700;margin-bottom:4px;}
+.chapter-header p{font-size:13px;color:#b0c8e8;line-height:1.6;}
+.chapter-badge{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:2px;padding:2px 8px;border-radius:3px;margin-bottom:8px;}
+.cb-sci1{background:rgba(76,141,255,.12);color:var(--accent);}
+.cb-ref{background:rgba(0,229,176,.1);color:var(--accent2);}
+.study-section-title{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--text);margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border2);}
+.sst-icon{font-size:16px;}
+.sst-badge{font-family:'IBM Plex Mono',monospace;font-size:9px;padding:1px 6px;border-radius:3px;background:rgba(76,141,255,.1);color:var(--accent);}
+.kv-table{width:100%;border-collapse:collapse;margin-bottom:16px;font-size:13px;}
+.kv-table th{background:var(--surface2);color:#b0c8e8;font-weight:600;padding:8px 12px;text-align:left;font-size:11px;letter-spacing:.5px;border-bottom:2px solid var(--border2);}
+.kv-table td{padding:9px 12px;vertical-align:top;line-height:1.6;border-bottom:1px solid var(--border);color:#b0c8e8;}
+.kv-table tr:last-child td{border-bottom:none;}
+.kv-table tr:hover td{background:rgba(76,141,255,.03);}
+.kv-table .kv-key{font-weight:600;color:var(--text);white-space:nowrap;width:28%;min-width:120px;}
+.kv-table .kv-en{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted);display:block;margin-top:2px;}
+.kv-table .hot{color:var(--warn);font-size:10px;margin-left:4px;}
+.kv-table .note{background:rgba(0,229,176,.05);border-left:2px solid rgba(0,229,176,.3);padding:6px 10px;border-radius:0 4px 4px 0;margin-top:4px;font-size:11px;color:var(--accent2);}
+.cmp-table{width:100%;border-collapse:collapse;margin-bottom:16px;font-size:13px;}
+.cmp-table th{background:var(--surface2);color:#b0c8e8;font-weight:600;padding:8px 12px;text-align:center;font-size:11px;letter-spacing:.5px;border-bottom:2px solid var(--border2);}
+.cmp-table th:first-child{text-align:left;}
+.cmp-table td{padding:9px 12px;vertical-align:top;line-height:1.6;border-bottom:1px solid var(--border);color:#b0c8e8;text-align:center;}
+.cmp-table td:first-child{font-weight:600;color:var(--text);text-align:left;}
+.cmp-table tr:last-child td{border-bottom:none;}
+.cmp-table tr:hover td{background:rgba(76,141,255,.03);}
+.cmp-table .yes{color:var(--accent2);}
+.cmp-table .no{color:var(--warn);}
+.formula-box{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:12px 16px;margin-bottom:12px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--accent);text-align:center;}
+.formula-label{font-size:10px;color:var(--text-muted);font-family:'Noto Sans TC',sans-serif;margin-top:4px;text-align:center;}
+.src-ref{display:inline-flex;align-items:center;gap:4px;font-size:9px;padding:1px 6px;border-radius:3px;background:rgba(0,229,176,.1);color:var(--accent2);border:1px solid rgba(0,229,176,.2);vertical-align:middle;}
+.stag{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px;letter-spacing:.5px;}
+.stag-official{background:rgba(76,141,255,.15);color:#7ab4ff;border:1px solid rgba(76,141,255,.3);}
+.stag-mock{background:rgba(240,192,64,.14);color:#f0c040;border:1px solid rgba(240,192,64,.3);}
+.stag-sci1{background:rgba(76,141,255,.1);color:var(--accent);}
+.stag-sci2{background:rgba(0,229,176,.1);color:var(--accent2);}
+.stag-both{background:rgba(160,120,255,.1);color:#b08fff;border:1px solid rgba(160,120,255,.25);}
+.stag-115{background:rgba(255,165,0,.12);color:#ffaa33;border:1px solid rgba(255,165,0,.3);}
+.scard-official{border-left:3px solid var(--accent);}
+.scard-mock{border-left:3px solid var(--gold);}
+.legend{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--text-dim);padding:4px 10px;border-radius:5px;background:var(--surface2);border:1px solid var(--border);}
+.legend-dot{width:8px;height:8px;border-radius:50%;display:inline-block;}
+.hbg{display:none;position:fixed;top:14px;left:14px;z-index:200;background:var(--surface);border:1px solid var(--border);border-radius:7px;width:38px;height:38px;align-items:center;justify-content:center;cursor:pointer;font-size:16px;}
+#overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:90;}
+#overlay.show{display:block;}
+@media(max-width:768px){
+  #sidebar{transform:translateX(-100%);}
+  #sidebar.open{transform:none;}
+  #main{margin-left:0;}
+  #content{padding:14px;}
+  .grid2{grid-template-columns:1fr;}
+  .hbg{display:flex;}
+  .result-stats{grid-template-columns:1fr 1fr;}
+  #topbar{padding:0 14px 0 56px;}
+}
+</style>
+</head>
+<body>
+<button class="hbg" onclick="toggleSB()">☰</button>
+<div id="overlay" onclick="closeSB()"></div>
+<div id="app">
+<aside id="sidebar">
+  <div class="logo">
+    <div class="logo-tag">iPAS · 初級</div>
+    <h1>AI 應用規劃師<br><em>智慧練習系統</em></h1>
+  </div>
+  <nav>
+    <div class="nav-section">
+      <div class="nav-label">主選單</div>
+      <div class="nav-item active" onclick="gp('home',this)"><span class="nav-icon">🏠</span>首頁總覽</div>
+      <div class="nav-item" onclick="gp('exam',this)"><span class="nav-icon">📝</span>模擬考試</div>
+      <div class="nav-item" onclick="gp('practice',this)"><span class="nav-icon">🎯</span>分科練習</div>
+      <div class="nav-item" onclick="gp('review',this)"><span class="nav-icon">🔁</span>錯題複習</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">學習資源</div>
+      <div class="nav-item" onclick="gp('study',this)"><span class="nav-icon">📖</span>考試重點</div>
+      <div class="nav-item" onclick="gp('sources',this)">
+        <span class="nav-icon">📁</span>學習資源庫
+        <span class="nav-badge">8</span>
+      </div>
+      <div class="nav-item" onclick="gp('settings',this)"><span class="nav-icon">⚙️</span>個人設定</div>
+    </div>
+  </nav>
+  <div class="sidebar-stats">
+    <div class="stats-row">
+      <div class="stat-box"><div class="v" id="s-done">0</div><div class="l">已答題</div></div>
+      <div class="stat-box"><div class="v" id="s-acc">─</div><div class="l">正確率</div></div>
+    </div>
+  </div>
+</aside>
+<main id="main">
+  <div id="topbar">
+    <div class="page-title" id="ptitle">首頁總覽 <span>官方題庫200題 ＋ 模擬55題 ＋ 樣題50題</span></div>
+    <div class="top-btns">
+      <button class="btn btn-ghost btn-sm" onclick="gp('sources',null)">📁 資源庫</button>
+      <button class="btn btn-primary btn-sm" onclick="startExam('random')">⚡ 快速練習</button>
+    </div>
+  </div>
+  <div id="content">
+
+    <!-- HOME -->
+    <div id="page-home" class="page active">
+      <div class="hero">
+        <h2>備考 <em>iPAS</em> · 官方真題精練</h2>
+        <p>收錄 114年第四梯次官方試題 100 題 ＋ 115年第一次兩科官方試題（科目一＋科目二）100 題<br>＋ 模擬題庫 55 題 ＋ 114年4月版考試樣題 50 題，共 <strong style="color:var(--accent2)">305 題</strong><br>科目一：人工智慧基礎概論 ✕ 科目二：生成式AI應用與規劃</p>
+        <div class="hero-actions">
+          <button class="btn-hero btn-hero-p" onclick="startExam('full50')">🚀 模擬完整考試（各科50題）</button>
+          <button class="btn-hero btn-hero-s" onclick="gp('study',null)">📖 先看考試重點</button>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-hd"><div class="card-title">題庫選擇</div><div>📚</div></div>
+          <div class="subj-list">
+            <div class="subj-item" onclick="startExam('sci1_114')">
+              <div><div class="subj-name">科目一：人工智慧基礎概論</div><div class="subj-cnt">114年第四梯次・50道官方真題</div></div>
+              <div style="display:flex;gap:4px;flex-direction:column;align-items:flex-end">
+                <span class="tag t1">科目 1</span>
+                <span class="stag stag-official">114年官方</span>
+              </div>
+            </div>
+            <div class="subj-item" onclick="startExam('sci1_115_1')">
+              <div><div class="subj-name">科目一：人工智慧基礎概論</div><div class="subj-cnt">115年第一次・50道官方真題 🆕</div></div>
+              <div style="display:flex;gap:4px;flex-direction:column;align-items:flex-end">
+                <span class="tag t1">科目 1</span>
+                <span class="stag stag-115">115年官方 🆕</span>
+              </div>
+            </div>
+            <div class="subj-item" onclick="startExam('sci2')">
+              <div><div class="subj-name">科目二：生成式AI應用與規劃</div><div class="subj-cnt">114年第四梯次・50道官方真題</div></div>
+              <div style="display:flex;gap:4px;flex-direction:column;align-items:flex-end">
+                <span class="tag t2">科目 2</span>
+                <span class="stag stag-official">114年官方</span>
+              </div>
+            </div>
+            <div class="subj-item" onclick="startExam('sci2_115_1')">
+              <div><div class="subj-name">科目二：生成式AI應用與規劃</div><div class="subj-cnt">115年第一次・50道官方真題 🆕</div></div>
+              <div style="display:flex;gap:4px;flex-direction:column;align-items:flex-end">
+                <span class="tag t2">科目 2</span>
+                <span class="stag stag-115">115年官方 🆕</span>
+              </div>
+            </div>
+            <div class="subj-item" onclick="startExam('sci1_all')">
+              <div><div class="subj-name">科目一合併練習</div><div class="subj-cnt">114＋115年・共100道官方真題</div></div>
+              <div style="display:flex;gap:4px;flex-direction:column;align-items:flex-end">
+                <span class="tag t1">科目 1</span>
+                <span class="stag stag-both">兩梯次合併</span>
+              </div>
+            </div>
+            <div class="subj-item" onclick="startExam('mock')">
+              <div><div class="subj-name">模擬題庫練習</div><div class="subj-cnt">自製模擬題・55 題・兩科混合</div></div>
+              <div style="display:flex;gap:4px;flex-direction:column;align-items:flex-end">
+                <span class="tag tg">混合</span>
+                <span class="stag stag-mock">模擬題庫</span>
+              </div>
+            </div>
+            <div class="subj-item" onclick="startExam('random')">
+              <div><div class="subj-name">全庫隨機混合練習</div><div class="subj-cnt">官方 ＋ 樣題 ＋ 模擬共 305 題・依設定抽題</div></div>
+              <div style="display:flex;gap:4px;flex-direction:column;align-items:flex-end">
+                <span class="tag tg">混合</span>
+                <span class="stag stag-both">全部題庫</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><div class="card-title">主題分類進度</div><div>📊</div></div>
+          <div class="prog-list">
+            <div class="prog-item"><div class="prog-lbl"><span>機器學習基礎</span><span id="pg1">0%</span></div><div class="prog-bar"><div class="prog-fill" id="pf1" style="width:0"></div></div></div>
+            <div class="prog-item"><div class="prog-lbl"><span>資料處理工程</span><span id="pg2">0%</span></div><div class="prog-bar"><div class="prog-fill" id="pf2" style="width:0"></div></div></div>
+            <div class="prog-item"><div class="prog-lbl"><span>AI 治理與法規</span><span id="pg3">0%</span></div><div class="prog-bar"><div class="prog-fill" id="pf3" style="width:0"></div></div></div>
+            <div class="prog-item"><div class="prog-lbl"><span>生成式AI與提示</span><span id="pg4">0%</span></div><div class="prog-bar"><div class="prog-fill" id="pf4" style="width:0"></div></div></div>
+            <div class="prog-item"><div class="prog-lbl"><span>AI 系統導入規劃</span><span id="pg5">0%</span></div><div class="prog-bar"><div class="prog-fill" id="pf5" style="width:0"></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXAM -->
+    <div id="page-exam" class="page">
+      <div id="exam-area">
+        <div class="exam-hd">
+          <div class="exam-meta">
+            <div class="em-item"><div class="em-v a" id="eq-n">1</div><div class="em-l">題次</div></div>
+            <div class="em-sep"></div>
+            <div class="em-item"><div class="em-v" id="eq-tot">50</div><div class="em-l">總題</div></div>
+            <div class="em-sep"></div>
+            <div class="em-item"><div class="em-v a" id="eq-c">0</div><div class="em-l">答對</div></div>
+          </div>
+          <div style="text-align:center"><div id="timer">─:──</div><div class="em-l">剩餘時間</div></div>
+          <button class="btn btn-ghost btn-sm" onclick="endExam()">交卷</button>
+        </div>
+        <div id="qcon"></div>
+        <div class="exam-nav">
+          <button class="btn btn-ghost" id="btn-prev" onclick="prevQ()">← 上一題</button>
+          <div style="font-size:12px;color:var(--text-muted)" id="qprog">1 / 50</div>
+          <button class="btn btn-primary" id="btn-next" onclick="nextQ()">下一題 →</button>
+        </div>
+      </div>
+      <div id="result-area" style="display:none"></div>
+    </div>
+
+    <!-- PRACTICE -->
+    <div id="page-practice" class="page">
+      <div style="margin-bottom:20px"><h2 style="font-size:18px;margin-bottom:6px">分科主題練習</h2><p style="color:var(--text-dim);font-size:13px">依官方評鑑主題精準練習</p></div>
+      <div id="topic-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px"></div>
+    </div>
+
+    <!-- REVIEW -->
+    <div id="page-review" class="page">
+      <div style="margin-bottom:20px"><h2 style="font-size:18px;margin-bottom:6px">錯題複習</h2><p style="color:var(--text-dim);font-size:13px">歷次答錯題目集中練習</p></div>
+      <div id="wrong-list"></div>
+    </div>
+
+    <!-- STUDY -->
+    <div id="page-study" class="page">
+      <div style="margin-bottom:20px"><h2 style="font-size:18px;margin-bottom:6px">考試重點整理</h2><p style="color:var(--text-dim);font-size:13px">依官方評鑑範圍 ＋ 114年第四梯次 ＋ 115年第一次真題歸納彙整</p></div>
+      <div id="study-con"></div>
+    </div>
+
+    <!-- SOURCES -->
+    <div id="page-sources" class="page">
+      <div style="margin-bottom:20px">
+        <h2 style="font-size:18px;margin-bottom:6px">學習資源庫</h2>
+        <p style="color:var(--text-dim);font-size:13px">已整合的官方題庫與參考資料，依類型分類管理</p>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
+        <div class="legend"><span class="legend-dot" style="background:var(--accent)"></span>官方題庫 — 經濟部 iPAS 公告試題</div>
+        <div class="legend"><span class="legend-dot" style="background:#ffaa33"></span>115年最新題庫</div>
+        <div class="legend"><span class="legend-dot" style="background:var(--gold)"></span>模擬題庫 — 自製練習模擬題，非官方</div>
+      </div>
+
+      <!-- 115年新題庫 -->
+      <div style="margin-bottom:8px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted)">🆕 115年最新官方題庫</div>
+      <div class="source-grid">
+        <div class="source-card" style="border-left:3px solid #ffaa33">
+          <div class="source-card-top">
+            <div class="source-icon" style="background:rgba(255,170,51,.12)">📄</div>
+            <div class="source-info">
+              <div class="source-name">115年第一次初級AI應用規劃師<br>第一科 人工智慧基礎概論</div>
+              <div class="source-meta">公告試題 · 考試日期：115年03月21日 · 50題</div>
+            </div>
+          </div>
+          <div class="source-tags">
+            <span class="stag stag-115">🆕 115年官方</span>
+            <span class="stag stag-sci1">科目一</span>
+            <span class="tag" style="background:rgba(255,255,255,.04);color:var(--text-muted);font-size:9px;padding:2px 7px;border-radius:3px">115.04.10 公告</span>
+          </div>
+          <div style="font-size:11px;color:var(--text-dim);line-height:1.6;border-top:1px solid var(--border);padding-top:10px">
+            資料整合目的・感測器網路・非監督式學習・One-hot編碼・SMOTE・標準化防洩漏・寬深模型・Softmax・VAE・RLHF・LLM・反事實解釋・SHAP・LIME・Saliency Map・批次vs即時推論・擴散模型・增量索引RAG・學習模式辨析・F1-score・Recall等
+          </div>
+          <div style="font-size:10px;color:var(--text-muted);border-top:1px solid var(--border);padding-top:8px">
+            📁 檔案：115年第一次初級AI應用規劃師_第一科_人工智慧基礎概論_公告試題_20260410164304.pdf
+          </div>
+          <button class="source-btn" style="color:#ffaa33;border-color:rgba(255,170,51,.3)" onclick="startExam('sci1_115_1')">→ 進入115年科目一練習（50題）</button>
+        </div>
+        <div class="source-card" style="border-left:3px solid #ffaa33">
+          <div class="source-card-top">
+            <div class="source-icon" style="background:rgba(255,170,51,.12)">📄</div>
+            <div class="source-info">
+              <div class="source-name">115年第一次初級AI應用規劃師<br>第二科 生成式AI應用與規劃</div>
+              <div class="source-meta">公告試題 · 考試日期：115年03月21日 · 50題</div>
+            </div>
+          </div>
+          <div class="source-tags">
+            <span class="stag stag-115">🆕 115年官方</span>
+            <span class="stag stag-sci2">科目二</span>
+            <span class="tag" style="background:rgba(255,255,255,.04);color:var(--text-muted);font-size:9px;padding:2px 7px;border-radius:3px">115.04.10 公告</span>
+          </div>
+          <div style="font-size:11px;color:var(--text-dim);line-height:1.6;border-top:1px solid var(--border);padding-top:10px">
+            Low-code整合測試・APE圖提示挑戰・Context Engineering・LLM矛盾資訊・Vision Graph搜尋・本地部署LLM・GitHub Copilot・Agentic AI工具・風格調整・多代理角色・Fine-tuning+RAG・RAG檢索品質・Prompt注入防禦・Data Drift・KD知識蒸餾・MMLU基準・Guardrails・Chunking・Multi-vector Retriever・解決方案圖譜等
+          </div>
+          <div style="font-size:10px;color:var(--text-muted);border-top:1px solid var(--border);padding-top:8px">
+            📁 檔案：115年第一次初級AI應用規劃師_第二科_生成式AI應用與規劃_公告試題_20260410164328.pdf
+          </div>
+          <button class="source-btn" style="color:#ffaa33;border-color:rgba(255,170,51,.3)" onclick="startExam('sci2_115_1')">→ 進入115年科目二練習（50題）</button>
+        </div>
+      </div>
+
+
+      <!-- 114年官方題庫 -->
+      <div style="margin-top:24px;margin-bottom:8px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted)">🏛 114年官方題庫</div>
+      <div class="source-grid">
+        <div class="source-card scard-official">
+          <div class="source-card-top">
+            <div class="source-icon si-q">📄</div>
+            <div class="source-info">
+              <div class="source-name">114年第四梯次初級AI應用規劃師<br>第一科 人工智慧基礎概論</div>
+              <div class="source-meta">公告試題 · 考試日期：114年11月01日 · 50題</div>
+            </div>
+          </div>
+          <div class="source-tags">
+            <span class="stag stag-official">官方題庫</span>
+            <span class="stag stag-sci1">科目一</span>
+          </div>
+          <div style="font-size:11px;color:var(--text-dim);line-height:1.6;border-top:1px solid var(--border);padding-top:10px">
+            人機迴圈控制・特徵交叉・ETL・L1/L2正則化・Bias-Variance・KNN・RNN梯度消失・強化學習・XAI（LIME）・VAE・Transformer瓶頸・聯邦學習・資料去偏・統計推論等
+          </div>
+          <button class="source-btn" onclick="startExam('sci1_114')">→ 進入114年科目一練習（50題）</button>
+        </div>
+        <div class="source-card scard-official">
+          <div class="source-card-top">
+            <div class="source-icon si-q">📄</div>
+            <div class="source-info">
+              <div class="source-name">114年第四梯次初級AI應用規劃師<br>第二科 生成式AI應用與規劃</div>
+              <div class="source-meta">公告試題 · 考試日期：114年11月01日 · 50題</div>
+            </div>
+          </div>
+          <div class="source-tags">
+            <span class="stag stag-official">官方題庫</span>
+            <span class="stag stag-sci2">科目二</span>
+          </div>
+          <div style="font-size:11px;color:var(--text-dim);line-height:1.6;border-top:1px solid var(--border);padding-top:10px">
+            Low-code Model・聯邦學習・MCP協議・A2A架構・Context Engineering・RAG增量索引・CoT/ToT/Graph Prompting・知識蒸餾・Data Drift・Guardrails・MMLU等
+          </div>
+          <button class="source-btn" onclick="startExam('sci2')">→ 進入科目二練習（50題）</button>
+        </div>
+      </div>
+
+      <!-- 官方參考指引 -->
+      <div style="margin-top:24px;margin-bottom:8px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted)">📋 官方參考指引</div>
+      <div class="source-grid">
+        <div class="source-card scard-official" style="border-left-color:var(--accent2)">
+          <div class="source-card-top">
+            <div class="source-icon si-ref">📋</div>
+            <div class="source-info">
+              <div class="source-name">AI應用規劃師(初級)<br>參考指引－科目1 人工智慧基礎概論</div>
+              <div class="source-meta">2025年版 · 經濟部產業發展署 · 71頁 · 含模擬考題與解析</div>
+            </div>
+          </div>
+          <div class="source-tags">
+            <span class="stag" style="background:rgba(0,229,176,.12);color:var(--accent2);border:1px solid rgba(0,229,176,.25)">參考指引</span>
+            <span class="stag stag-sci1">科目一</span>
+          </div>
+          <button class="source-btn" onclick="gp('study',null)" style="color:var(--accent2);border-color:rgba(0,229,176,.3)">→ 查看科目一考試重點</button>
+        </div>
+        <div class="source-card scard-official" style="border-left-color:#b08fff">
+          <div class="source-card-top">
+            <div class="source-icon" style="background:rgba(176,143,255,.1)">📋</div>
+            <div class="source-info">
+              <div class="source-name">AI應用規劃師(初級)<br>參考指引－科目2 生成式AI應用與規劃</div>
+              <div class="source-meta">2025年版 · 經濟部產業發展署 · 62頁 · 含模擬考題與解析</div>
+            </div>
+          </div>
+          <div class="source-tags">
+            <span class="stag" style="background:rgba(176,143,255,.12);color:#b08fff;border:1px solid rgba(176,143,255,.3)">參考指引</span>
+            <span class="stag stag-sci2">科目二</span>
+          </div>
+          <button class="source-btn" style="color:#b08fff;border-color:rgba(176,143,255,.3)" onclick="gp('study',null)">→ 查看科目二考試重點</button>
+        </div>
+      </div>
+
+      <!-- 考試樣題 -->
+      <div style="margin-top:24px;margin-bottom:8px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted)">📝 考試樣題</div>
+      <div class="source-grid">
+        <div class="source-card" style="border-left:3px solid #ffa500">
+          <div class="source-card-top">
+            <div class="source-icon" style="background:rgba(255,165,0,.1)">📝</div>
+            <div class="source-info">
+              <div class="source-name">iPAS AI應用規劃師初級能力鑑定<br>考試樣題（114年4月版）</div>
+              <div class="source-meta">官方樣題 · 非正式考題，僅供參考 · 兩科各25題，共50題</div>
+            </div>
+          </div>
+          <div class="source-tags">
+            <span class="stag" style="background:rgba(255,165,0,.12);color:#ffa500;border:1px solid rgba(255,165,0,.3)">考試樣題</span>
+            <span class="stag stag-both">科目一＋二</span>
+          </div>
+          <button class="source-btn" onclick="startExam('sample')">→ 樣題練習（50題）</button>
+          <div style="font-size:10px;color:var(--text-muted)">⚠️ 此為官方公告的樣題範例，非正式考題，僅供備考練習參考</div>
+        </div>
+      </div>
+
+      <!-- 模擬題庫 -->
+      <div style="margin-top:24px;margin-bottom:8px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted)">🔶 模擬題庫</div>
+      <div class="source-grid">
+        <div class="source-card scard-mock">
+          <div class="source-card-top">
+            <div class="source-icon" style="background:rgba(240,192,64,.1)">📝</div>
+            <div class="source-info">
+              <div class="source-name">iPAS AI 應用規劃師初級<br>自製模擬練習題庫</div>
+              <div class="source-meta">系統自製 · 兩科混合 · 55題 · 非官方</div>
+            </div>
+          </div>
+          <div class="source-tags">
+            <span class="stag stag-mock">模擬題庫</span>
+            <span class="stag stag-both">科目一＋二</span>
+          </div>
+          <button class="source-btn" onclick="startExam('mock')">→ 模擬題庫練習（55題）</button>
+          <div style="font-size:10px;color:var(--text-muted)">⚠️ 此為自製模擬題，僅供備考練習參考，不代表官方立場</div>
+        </div>
+      </div>
+
+      <!-- 題型分析 -->
+      <div style="margin-top:28px;margin-bottom:12px">
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px">📊 題型主題分析（全庫 255 題）</div>
+      </div>
+      <div id="topic-analysis"></div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div id="page-settings" class="page">
+      <div style="margin-bottom:20px"><h2 style="font-size:18px;margin-bottom:6px">個人設定</h2></div>
+      <div class="set-group" style="margin-bottom:20px">
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px">考試設定</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:6px">
+          <div><div style="font-size:13px">每次練習題數</div><div style="font-size:11px;color:var(--text-muted);margin-top:1px">隨機混合模式下的題數</div></div>
+          <select style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:7px;font-family:inherit;font-size:12px;cursor:pointer" id="set-cnt">
+            <option value="10">10 題</option><option value="20" selected>20 題</option><option value="30">30 題</option><option value="50">50 題</option>
+          </select>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:6px">
+          <div><div style="font-size:13px">啟用計時器</div></div>
+          <div class="tog on" id="tog-t" onclick="this.classList.toggle('on')" style="width:40px;height:22px;background:var(--accent);border-radius:11px;cursor:pointer;position:relative;border:1px solid var(--accent);transition:background .2s"></div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:6px">
+          <div><div style="font-size:13px">即時顯示解析</div></div>
+          <div class="tog on" id="tog-e" onclick="this.classList.toggle('on')" style="width:40px;height:22px;background:var(--accent);border-radius:11px;cursor:pointer;position:relative;border:1px solid var(--accent);transition:background .2s"></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px">資料管理</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px">
+          <div><div style="font-size:13px">清除練習紀錄</div></div>
+          <button class="btn btn-sm" style="background:rgba(255,95,95,.1);color:var(--warn);border:1px solid rgba(255,95,95,.25)" onclick="clearAll()">清除</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+</div>
+<script>
+
+// ═══════ 114年第四梯次 科目二 50題 ═══════
+const QB2 = [
+  {id:201,sub:'sci2',topic:'nocode',src:'official',q:'在 Low Code 平台的開發應用設計中，關於「模型（Model）」，下列敘述何者最符合實際情況？',opts:['模型僅扮演設計視覺化的輔助工具，對應用邏輯的影響有限','模型是用來抽象描述資料結構、業務流程與介面邏輯的核心元素，影響應用的設計與維護','模型僅依循 UML 等傳統建模方式，缺乏針對 Low Code 環境的延展性','模型在 Low Code 平台中已被自動程式碼生成全面取代'],ans:1,exp:'在 Low-code 平台中，Model 是核心抽象層，定義資料結構、業務規則和介面邏輯，是 CRUD 操作、流程自動化和 UI 綁定的基礎，貫穿整個應用設計與維護週期。'},
+  {id:202,sub:'sci2',topic:'ai-gov',src:'official',q:'企業導入生成式 AI 平台時，希望在確保隱私的前提下讓模型持續優化並降低資料外洩風險，下列哪一種方法最適合？',opts:['同態加密（Homomorphic Encryption）','安全多方計算（Secure Multi-party Computation）','零知識證明（Zero-knowledge Proofs）','聯邦學習（Federated Learning）'],ans:3,exp:'聯邦學習讓各部門在本地訓練，只共享梯度更新不共享原始資料，是「資料不動模型動」的隱私保護分散式學習方案，最適合敏感資料的跨部門 AI 優化場景。'},
+  {id:203,sub:'sci2',topic:'nocode',src:'official',q:'企業利用 No Code/Low Code 平台開發內部系統，確保跨部門流程與外部服務整合的可測試性，下列哪一項作法最為合適？',opts:['依賴平台提供的即時預覽與基本單元測試功能，快速驗證常見流程','導入可重複執行的自動化測試流程，並透過 API 或服務虛擬化進行模組化驗證','將測試聚焦於使用者介面互動與操作流程驗證','依靠使用者回饋與正式上線後的監控資料作為修正依據'],ans:1,exp:'生產級系統的測試應導入自動化測試（Automated Testing）和服務虛擬化（Service Virtualization），確保每次變更都能可重複驗證，比手動點擊測試更可靠且可維護。'},
+  {id:204,sub:'sci2',topic:'prompt-eng',src:'official',q:'結合自動提示工程（APE）與圖提示（Graph Prompting）分析使用者互動關係，最可能遇到的挑戰為何？',opts:['圖結構轉換為文字提示時，可能導致部分關聯資訊遺失','APE 在圖資料上無法產生任何提示內容','圖轉文字後能完整保留所有上下文，對推理不造成影響','Graph Prompting 僅能處理線性路徑，限制多分支探索'],ans:0,exp:'圖結構（節點、邊、屬性）轉換為文字序列時，拓撲結構信息可能部分丟失（語言模型天然是線性序列處理器）。如何有效表達圖的結構性關係是 Graph Prompting 的核心挑戰。'},
+  {id:205,sub:'sci2',topic:'prompt-eng',src:'official',q:'在超長上下文任務中使用自動提示工程（APE），可能面臨的最大限制是什麼？',opts:['迭代優化難以因應上下文的不斷變動，導致調整失效','模型的記憶容量有限，無法完整保留所有長篇資訊','提示內容難以有效分解，無法支援複雜任務拆解','回饋機制通常僅針對局部片段，難以全面評估最終輸出品質'],ans:3,exp:'APE 依賴評估函數對提示進行自動優化，但超長上下文中輸出品質難以用局部評估函數捕捉全局效果，回饋信號不足導致優化困難，是 APE 在長上下文任務中的核心限制。'},
+  {id:206,sub:'sci2',topic:'nocode',src:'official',q:'設計團隊在短時間內完成行動應用，需同時達到高度個人化、快速生成介面與行銷內容自動產出。結合 No Code/Low Code 與生成式 AI，哪一種整合策略最能符合目標？',opts:['使用生成式 AI 自動產生 API 呼叫與元件配置，並由開發者手動整合至 No Code 平台流程','透過生成式 AI 在 No Code 平台中自動建立介面模板，並結合使用者數據即時生成個人化功能與行銷推播內容','在 No Code 平台中導入生成式 AI，快速建立跨專案可重用的通用模組，專注於提升開發速度','在 No Code 平台中完全依賴生成式 AI 自動產生所有應用功能與流程，不經人工設計或驗證'],ans:1,exp:'最佳策略是：No Code 平台提供快速開發框架，生成式 AI 負責動態內容生成（個人化介面、推播文案）並結合使用者數據，兩者協同而非完全自動化（選項D過於激進且有風險）。'},
+  {id:207,sub:'sci2',topic:'ai-system',src:'official',q:'透過 MCP（Model Context Protocol）實現 AI 查詢 GitHub 程式碼庫，MCP 運作流程的正確順序為何？',opts:['MCP Server → AI Host → MCP Client → 資料查詢 → 結果回傳 AI Host','MCP Client → AI Host → MCP Server → 資料查詢 → 結果回傳 AI Host','AI Host → MCP Client → MCP Server → 資料查詢 → 結果回傳 AI Host','AI Host → MCP Server → MCP Client → 資料查詢 → 結果回傳 AI Host'],ans:2,exp:'MCP 標準流程：AI Host（如 Claude）發起請求 → MCP Client（連接層）轉發 → MCP Server（GitHub 服務端）執行資料查詢 → 結果回傳給 AI Host。AI Host 是起點和終點。'},
+  {id:208,sub:'sci2',topic:'ai-system',src:'official',q:'在 Agent-to-Agent（A2A）架構中，下列敘述何者最符合 Client Agent 與 Remote Agent 的互動流程？',opts:['Remote Agent 主動分派任務給 Client Agent','由人工事先設定 Client Agent 與 Remote Agent 處理任務的先後順序','Client Agent 發起任務，Remote Agent 執行並回傳結果','Client Agent 與 Remote Agent 同時處理任務並同步處理結果'],ans:2,exp:'A2A 架構中：Client Agent 是任務發起方，負責規劃並分配任務；Remote Agent 是執行方，接收任務、執行後回傳結果。類似 Client-Server 架構在多 Agent 系統中的應用。'},
+  {id:209,sub:'sci2',topic:'prompt-eng',src:'official',q:'在導入生成式 AI 的應用規劃中，上下文工程（Context Engineering）的核心目的為何？',opts:['縮短模型訓練時間','優化提示與上下文','增加模型參數數量','優化 Fine-tuning 正確率'],ans:1,exp:'Context Engineering（上下文工程）專注於設計最佳的輸入上下文（包含系統提示、範例、背景資訊），以引導模型產出高品質回應，是提示工程的延伸，不涉及模型訓練。'},
+  {id:210,sub:'sci2',topic:'gen-ai',src:'official',q:'測試人員在輸入的上下文中放入互相矛盾的資訊（同一員工被描述為入職三年與入職五年），最常見的模型行為會是什麼？',opts:['永遠選擇第一段資訊作為答案依據','可能生成幻覺或隨機採信其中一方的內容','拒絕回答，並要求提供更一致的輸入','自動判斷並只選擇正確的資訊'],ans:1,exp:'LLM 面對矛盾資訊時，缺乏確認哪方為真的能力，通常會：選擇其中一個（不確定性選擇）、生成融合的矛盾內容（幻覺），或輸出前後不一致的回應，無法像人類一樣要求澄清。'},
+  {id:211,sub:'sci2',topic:'ai-system',src:'official',q:'Agentic AI 在解決方案圖譜（Solution Graph）上尋找最佳解決路徑時，通常使用什麼搜尋策略？',opts:['使用廣度優先、深度優先或最佳優先等演算法進行探索','每一步都隨機選擇動作，反覆嘗試直到找到可行路徑','只執行事先假定的一條路徑，失敗就停止','完全依靠 LLM 一次性推斷最優完整路徑'],ans:0,exp:'Agentic AI 在解決方案空間中進行搜尋，採用 BFS（廣度優先）、DFS（深度優先）或 A*（最佳優先）等演算法系統性探索可能的行動序列，而非隨機嘗試或單次推斷。'},
+  {id:212,sub:'sci2',topic:'ai-plan',src:'official',q:'企業考慮將開源大型語言模型（GPT-OSS）自行部署在本地伺服器，最能代表本地部署對企業的實際好處為何？',opts:['可以達到無運算成本，因為本地部署不會產生額外資源消耗','模型預測能力會比在雲端運行時更精度，因為本地環境更可靠','可確保輸入模型的敏感資料不會傳輸給第三方，提升資料隱私和自主控制','以上皆是'],ans:2,exp:'本地部署（On-premise）的核心優勢是資料主權：敏感資料不離開企業環境，不受第三方雲端服務商存取，滿足金融、醫療、政府等高隱私要求行業的合規需求。'},
+  {id:213,sub:'sci2',topic:'gen-ai',src:'official',q:'關於 GitHub Copilot，下列敘述何者正確？',opts:['GitHub Copilot 基於程式碼片段查詢工具，透過後端搜尋大型程式碼資料庫提供建議','GitHub Copilot 僅適用於 GitHub 上的開源專案，無法在私有程式碼庫或本地環境中提供建議','GitHub Copilot 利用靜態分析技術分析程式碼，根據邏輯流程推導下一步應寫的程式碼','GitHub Copilot 由 OpenAI 的 Codex 模型提供技術支援，可即時在開發者編輯時給出整行或整個函式建議'],ans:3,exp:'GitHub Copilot 基於 OpenAI Codex（GPT 系列的程式碼版本），透過理解自然語言與程式碼上下文，即時生成整行或整個函式的建議，支援各類 IDE（VS Code、JetBrains 等）和私有庫。'},
+  {id:214,sub:'sci2',topic:'ai-system',src:'official',q:'電商導入 Agentic AI 處理客服，Agent 回答 FAQ 常出錯且無法幫客戶修改訂單，最可能缺少哪兩項工具？',opts:['API 調用（API Calling）＋任務規劃器（Task Planner）','向量資料庫檢索（Vector Retrieval）＋ API 調用（API Calling）','向量資料庫檢索（Vector Retrieval）＋任務規劃器（Task Planner）','任務規劃器（Task Planner）＋溫度參數（Temperature）設定'],ans:1,exp:'FAQ 常出錯 → 缺乏向量資料庫檢索（RAG）提供正確知識；無法修改訂單 → 缺乏 API 調用（呼叫訂單管理系統）。向量檢索+API調用是 Agentic AI 客服的兩大核心能力。'},
+  {id:215,sub:'sci2',topic:'gen-ai',src:'official',q:'客服自動回應系統希望根據不同客戶群體調整回覆風格。在兼顧即時性與效果前提下，下列哪一種方案最適合？',opts:['直接微調預訓練模型，針對每個客戶群體分別訓練不同風格模型','利用控制變量（Control Tokens）或風格標籤在同一模型內動態調整風格','利用生成對抗網路（GAN）生成不同風格文本，並透過人工篩選最終答案','採用規則式替換方法，替換回覆詞彙以符合不同風格要求'],ans:1,exp:'Control Tokens 或 Style Prompts 在推理時動態注入風格指令，在同一模型中靈活切換風格，無需為每種風格分別微調，兼具即時性與成本效益。'},
+  {id:216,sub:'sci2',topic:'ai-system',src:'official',q:'建置多代理 LLM 系統時，如果沒有清楚定義每個代理的任務啟動條件和角色分工，最可能出現什麼問題？',opts:['回覆內容前後不連貫，系統邏輯斷裂','不同代理的答案互相衝突，無法判斷最終決策','系統陷入無限對話循環，導致資源耗盡','多個代理重複做同樣的任務，造成效率低落'],ans:3,exp:'缺乏明確角色分工和任務啟動條件時，多個 Agent 可能都認為某任務屬於自己的職責範疇，導致重複執行相同工作，浪費運算資源且可能產生衝突結果。'},
+  {id:217,sub:'sci2',topic:'rag',src:'official',q:'企業部署結合 Fine-tuning 與 RAG 的語言模型系統，需確保回覆語氣一致、能即時查詢每日新增文件、維持效能穩定，避免頻繁重新訓練。長期維護下最合適的策略為何？',opts:['每週重新 Fine-tune 模型，將新文件整合進模型知識，逐步取代 RAG 模組','完全依靠基礎模型與 RAG，不進行 Fine-tune，僅透過提示設計控制語氣','每日進行增量 Fine-tune，讓模型即時學習新文件內容','保留語氣相關 Fine-tuning，僅透過檢索系統更新文件內容，不頻繁改動模型'],ans:3,exp:'最佳策略：Fine-tuning 用於固化語氣風格（一次性或低頻）；RAG 負責動態知識更新（高頻文件變更）。兩者職責分離，避免頻繁重訓導致的高成本和系統不穩定。'},
+  {id:218,sub:'sci2',topic:'rag',src:'official',q:'客服系統回覆「訂單取消政策」時，即使溫度固定為0.6，回覆品質仍常出現差異。調查顯示檢索到的政策內容有時是舊版本。若要優先改善品質波動，應先解決哪一項問題？',opts:['調整溫度參數，降低生成隨機性','加強 Prompt 設計，限制模型表達方式','優化微調語料，減少含糊描述','提升檢索系統品質，確保取得的政策內容正確且最新'],ans:3,exp:'根本原因是「檢索到過時文件」，而非溫度或 Prompt 問題。GIGO（Garbage In, Garbage Out）原則：無論生成多精細，錯誤的輸入資料必然導致錯誤輸出。應優先修復資料源。'},
+  {id:219,sub:'sci2',topic:'ai-system',src:'official',q:'醫院智慧系統 ASR→LLM→醫療資料庫API，詢問「術後復健流程」卻查到「術前注意事項」。已排除語音辨識錯誤，最可能的原因為何？',opts:['醫療資料庫 API 對應規則設計不清，造成意圖映射模糊','LLM 的 Prompt 缺乏明確指示，導致語意分類判斷錯誤','查詢 API 回傳速度過慢，影響系統處理正確性','LLM 未經醫療領域微調，難以正確理解專業性詞彙'],ans:1,exp:'ASR 無誤（文字正確）→ LLM 接收到正確文字卻錯誤判斷意圖（術後→術前）→ 根本原因是 LLM Prompt 未明確定義意圖分類規則，導致語意歧義時判斷錯誤。應優化 Prompt 的意圖分類指引。'},
+  {id:220,sub:'sci2',topic:'ai-plan',src:'official',q:'醫院將生成式 AI 模型運用於胸腔 X 光影像診斷，最可能成為主要風險的是？',opts:['模型在生成報告時語句流暢，但僅在文字表達上有差異，對診斷結果沒有重大影響','模型若資料不足，僅會降低生成報告的完整性，而非影響判斷病灶的正確性','模型偏向生成內容而非分類，但此差異僅影響效率，不會造成誤診風險','模型可能生成與實際影像不符的診斷結論，導致誤判並引發醫療與法律風險'],ans:3,exp:'生成式 AI（如 GPT）設計用途是生成文字，而非判斷醫學影像中的病灶。強行用於影像診斷可能憑空生成診斷結論（幻覺），造成誤診、延誤治療，並引發醫療責任與法律問題。'},
+  {id:221,sub:'sci2',topic:'ai-system',src:'official',q:'智慧車載語音助理：ASR辨識錯誤率高、LLM回覆不精確、系統延遲尚可接受。若目標是「優先提升準確性與回答品質」，最合理的執行順序為何？',opts:['1（擴充標註汽車語音資料，微調ASR） → 2（微調LLM+RAG） → 4（調整溫度） → 3（優化批次推論降延遲）','2 → 1 → 3 → 4','1 → 3 → 2 → 4','3 → 1 → 2 → 4'],ans:0,exp:'優先解決最上游問題：ASR錯誤率高→先修復ASR（步驟1）；再修復LLM準確性（步驟2）；調整溫度優化輸出品質（步驟4）；延遲尚可接受故最後優化（步驟3）。'},
+  {id:222,sub:'sci2',topic:'gen-ai',src:'official',q:'生成式 AI 協助撰寫數據分析報告，但生成結果多半只是替換數值關鍵詞，未展現針對不同專案的多樣化推理。最合理的解釋為何？',opts:['模型缺乏對字體與排版的優化能力','測試資料涵蓋過多統計圖表，導致模型無法專注於文字多樣化表達','模型過度依賴訓練語料中的常見報告範式，導致生成結果以樣板化結構取代真正的推理','模型因無法正確辨識頁碼與標題層級，才出現樣板化的結果'],ans:2,exp:'這是 LLM 的「樣板化過擬合」現象：模型在大量商業報告語料上訓練，學到了固定的報告結構和表達套路，導致生成結果缺乏真正的邏輯推理，只是填充數字的模板。解決方法包括 CoT 提示、角色設定等。'},
+  {id:223,sub:'sci2',topic:'prompt-eng',src:'official',q:'在應用零樣本提示（Zero-Shot Prompting）時，哪一種情境最可能因缺乏示範而失敗？',opts:['要求模型判斷一段影評文字的情感傾向','要求模型將一段新聞摘要濃縮為一句話','要求模型將一段繁體中文翻譯成英文','要求模型從表格中擷取所有城市的最高氣溫'],ans:3,exp:'從非結構化表格中精確擷取特定格式資料需要精確的格式理解，Zero-shot 難以讓模型確切知道輸出格式。情感分析、摘要、翻譯是 LLM 預訓練中大量見過的標準任務，Zero-shot 表現良好。'},
+  {id:224,sub:'sci2',topic:'ai-plan',src:'official',q:'保險公司導入生成式 AI 內部合約查詢系統，高層強調客戶資料隱私與合規風險控管，即使需要更多資源也必須確保資料不外洩。最符合需求的策略為何？',opts:['導入開源模型並由 IT 團隊自建，後續逐步補強隱私與合規控管','在需求確認階段即納入法遵與稽核單位，設定準確率 KPI，並透過 MVP 驗證成效','優先使用雲端大型 API 模型快速部署，並根據使用數據持續調整','投入資源自訓並私有化部署 LLM，並同步建立自動化風控機制'],ans:3,exp:'高隱私合規優先的場景：私有化部署確保敏感合約資料不離開企業環境，結合自動化風控機制滿足法規要求。雲端 API（選項C）資料仍需傳輸至第三方，不符合最高隱私要求。'},
+  {id:225,sub:'sci2',topic:'gen-ai',src:'official',q:'圖像描述生成系統能根據輸入照片自動產生說明文字，為使描述文字能與圖片資訊精準對應，下列哪一種設計思路最關鍵？',opts:['強化語言模型的句法與流暢性，確保生成文字更自然易讀','在生成過程中結合圖片特徵與語言建模，讓模型同時利用影像內容與文字資訊','調整生成策略（如 Beam Search 或溫度參數），以提升輸出文字的合理性','專注於文字序列上下文的建模，只提升文字間的連貫性'],ans:1,exp:'圖像描述生成（Image Captioning）的核心是多模態對齊：利用 CNN/ViT 提取圖片視覺特徵，並在語言生成過程中持續參考視覺特徵（Cross-attention），確保文字與圖片內容緊密對應。'},
+  {id:226,sub:'sci2',topic:'gen-ai',src:'official',q:'電商平台希望生成的商品描述在風格與用詞上保持一致性，但不需要新增專業知識，下列哪種方法最適合？',opts:['擴充語料庫並微調模型，使風格統一','增加提示詞複雜度，引導模型風格一致','降低生成溫度，以減少隨機性並提升風格一致性','使用全連接神經網路對生成結果後期篩選'],ans:2,exp:'降低 Temperature 減少輸出的隨機性，使模型傾向選擇高機率（符合訓練分布）的詞彙和表達方式，達到風格一致性。微調（選項A）成本高且需要資料，對此需求過於複雜。'},
+  {id:227,sub:'sci2',topic:'gen-ai',src:'official',q:'企業整合生成式 AI 進行「會議即時摘要」，哪一種策略最能提升摘要的語意品質與使用價值？',opts:['使用語音轉文字模型即時輸出逐字稿並轉入 GPT 摘要','將語音逐段切分並建立關鍵字索引，以利摘要模型擷取核心內容','將語音轉文字後標註發言角色與主題邊界，結合語意分群進行動態摘要','將所有語音內容儲存為完整紀錄，提供事後人工摘要比對用'],ans:2,exp:'高品質會議摘要需要：(1)發言角色標註（Diarization）→ 知道誰說什麼；(2)主題邊界識別 → 區分議題；(3)語意分群 → 按主題而非時間整理摘要，遠優於純逐字稿送入 GPT。'},
+  {id:228,sub:'sci2',topic:'prompt-eng',src:'official',q:'下列哪一個提示最符合「少樣本提示（Few-Shot Prompting）」的設計原則？',opts:['「請回答顧客詢問：如何申請退貨？」','「以下是兩組客服對話範例，請依照相同風格回覆新的顧客問題」','「請逐步分析顧客投訴的原因，並依照推理過程生成合適回覆」','「請以正式的語氣回覆顧客的提問」'],ans:1,exp:'Few-Shot Prompting 的關鍵特徵是提供若干輸入-輸出範例（In-context Examples），讓模型從示範中學習格式和風格。選項A=Zero-shot；選項C=Chain-of-Thought；選項D=角色指定。'},
+  {id:229,sub:'sci2',topic:'rag',src:'official',q:'投資公司導入生成式 AI 即時分析股市波動，希望兼顧「即時性」與「可靠性」，哪一項設計最能有效提升表現？',opts:['將 AI 系統連結至公司內部歷史交易資料庫，以便快速調用既有案例','調整模型的回應邏輯，讓 AI 優先輸出最新市場行情，而不是完整背景分析','建立與外部即時行情來源同步的查詢模組，確保 AI 能即時擷取最新金融數據','增加訓練資料中模擬的金融危機與市場異常案例，以提升 AI 在特殊情境下的表現'],ans:2,exp:'股市分析的核心痛點是 LLM 訓練資料有截止日期。RAG + 即時行情 API 能讓模型在生成時檢索最新數據（如當前股價、成交量），解決知識時效性問題，同時保持分析可靠性。'},
+  {id:230,sub:'sci2',topic:'ai-plan',src:'official',q:'大型物流公司導入AI系統，規劃四個步驟的正確執行順序為何？（1.建立AI對話邏輯與應答範本 2.明確定義目標並設定KPI 3.蒐集清理客服紀錄資料 4.評估並選擇AI技術供應商或開源方案）',opts:['2 → 3 → 4 → 1','3 → 2 → 1 → 4','2 → 1 → 3 → 4','1 → 4 → 3 → 2'],ans:0,exp:'標準 AI 專案導入流程：先明確目標與KPI（2）→ 蒐集清理資料（3）→ 評估選擇技術方案（4）→ 建立對話邏輯（1）。需求導向、資料先行、技術後選，最後才設計具體功能。'},
+  {id:231,sub:'sci2',topic:'ai-gov',src:'official',q:'跨國電商導入生成式 AI 處理顧客服務，資安與法遵部門擔心 AI 可能洩漏顧客個資。若要優先避免觸法風險，下列哪一項措施最符合要求？',opts:['在加密環境下導入完整的顧客訂單與行為資料，並透過嚴格存取控管降低洩漏風險','實施資料最小化與去識別化，確保 AI 在訓練與生成過程中不直接處理或暴露敏感個資','強化模型的回覆審查流程，透過自動過濾與人工抽查結合，降低個資外洩的機率','設定 AI 的角色與回覆範圍，讓其專注於客服相關內容，避免回答其他敏感議題'],ans:1,exp:'GDPR 等個資法的核心原則：資料最小化（只處理必要資料）和去識別化（匿名化），確保 AI 系統從根本上不接觸原始個資，是降低觸法風險最直接有效的措施。'},
+  {id:232,sub:'sci2',topic:'ai-plan',src:'official',q:'國際銀行導入生成式 AI 彙整各國金融監管機構合規規範，建立跨國合規知識庫。確保知識庫查詢與報告生成正確性的最關鍵 AI 能力為何？',opts:['具備跨語言專業術語對齊與條文語意抽取能力，能正確辨識不同國家規範間的對應與差異','能自動最佳化文件檢索效率，縮短跨國法規查詢的延遲時間','能將合規文件轉換為多種輸出形式（如簡報、摘要或法規清單），以符合不同決策層級需求','具備根據歷史案例生成合規解釋的能力'],ans:0,exp:'跨國合規知識庫的核心挑戰是多語言法律術語的語意對齊（不同語言的同一概念可能有不同表述）和條文差異識別，這要求 AI 具備跨語言法律語意理解能力，遠超一般文件摘要或格式轉換。'},
+  {id:233,sub:'sci2',topic:'nocode',src:'official',q:'企業導入 MLOps 過程中，No Code 平台最能有效解決的挑戰為何？',opts:['自動化大量資料的標註與前處理，以降低數據準備成本','提升運算基礎設施的可擴展性，以因應大規模服務需求','透過可視化建模介面，降低技術門檻並促進跨部門協作','提供進階特徵工程能力，優化高維度數據的處理效率'],ans:2,exp:'No-code 平台最大優勢是可視化介面降低技術門檻，使業務人員、數據分析師等非工程師能參與 MLOps 流程（模型監控、特徵定義等），促進跨部門協作。複雜特徵工程和基礎設施擴展仍需傳統工具。'},
+  {id:234,sub:'sci2',topic:'ai-plan',src:'official',q:'醫療機構導入生成式 AI 協助撰寫病歷摘要，技術測試階段最應優先關注的指標為何？',opts:['資料儲存與存取架構的完整性，確保長期運作的數據可追溯性','生成內容的醫療準確性與臨床一致性，避免出現錯誤或誤導性資訊','模型在不同病例語境下的泛化能力','系統回應時間的穩定性，以支援醫療場域的即時需求'],ans:1,exp:'醫療 AI 的首要考量永遠是「不傷害（Do No Harm）」原則。病歷摘要中的錯誤資訊可能導致誤診或用藥錯誤，醫療準確性（Accuracy）和臨床一致性（Clinical Consistency）是技術測試的核心指標。'},
+  {id:235,sub:'sci2',topic:'ai-plan',src:'official',q:'即時客服系統的延遲測試（Latency Testing）中，下列哪一項指標最能反映系統是否符合用戶即時互動需求？',opts:['AI 模型在同一分鐘內可完成的回覆訊息數量','客戶從輸入問題到收到第一個完整回應所需的時間','客服系統能連續提供服務的運行時長','AI 產生回答時用詞的多樣性與表達創意程度'],ans:1,exp:'端到端延遲（End-to-End Latency）= 用戶發送問題到收到回應的時間，是用戶感知「即時性」最直接的指標。吞吐量（選項A）、可用性（選項C）是其他維度的指標。'},
+  {id:236,sub:'sci2',topic:'ai-gov',src:'official',q:'航空公司導入生成式 AI 聲控客服，有人試圖讓系統洩漏內部安檢流程。降低提示攻擊（Prompt Injection）風險的最佳策略為何？',opts:['導入輸入檢測與回應審核流程，防止敏感指令被執行','限制 AI 可回應的主題範圍，使系統僅回答非敏感的航班與票務查詢','隨機變化回覆內容，讓攻擊者難以預測回應行為','擴充與更新航班與票務資料來源，以提升模型的知識正確性'],ans:0,exp:'防禦提示注入的最有效方法：(1)輸入驗證（過濾惡意指令）；(2)回應審核（防止敏感資訊洩露）；(3)最小權限原則。僅限制主題範圍（選項B）不足以防禦所有注入攻擊手法。'},
+  {id:237,sub:'sci2',topic:'ai-plan',src:'official',q:'機器學習模型實務應用中，「數據漂移（Data Drift）」主要是指下列哪一種情況？',opts:['訓練時使用的資料分佈，與部署後實際輸入資料的統計特徵隨時間逐漸出現差異，導致模型表現衰退','在資料前處理過程中，因特徵刪減或缺失補值不當，造成樣本資訊量下降','模型對訓練數據擬合過度，在未知數據上泛化能力不足','後端資料庫因欄位定義或結構調整，導致特徵提取流程與原始設計不一致'],ans:0,exp:'Data Drift（資料漂移/概念漂移）：生產環境中輸入資料的統計特性隨時間變化（如用戶行為改變、季節性變化），偏離訓練時的資料分佈，導致模型預測能力下降。是 MLOps 持續監控的核心指標。'},
+  {id:238,sub:'sci2',topic:'ai-gov',src:'official',q:'銀行導入生成式 AI 放貸審核系統，測試發現模型對不同族群的核准率存在顯著差異，可能引發演算法偏見。為降低此風險，最合適的措施為何？',opts:['提升模型運算速度與效能，以確保大量申請中快速回應','全面移除與申貸人身份相關的敏感屬性，避免模型因變數影響而產生偏差','導入資料與結果的公平性檢測流程，並依合規規範調整模型或決策邏輯','減少訓練樣本數量，降低偏見被放大的可能性'],ans:2,exp:'演算法公平性需系統性處理：(1)量化公平性指標（如族群間核准率差異）；(2)識別偏見來源；(3)依法規（公平放貸法）調整模型或加入後處理機制。僅刪除敏感屬性（選項B）可能因代理變數（Proxy Variables）仍造成間接歧視。'},
+  {id:239,sub:'sci2',topic:'prompt-eng',src:'official',q:'下列兩個情境，分別最適合採用哪一種提示方法？情境一：電商客服助理查詢退款流程；情境二：活動策劃AI規劃多場跨部門行銷活動，需比較不同方案可行性。',opts:['情境一採用 CoT，情境二採用 ToT','情境一採用 ToT，情境二採用 CoT','情境一與情境二都適合 CoT','情境一與情境二都適合 ToT'],ans:0,exp:'CoT（Chain-of-Thought）適合單一線性推理路徑（退款流程有明確規範，逐步推理即可）；ToT（Tree-of-Thoughts）適合需要探索多條路徑並比較方案的複雜決策（跨部門活動規劃需同時考量多個變數和方案）。'},
+  {id:240,sub:'sci2',topic:'prompt-eng',src:'official',q:'Graph Prompting 在處理複雜關係資料時，為何通常比 Chain-of-Thought（CoT）更有效？',opts:['Graph Prompting 幾乎不需要推理，只依靠圖結構即可得出結論','Graph Prompting 僅需單次提示，即可避免多輪推理的誤差累積','Graph Prompting 的生成速度通常更快，因此效率更高','Graph Prompting 能捕捉非線性結構與上下文關聯，適合處理網絡化資訊'],ans:3,exp:'CoT 是線性序列推理；Graph Prompting 透過圖結構表達節點間的非線性關係（社交網絡、知識圖譜），能捕捉複雜的多跳推理路徑和上下文依賴關係，對複雜關係資料更為有效。'},
+  {id:241,sub:'sci2',topic:'prompt-eng',src:'official',q:'少樣本提示（Few-shot）僅能提供1-2個範例，若遇到領域偏移（Domain Shift），模型最可能面臨的核心挑戰為何？',opts:['範例數量過少，無法涵蓋新領域的多樣性，導致模型泛化不足','範例表徵有限，模型容易依賴單一樣本特性而降低適應力','範例覆蓋不足，使模型難以抽取跨領域的穩定模式','範例資訊過於稀缺，模型缺乏應對不同輸入情境的能力'],ans:0,exp:'Domain Shift（領域偏移）指測試領域與訓練領域差異。僅1-2個範例無法充分代表新領域的多樣性模式（如從電商評論遷移到醫療文本），使模型難以泛化到新領域的各種輸入情形。'},
+  {id:242,sub:'sci2',topic:'rag',src:'official',q:'金融機構導入 RAG 模型，由於大型模型運算成本過高，若考慮引入知識蒸餾（Knowledge Distillation, KD）技術，主要效益為何？',opts:['讓小型模型學習大型模型的知識，在降低運算成本的同時維持檢索與生成品質','只能應用於語音或影像辨識，無法提升文字檢索生成效能','因為 RAG 已有檢索機制，因此無需額外蒸餾知識','僅能依賴特定 API 供應商才能使用，無法在自建模型中實現'],ans:0,exp:'知識蒸餾（Knowledge Distillation）：用大型教師模型（Teacher）的軟標籤訓練小型學生模型（Student），使學生模型在大幅降低參數量（降低推理成本）的同時，保留大模型的知識和能力，可與 RAG 結合使用。'},
+  {id:243,sub:'sci2',topic:'gen-ai',src:'official',q:'評估大型語言模型（7B、13B、175B 參數規模），模型規模對基準測試結果的影響，下列哪一種說法最為恰當？',opts:['小模型在正確調整下能超越大模型，因此模型大小並不重要','大模型在多數情境下表現較好，但在特定任務上略遜於小模型','模型規模與基準測試結果完全無關，影響主要來自測試設計','模型越大，Benchmark 結果可能提升，但幅度取決於訓練數據品質與資源配置'],ans:3,exp:'規模定律（Scaling Law）表明：增大模型規模通常提升性能，但邊際效益遞減，且高度依賴訓練資料品質和計算資源分配（計算最優訓練：Chinchilla Scaling Law）。並非線性關係，也非完全無關。'},
+  {id:244,sub:'sci2',topic:'ai-system',src:'official',q:'MCP（Model Context Protocol）與 RAG 都能擴展模型的能力，兩者的核心差異主要為何？',opts:['MCP 擴展模型工具，但主要用於補足訓練資料不足','MCP 能標準化連接資源，但仍需依賴向量資料庫','RAG 常用於擴展知識庫內容，而 MCP 更著重於動態工具與 API 呼叫的整合','RAG 透過統一協議，提升回答相關性'],ans:2,exp:'RAG（檢索增強生成）：從向量資料庫檢索靜態知識文件，擴展知識廣度。MCP（Model Context Protocol）：標準化 AI 與外部工具/服務的連接協議，支援動態 API 調用（如查詢資料庫、執行程式碼），兩者互補而非競爭。'},
+  {id:245,sub:'sci2',topic:'gen-ai',src:'official',q:'下列哪一個資料集專門設計用於測試大型語言模型在多領域、多任務語言理解（人文、科學、社會科學），而非專門用於數學推理或中文專業知識？',opts:['MMLU','GSM8K','MATH','C-Eval'],ans:0,exp:'MMLU（Massive Multitask Language Understanding）：涵蓋57個科目的多選題，測試廣泛領域的語言理解能力；GSM8K=小學數學；MATH=競賽數學；C-Eval=中文學科知識測試。'},
+  {id:246,sub:'sci2',topic:'ai-plan',src:'official',q:'智慧工廠導入生成式 AI 協助產線工程師即時產生維修指引，下列哪一項並非加入 Guardrails（防護機制）的主要目的？',opts:['檢查工程師輸入內容，避免觸發錯誤或危險需求','過濾與驗證 AI 輸出的維修指引，確保符合安全標準','確保生成的操作建議符合法規與產業安全規範','完整重建並追蹤 AI 模型的全部推理過程'],ans:3,exp:'Guardrails（防護機制）的目的是：輸入過濾（防止危險指令）、輸出驗證（確保安全合規）、內容過濾等。「完整重建AI推理過程」是可解釋性（XAI）的範疇，不是防護機制的主要功能。'},
+  {id:247,sub:'sci2',topic:'rag',src:'official',q:'顧問公司導入生成式 AI 檢索長篇法規文件，發現回應常出現不相關或過於分散的內容。決定對文件進行文本切分（Chunking）的主要目的為何？',opts:['讓模型在回答時能加快推理速度','提高檢索相關性與降低長上下文噪音','降低系統記憶體和硬體資源的負擔','使模型在生成回覆時更具創造性與多樣化'],ans:1,exp:'Chunking（文本切分）將長文件分割為較小的語意段落，使向量檢索能更精準地找到相關片段（而非整份長文件），降低無關內容噪音，提升 RAG 系統的檢索精確率和相關性。'},
+  {id:248,sub:'sci2',topic:'rag',src:'official',q:'企業內部知識檢索系統採用多向量檢索器（Multi-vector Retriever），主要以何種方式提升查詢的完整性與精準度？',opts:['支援同時處理多種資訊表示，提升跨文本型態的檢索效果','透過多向量壓縮與共享權重方式，降低檢索過程的運算與儲存成本','以切分並過濾文件片段，減少上下文長度帶來的 Token 負擔','透過調整生成階段的溫度參數，使模型在回覆時更穩定一致'],ans:0,exp:'多向量檢索器為同一文件建立多種向量表示（如：文件摘要向量+段落向量+關鍵句向量），支援不同粒度和角度的查詢，顯著提升對複雜查詢的召回率和精確率。'},
+  {id:249,sub:'sci2',topic:'ai-system',src:'official',q:'在 Agentic AI 的架構中，解決方案圖譜（Solution Graph）常被用來輔助代理的任務執行，其主要作用為何？',opts:['透過圖形結構完全取代大型語言模型的推理，讓代理只依靠圖演算法完成任務','僅用於保存代理的輸出結果，方便後續檢視與審計，而不影響實際推理流程','將代理限制在既定流程內，避免其產生偏離設計腳本的行為','作為代理在執行過程中的參考框架，用於組織決策步驟並支援任務推理'],ans:3,exp:'Solution Graph（解決方案圖譜）為 Agentic AI 提供任務分解的結構化框架，代理在執行過程中參考圖譜進行路徑規劃、步驟追蹤和決策，而非取代 LLM 推理，也不只是記錄結果。'},
+  {id:250,sub:'sci2',topic:'gen-ai',src:'official',q:'小明想開發部落格寫作工具，用戶輸入文章開頭，系統自動續寫後續內容。若要實現此功能，最適合選擇哪一類任務？',opts:['序列到序列建模（Sequence-to-Sequence Modeling），透過輸入序列產生新的輸出序列','遮罩語言建模（Masked Language Modeling），補齊文字中缺失的詞語或片段','生成式語言建模（Text Generation），依據上下文持續產生新的內容','文本分類（Text Classification），針對輸入文本判斷情感、主題或標籤'],ans:2,exp:'文章續寫（Text Continuation）是典型的自回歸語言生成任務（Causal Language Modeling）：根據已有上下文逐詞生成後續內容，使用 GPT 類模型。Seq2Seq 適合翻譯/摘要；MLM（如 BERT）用於填空，非生成。'},
+];
+
+// ═══════ 115年第一次科目一 50題 ═══════
+const QB_115_1_S1 = [
+  {id:501,sub:'sci1',topic:'data-eng',src:'official_115',q:'下列何者不屬於資料整合（Data Integration）的主要目的？',
+   opts:['統一不同來源資料的格式與欄位定義，以確保分析一致性','識別並處理重複資料，避免影響模型訓練結果','整併多來源資料，以提升資料完整性與應用價值','依資料保存政策延長原始資料留存期限，以利未來可能的分析需求'],
+   ans:3,exp:'資料整合目的：統一格式、處理重複、提升完整性。延長留存期限是資料治理政策，非資料整合目的。'},
+  {id:502,sub:'sci1',topic:'ai-concept',src:'official_115',q:'某智慧城市專案導入 AI 技術，以優化垃圾收集路線調度並即時監測空氣品質。系統需持續蒐集 PM2.5、氣體濃度與垃圾桶滿溢度。下列何種技術最直接支援上述需求？',
+   opts:['專家系統（Expert System）','決策支援系統（Decision Support System）','啟發式決策引擎（Heuristic Decision Engine）','感知器網路（Sensor Network）'],
+   ans:3,exp:'感測器網路直接負責蒐集環境數據（PM2.5、氣體濃度）與設備狀態（垃圾桶滿溢度）等即時資料，最直接支援此需求。'},
+  {id:503,sub:'sci1',topic:'ml',src:'official_115',q:'下列何者不符合非監督式學習（Unsupervised Learning）的典型特徵？',
+   opts:['模型可依據資料中的特徵相似性進行自動分群','訓練過程中不需仰賴事先定義的標籤資料','常用於探索資料的潛在結構或隱含模式','模型主要學習輸入特徵與既定目標標記之間的對應關係'],
+   ans:3,exp:'選項D描述的是監督式學習（學習輸入與目標標記的對應），非監督式學習不需要標籤資料，自動發現資料結構。'},
+  {id:504,sub:'sci1',topic:'data-eng',src:'official_115',q:'某保險公司AI理賠金額預測模型，歷史資料呈近似常態分布但有少數極端高額案件，規劃進行離群值處理。下列何者最不適當？',
+   opts:['依統計準則（如 Z-score 或 IQR）評估後，再決定是否調整或處理極端值','採用截尾（Trimming）處理極端值，以提升模型穩定性','使用 One-hot 編碼（One-hot Encoding）將離群值轉換為類別特徵以改善數值穩定性','結合領域知識評估其合理性，再決定保留或修正'],
+   ans:2,exp:'One-hot 編碼用於類別型特徵轉換，不適合用來處理數值型資料的離群值問題。'},
+  {id:505,sub:'sci1',topic:'data-eng',src:'official_115',q:'某銀行建立 AI 詐欺交易偵測模型，詐欺樣本比例極低。下列何者最符合 SMOTE 技術的主要功能？',
+   opts:['透過隨機刪除部分正常交易資料，以降低類別失衡程度','依據少數類別樣本的特徵空間，合成產生新的少數類別樣本','調整模型的損失函數（Loss Function）權重，使誤判少數類別時的懲罰提高','以交叉驗證（Cross-validation）方式重新分割資料集，使各折資料類別比例一致'],
+   ans:1,exp:'SMOTE 核心是在少數類別的特徵空間中透過插值方式合成新的少數類別樣本，而非刪除多數類別資料。'},
+  {id:506,sub:'sci1',topic:'data-eng',src:'official_115',q:'資料科學團隊在模型訓練前需對數值特徵進行正規化或標準化。為確保模型評估具真實性並避免資料洩漏，下列何者為最適當的作法？',
+   opts:['於資料分割前，先對完整資料集計算統計量並進行標準化處理','先分割訓練資料和測試資料，並各自獨立計算統計量後進行標準化','先分割訓練資料和測試資料，僅以訓練資料計算統計量，再套用至測試資料','僅對訓練資料進行標準化處理，測試資料保持原始數值'],
+   ans:2,exp:'正確做法是以訓練資料計算均值/標準差，再套用至測試資料，避免資料洩漏。'},
+  {id:507,sub:'sci1',topic:'data-eng',src:'official_115',q:'某電信公司建立機器學習模型預測用戶流失風險，資料包含「資費方案類型」與「客戶地區」等類別型特徵。下列何者最直接用於將類別型特徵轉換為模型可處理的數值格式？',
+   opts:['資料分群（Data Clustering）','特徵交叉（Feature Cross）','One-hot 編碼（One-hot Encoding）','寬深模型（Wide and Deep）'],
+   ans:2,exp:'One-hot 編碼將每個類別轉為獨立二元特徵，是最直接的類別→數值轉換方式。'},
+  {id:508,sub:'sci1',topic:'ml',src:'official_115',q:'某零售企業預測顧客購買機率，資料同時包含大量稀疏類別特徵與數值型特徵，希望模型既能學習已出現的特徵組合規律，也能對未出現的特徵組合做出合理預測。下列哪一種模型架構最適合？',
+   opts:['線性迴歸（Linear Regression）','決策樹（Decision Tree）','支援向量機（Support Vector Machine, SVM）','寬深模型（Wide and Deep）'],
+   ans:3,exp:'寬深模型（Wide部分記憶已出現特徵組合，Deep部分泛化未出現特徵組合），專為此類需求設計。'},
+  {id:509,sub:'sci1',topic:'gen-ai',src:'official_115',q:'某影音串流平台建立神經網路模型，模型輸出層需將結果轉換為各類別的機率分佈，以便系統依機率高低推薦內容。下列哪一種函數最適合用於模型輸出層？',
+   opts:['Softmax 函數（Softmax Function）','Sigmoid 函數（Sigmoid Function）','線性函數（Linear Function）','ReLU 函數（Rectified Linear Unit Function）'],
+   ans:0,exp:'Softmax 將輸出轉換為總和為1的機率分佈，適合多類別分類輸出層。'},
+  {id:510,sub:'sci1',topic:'gen-ai',src:'official_115',q:'某設計公司導入生成式 AI 工具，需依據既有圖像資料產生具有變化且風格一致的新圖像。下列哪一種模型技術或方法最符合上述需求？',
+   opts:['隱變量自編碼器（Variational Autoencoder, VAE）','隨機森林（Random Forest）','K-近鄰演算法（K-Nearest Neighbors, KNN）','貝氏網路（Bayesian Network）'],
+   ans:0,exp:'VAE 學習資料的潛在分佈，能生成具有變化性且風格一致的新樣本，適合此需求。'},
+  {id:511,sub:'sci1',topic:'gen-ai',src:'official_115',q:'某企業導入生成式 AI 系統自動產出會議摘要，並規劃額外建置一套 AI 系統用於評估摘要內容的正確性與完整性。下列何者為此 AI 系統的核心目標？',
+   opts:['自動新增專業名詞與技術指標','判斷摘要是否遺漏關鍵資訊或出現語意錯誤','調整語音轉文字結果','自動標註摘要的關鍵字與主題標籤'],
+   ans:1,exp:'評估摘要正確性與完整性的核心是判斷是否有資訊遺漏或語意錯誤，屬評估/驗證系統功能。'},
+  {id:512,sub:'sci1',topic:'gen-ai',src:'official_115',q:'ChatGPT、Gemini 等對話型生成式 AI 工具所依據的基礎模型技術，下列何者正確？',
+   opts:['決策樹（Decision Tree）','大型語言模型（Large Language Model, LLM）','生成對抗網路（Generative Adversarial Network, GAN）','圖卷積網路（Graph Convolutional Network, GCN）'],
+   ans:1,exp:'ChatGPT、Gemini 等對話型 AI 的基礎技術是大型語言模型（LLM），基於 Transformer 架構訓練。'},
+  {id:513,sub:'sci1',topic:'ai-gov',src:'official_115',q:'根據《金融機構運用人工智慧技術作業規範》，金融機構於使用人工智慧提供金融服務並直接與消費者互動時，下列何者非必要揭露之資訊？',
+   opts:['該服務之 AI 模型原始程式碼','服務適用對象與用途範圍','該服務是否為 AI 自動完成','該服務是否提供替代方案'],
+   ans:0,exp:'原始程式碼涉及商業機密，法規並未要求揭露。必要揭露項目包含服務對象、是否由AI完成、是否有替代方案。'},
+  {id:514,sub:'sci1',topic:'ai-concept',src:'official_115',q:'下列哪一項「AI 技術應用與產業領域」的對應最為恰當？',
+   opts:['利用 AI 分析商場顧客購買紀錄以預測股票市場波動—智慧交通','使用 AI 進行設備故障預測與預防性維護—智慧製造','以 AI 模型融合即時氣象資料與乘客消費行為特徵，推薦會員升級優惠方案—智慧醫療','利用 AI 分析社群媒體互動以提升臨床診斷準確度—金融服務業'],
+   ans:1,exp:'設備故障預測與預防性維護是智慧製造的典型 AI 應用，其他選項的應用與產業領域明顯不符。'},
+  {id:515,sub:'sci1',topic:'data-eng',src:'official_115',q:'在資料處理中，下列何者屬於「結構化數據」的例子？',
+   opts:['儲存在 MySQL 資料庫中的訂單記錄','以 JSON 格式儲存的商品訂單資訊','用 XML 標註的產品目錄','儲存在純文字檔案中的客服對話紀錄'],
+   ans:0,exp:'結構化資料有明確欄位定義，儲存在關聯式資料庫（如MySQL）中的訂單記錄是典型例子。JSON/XML屬半結構化，純文字對話屬非結構化。'},
+  {id:516,sub:'sci1',topic:'stats',src:'official_115',q:'關於敘述性統計指標，下列敘述何者最為正確？',
+   opts:['中位數（Median）能有效反映極端值對資料分佈的影響','標準差（Standard Deviation）越大，代表資料越集中','百分位數（Percentile）主要用於衡量資料在整體分布中的相對位置','平均值（Mean）適合描述偏態且包含離群值（Outliers）的資料'],
+   ans:2,exp:'百分位數表示一個值在整體資料中所處的相對位置。標準差越大代表資料越分散；中位數不受極端值影響；平均值易受離群值影響。'},
+  {id:517,sub:'sci1',topic:'data-viz',src:'official_115',q:'下列哪一種情境最適合使用直方圖（Histogram）？',
+   opts:['檢視顧客年齡資料在不同區間的集中情形','分析產品售價與銷售量之間的關聯程度','比較各產品類別的年度銷售總額','在地圖上標示各縣市加盟店的地理分布位置'],
+   ans:0,exp:'直方圖用於呈現連續數值資料在各區間的分布頻率，最適合分析顧客年齡分布。'},
+  {id:518,sub:'sci1',topic:'ml',src:'official_115',q:'給定排序後陣列：arr = [3, 8, 14, 19, 21, 27, 33, 45, 52]。若搜尋目標值為 27，且採用標準二分搜尋流程（每次比較後排除中位數），請問最多需要比較幾次即可找到目標？',
+   opts:['2 次','3 次','4 次','5 次'],
+   ans:1,exp:'第1次：中位數21，27>21；第2次：右半[27,33,45,52]中位數33，27<33；第3次：[27]找到27。共3次比較。'},
+  {id:519,sub:'sci1',topic:'ml',src:'official_115',q:'某物流公司導入強化式學習（Reinforcement Learning）優化車隊調度。模型依據不同配送狀態動態調整行動選擇方式，使決策結果逐步朝較佳績效收斂。最符合下列哪一項強化式學習核心機制？',
+   opts:['調整策略函數以改變行動選擇機率','更新訓練資料分布以降低模型偏差','重新分群狀態資料以識別決策類型','建立正確決策標籤進行誤差修正'],
+   ans:0,exp:'強化學習的核心是策略（Policy）調整，根據環境回饋更新策略函數，改變各狀態下的行動選擇機率。'},
+  {id:520,sub:'sci1',topic:'ml',src:'official_115',q:'某團隊訓練影像分類模型，訓練準確率達 98%，但在測試資料上僅有 72%。若希望提升模型對新資料的適應能力，並增加訓練資料的多樣性，下列何者最適合？',
+   opts:['增加模型的深度與參數量，使模型學習更多細節','對訓練影像進行旋轉、翻轉等隨機變化','提高訓練速度，使模型更快完成學習','僅保留模型表現較好的訓練資料'],
+   ans:1,exp:'訓練/測試差距大是過擬合現象。資料增強（旋轉、翻轉等）能增加訓練資料多樣性，有效改善過擬合。'},
+  {id:521,sub:'sci1',topic:'gen-ai',src:'official_115',q:'某時尚品牌建立服裝設計輔助系統，需根據設計師輸入的風格條件，自動產生具有高度視覺品質、細節穩定且風格變化自然的服裝草圖。團隊特別重視生成結果的穩定性與多樣性控制能力。下列哪一種模型技術較為適合？',
+   opts:['支援向量機（Support Vector Machine, SVM）','生成對抗網路（Generative Adversarial Network, GAN）','決策樹（Decision Tree）','擴散模型（Diffusion Model）'],
+   ans:3,exp:'擴散模型在高品質圖像生成、穩定性與多樣性控制方面優於 GAN（GAN 訓練不穩定），是目前圖像生成的主流技術。'},
+  {id:522,sub:'sci1',topic:'xai',src:'official_115',q:'某製造業工廠規劃導入 AI 監控系統，在缺乏完整異常標註資料的情況下，辨識與一般運作型態顯著不同的狀態，並發出預警。下列何種技術較為適合？',
+   opts:['使用支援向量機（SVM）建立異常分類模型','以決策樹（Decision Tree）學習異常類型的判斷規則','採用變分自編碼器（Variational Autoencoder, VAE）學習正常資料分佈','使用生成對抗網路（GAN）直接預測異常標籤'],
+   ans:2,exp:'VAE 學習正常資料的分布，重建誤差大的樣本即為異常，不需異常標籤，適合缺乏標註資料的異常偵測。'},
+  {id:523,sub:'sci1',topic:'gen-ai',src:'official_115',q:'在 AI 推論服務架構設計中，關於批次推論（Batch Inference）與即時推論（Real-time Inference）特性的敘述何者最正確？',
+   opts:['批次推論通常以同步請求方式回傳結果，以確保資料一致性；即時推論則多採非同步機制以提升系統吞吐量','批次推論多用於延遲容忍度較高的大規模資料處理，通常以吞吐量最佳化為優先；即時推論則著重於請求回應時間的穩定性與低延遲特性','批次推論因計算資源需求高，僅適用於影像類模型；即時推論則主要應用於結構化資料模型','即時推論為確保回應速度，通常限制為單筆資料輸入；批次推論則可支援同步多筆資料即時回傳'],
+   ans:1,exp:'批次推論強調高吞吐量（延遲容忍度高）；即時推論強調低延遲與快速響應，是兩者最核心的特性差異。'},
+  {id:524,sub:'sci1',topic:'gen-ai',src:'official_115',q:'某企業導入大型語言模型作為客服助理，規劃導入人類反饋強化學習（RLHF）流程。下列何者最不屬於 RLHF 階段的典型技術活動？',
+   opts:['透過人工評估方式建立偏好資料，使模型的不同候選輸出可反映人類主觀品質差異','訓練一個能依據人類偏好判斷輸出品質的模型，作為模型優化過程中的回饋依據','依據品質評估結果，調整模型生成策略，使其輸出更符合偏好導向的行為表現','以未標註語料為主進行長週期表示學習訓練，以提升模型基礎語言建模能力'],
+   ans:3,exp:'未標註語料預訓練屬於 LLM 的預訓練階段，不是 RLHF 的活動。RLHF 三步驟：偏好資料收集→獎勵模型訓練→策略調整。'},
+  {id:525,sub:'sci1',topic:'gen-ai',src:'official_115',q:'在大型語言模型（LLM）的推論服務中，關於批次處理（Batching）機制的影響，下列敘述何者最正確？',
+   opts:['Batching 可提升加速器資源使用效率並增加整體吞吐量（Throughput），但在部分情境下可能對單筆請求延遲造成影響','Batching 主要用於加快單筆請求回應時間','Batching 的效益主要來自降低記憶體使用量，對於吞吐量與延遲表現影響有限','Batching 在低併發（Concurrency）請求下，仍能明顯提升系統效能'],
+   ans:0,exp:'Batching 透過批量處理多個請求提升 GPU 利用率和整體吞吐量，但等待批次湊齊可能增加部分請求的等待延遲。'},
+  {id:526,sub:'sci1',topic:'xai',src:'official_115',q:'在可解釋 AI（XAI）的分類架構中，LIME（Local Interpretable Model-agnostic Explanations）屬於哪一類解釋技術？',
+   opts:['內建可解釋模型（Intrinsic Interpretability）：模型本身具有透明的決策結構','對話式解釋系統（Conversational AI Explainer）：透過互動對話提供模型解釋','後處理模型解釋（post-hoc）：對已訓練模型提供外部解釋','代理模型技術（Surrogate Model）：訓練另一個簡單模型來完全取代原黑盒模型進行推論'],
+   ans:2,exp:'LIME 屬於 post-hoc 解釋方法，在模型訓練後透過局部近似的方式解釋黑盒模型的預測結果，且模型無關（model-agnostic）。'},
+  {id:527,sub:'sci1',topic:'xai',src:'official_115',q:'SHAP（SHapley Additive exPlanations）值常用於分析機器學習模型的輸出行為。下列何者最符合 SHAP 值所提供的資訊？',
+   opts:['模型在訓練過程中，各特徵對損失函數收斂速度的影響程度','依據特徵對模型整體準確率的影響，自動篩除低重要性變數','在單一預測結果中，各輸入特徵對最終輸出所產生的貢獻分配','透過調整特徵權重，使模型在推論階段降低計算複雜度'],
+   ans:2,exp:'SHAP 基於 Shapley 值，量化每個特徵對特定預測結果的貢獻大小，提供個案層級（instance-level）的解釋。'},
+  {id:528,sub:'sci1',topic:'xai',src:'official_115',q:'在金融業導入 AI 模型與可解釋性技術時，反事實解釋（Counterfactual Explanation）最符合下列哪一種應用？',
+   opts:['分析整體客戶群的信用風險分布，以預測未來違約率趨勢','回溯歷史呆帳案例，辨識造成違約的主要影響因素','分析在模型不變的前提下，客戶申請資料變動對授信決策結果的影響','依據客戶輪廓與行為資料，推薦最適合的金融商品以提升交叉銷售'],
+   ans:2,exp:'反事實解釋回答「若輸入如何改變，則輸出會不同」，適合授信審查中解釋「客戶需改變哪些條件才能獲批」。'},
+  {id:529,sub:'sci1',topic:'xai',src:'official_115',q:'在深度學習模型的分析與驗證過程中，研究人員有時會利用「顯著性圖（Saliency Map）」來輔助理解模型行為。下列何者最符合此技術的主要用途？',
+   opts:['量化各輸入特徵對模型整體預測準確度的平均影響程度','標示輸入資料中對單一預測結果影響較大的區域或部分','評估在不同模型參數設定下，預測結果的穩定性變化','比較不同模型架構在測試資料上的泛化能力差異'],
+   ans:1,exp:'Saliency Map 透過計算輸出對輸入的梯度，視覺化哪些輸入區域（如影像像素）對特定預測結果貢獻最大。'},
+  {id:530,sub:'sci1',topic:'ml',src:'official_115',q:'某商業銀行想建立洗錢行為檢測系統，擁有過去 5 年交易記錄，其中包含已確認的洗錢案例（標記為「異常」）和正常交易（標記為「正常」）。請問使用下列哪一種機器學習方法最為適合？',
+   opts:['監督式學習的分類問題','非監督式學習的分群問題','強化式學習','非監督式學習的關聯規則挖掘'],
+   ans:0,exp:'有標註的歷史資料（異常/正常），訓練模型預測新交易類別，是典型的監督式學習分類問題。'},
+  {id:531,sub:'sci1',topic:'ml',src:'official_115',q:'某農場收集了大量作物葉片影像，但只有 30% 的影像有病害類別標註，其餘 70% 的影像沒有任何標籤。農場希望充分利用所有資料來訓練病害識別模型。這種情況最適合使用哪一種學習方法？',
+   opts:['半監督式學習（Semi-supervised Learning）','監督式學習（Supervised Learning）','非監督式學習（Unsupervised Learning）','強化式學習（Reinforcement Learning）'],
+   ans:0,exp:'半監督式學習結合少量標註資料與大量未標註資料進行訓練，正好適合此種部分標註的情境。'},
+  {id:532,sub:'sci1',topic:'ai-concept',src:'official_115',q:'某環保局想建立 AI 系統監測空氣品質，透過分析監測站攝影機拍攝的影像來識別煙霧，系統需要在影像中找出煙霧區域並標示其位置和範圍。這個應用主要屬於電腦視覺的哪個技術領域？',
+   opts:['影像分類，判斷影像中是否有煙霧','物件偵測，找出煙霧位置並用方框標示','影像分割，精確標示出煙霧的像素區域','人臉辨識，識別煙霧來源'],
+   ans:2,exp:'需要精確標示位置和範圍（像素層級）是影像分割的特徵。物件偵測用方框標示，影像分類只判斷有無。'},
+  {id:533,sub:'sci1',topic:'gen-ai',src:'official_115',q:'某公車系統想預測各站點的到站時間，需要考慮歷史班次資料、即時路況、天氣等因素。由於路況變化複雜，傳統循環神經網路（RNN）在建模時可能難以保留較早期的重要資訊。下列哪種架構最能解決這個問題？',
+   opts:['卷積神經網路（Convolutional Neural Network, CNN）','自編碼器（Autoencoder, AE）','全連接神經網路（Fully Connected Neural Network, FCNN）','長短期記憶網路（Long Short-Term Memory, LSTM）'],
+   ans:3,exp:'LSTM 透過遺忘閘、輸入閘、輸出閘機制解決 RNN 的梯度消失問題，能有效保留長期依賴資訊。'},
+  {id:534,sub:'sci1',topic:'ai-concept',src:'official_115',q:'某保險公司每月處理約 50 萬筆理賠申請，希望建立 AI 系統自動識別可疑的詐欺案件。由於公司內部缺乏 AI 專業人員，且需要快速上線驗證效果。在去識別化個人隱私資料後，下列哪一種平台類型最適合？',
+   opts:['從零開始建立深度學習框架並自行訓練模型','採用開源機器學習框架進行客製化模型開發','使用雲端 AutoML 平台進行自動化模型訓練','購買現成的詐欺偵測軟體套件直接部署'],
+   ans:2,exp:'AutoML 平台不需深度 AI 知識即可快速訓練模型並驗證效果，符合缺乏 AI 專業人員且需快速上線的需求。'},
+  {id:535,sub:'sci1',topic:'ai-gov',src:'official_115',q:'某市政府規劃釋出市民用電資料供學術研究使用，資料內容包含用電紀錄與部分人口統計欄位，考量資料可能涉及可識別個人之資訊，且須符合個人資料保護相關規範，下列哪一種資料處理方式最為適當？',
+   opts:['提供完整資料集並透過合約約定研究用途與保密責任','僅保留用電數值資料，移除所有其他欄位以避免識別風險','對具識別風險的資料欄位進行轉換處理，並移除直接識別資訊','僅將資料加密後提供，確保資料在傳輸過程中的安全性'],
+   ans:2,exp:'最佳做法是對具識別風險欄位進行去識別化轉換（如假名化），既保留資料分析價值又移除直接識別資訊。'},
+  {id:536,sub:'sci1',topic:'ai-concept',src:'official_115',q:'某電子製造公司建置 AI 視覺檢測系統，用於辨識 PCB 電路板製程缺陷。系統在影像判讀任務上表現穩定，但其模型設計與訓練目標皆侷限於特定應用範圍，無法直接遷移至其他營運決策任務。依人工智慧能力範疇分類，下列何者最符合該系統特性？',
+   opts:['弱 AI（Weak AI/Narrow AI）','強 AI（Strong AI）','通用人工智慧（Artificial General Intelligence, AGI）','超級人工智慧（Artificial Superintelligence, ASI）'],
+   ans:0,exp:'弱 AI（窄 AI）是針對特定任務設計的 AI 系統，不具備跨域遷移或通用推理能力，符合此描述。'},
+  {id:537,sub:'sci1',topic:'gen-ai',src:'official_115',q:'某紡織製造公司導入 AI 系統進行布料瑕疵檢測，每天需處理來自 30 條產線的影像資料，需在布料離開產線前的 3 秒內完成瑕疵判定。近期系統在尖峰時段容易出現判定延遲，影響製程節奏。若要優先改善此問題，下列哪一種做法最適合？',
+   opts:['擴充資料儲存容量，以因應長期資料累積需求','強化即時資料處理與推論計算資源配置，以降低延遲風險','調整資料格式標準，以降低跨來源整合複雜度','增加資料驗證與清理機制，以提升資料品質穩定性'],
+   ans:1,exp:'問題核心是即時推論延遲，應強化推論計算資源（如 GPU 加速）以降低延遲，而非儲存或格式問題。'},
+  {id:538,sub:'sci1',topic:'ai-concept',src:'official_115',q:'某果園管理公司計畫導入 AI 系統協助農民判斷蘋果成熟度，透過分析果實特徵資訊，評估成熟狀態並自動判斷採收時機。根據 AI 應用領域的分類，這個系統主要屬於哪一個應用領域？',
+   opts:['自然語言處理（Natural Language Processing）','電腦視覺（Computer Vision）','語音識別（Speech Recognition）','推薦系統（Recommendation System）'],
+   ans:1,exp:'分析影像（果實特徵）進行判斷（成熟度）屬於電腦視覺的應用範疇。'},
+  {id:539,sub:'sci1',topic:'ml',src:'official_115',q:'某企業評估於不同業務場景導入機器學習技術。下列哪一項應用情境與機器學習類型的搭配最為適當？',
+   opts:['在醫療影像分析中，同時運用少量已標註資料與大量未標註影像進行模型訓練—監督式學習（Supervised Learning）','在智慧推薦系統中，利用顧客是否點擊的歷史標籤資料預測未來偏好—非監督式學習（Unsupervised Learning）','在詐欺交易分析中，模型透過錯誤判斷所產生的損失作為回饋訊號，持續調整策略—監督式學習（Supervised Learning）','在股價資料分析中，將歷史價格變動模式劃分為若干趨勢型態，且未使用人工標註—非監督式學習（Unsupervised Learning）'],
+   ans:3,exp:'股價模式分群且無人工標註是非監督式學習。選A是半監督式；選B有標籤應是監督式；選C以損失調整策略是強化式學習。'},
+  {id:540,sub:'sci1',topic:'ml',src:'official_115',q:'某製造業公司建置機器學習模型，用於預測產品是否為瑕疵品。實際生產資料中，瑕疵品比例極低，大多數樣本皆為正常品。模型測試時發現，即使模型多數預測為正常品，仍可獲得很高的整體準確率。在此情境下，若希望更有效衡量模型對瑕疵品的辨識能力，下列何者較適合作為主要評估指標？',
+   opts:['F1-score','均方誤差（Root Mean Squared Error, RMSE）','準確率（Accuracy）','判定係數（R², Coefficient of Determination）'],
+   ans:0,exp:'類別不平衡時 Accuracy 會誤導，F1-score 兼顧 Precision 和 Recall，能更有效衡量對少數類別（瑕疵品）的辨識能力。'},
+  {id:541,sub:'sci1',topic:'gen-ai',src:'official_115',q:'在大型語言模型（LLM）的效能優化中，Flash Attention 常被用來改善 Transformer 注意力機制的運算效率。關於 Flash Attention 的主要效益，下列敘述何者最正確？',
+   opts:['透過忽略影響較小的注意力權重，減少模型需要計算的關聯數量，以降低運算成本','透過調整注意力計算與資料處理方式，減少中間結果的儲存需求，進而改善速度與資源使用效率','透過增加注意力計算的並行程度，使模型可同時處理更多注意力頭部','透過將注意力結果暫存於高速快取記憶體，以避免重複計算造成延遲'],
+   ans:1,exp:'Flash Attention 的核心創新是 IO 感知的計算方式，避免將注意力矩陣寫回高頻寬記憶體，減少中間結果儲存，大幅提升速度與記憶體效率。'},
+  {id:542,sub:'sci1',topic:'rag',src:'official_115',q:'某企業建置基於檢索增強生成（RAG）的法遵知識輔助系統，每當法規更新時需重新建立完整索引，導致更新期間系統暫停服務。若希望在兼顧查詢效率的同時提升知識更新彈性與系統穩定性，下列何者最適合？',
+   opts:['提升模型推論資源配置，以維持高流量查詢時的回應效能','調整語言模型的輸出限制機制，以降低生成內容與法規不一致的風險','建立固定法規問答對照表，以規則化方式優先回應常見問題','導入可支援增量更新的索引管理方式，使異動文件可即時反映於檢索結果'],
+   ans:3,exp:'增量索引（Incremental Indexing）只處理新增/更新的文件，不需重建整個索引，可做到近即時更新且不影響線上服務。'},
+  {id:543,sub:'sci1',topic:'ml',src:'official_115',q:'關於機器學習不同的學習模式，下列敘述哪些錯誤？（含：非監督式需預先定義正確輸出、半監督式只用未標註資料、自監督式需人工逐筆標註）',
+   opts:['2、3、6','2、4、5','1、3、6','2、3、4'],
+   ans:3,exp:'錯誤敘述：(2)非監督式不需預先定義正確輸出；(3)半監督式同時使用標註與未標註資料；(4)自監督式自動從資料中產生監督訊號，無需人工標註。'},
+  {id:544,sub:'sci1',topic:'data-eng',src:'official_115',q:'某零售業者建立顧客行為預測模型，資料集包含「年消費金額」、「平均單筆交易金額」及「會員年資」等數值型特徵，部分金額特徵呈現高度偏態分布。為降低極端值對模型學習穩定性的影響，下列哪一種特徵工程方法最適合？',
+   opts:['對數轉換（Log Transformation）','區間化（Binning）','One-hot 編碼（One-hot Encoding）','隨機重抽樣（Random Resampling）'],
+   ans:0,exp:'對數轉換能壓縮大數值的範圍，有效降低偏態分布中極端值的影響，同時保留數值型特徵的連續性。'},
+  {id:545,sub:'sci1',topic:'gen-ai',src:'official_115',q:'某團隊訓練深層神經網路模型時，發現訓練誤差長時間幾乎未下降，模型參數更新幅度極小，呈現學習停滯現象。若研判問題與梯度傳遞效率有關，下列何者最適合的改善策略？',
+   opts:['延長模型訓練時間，使模型有更多機會調整參數','增加訓練樣本數量，以提升模型學習能力','調整模型中的啟動函數設定，以改善訓練過程的穩定性','簡化模型結構，以降低模型過度擬合的可能性'],
+   ans:2,exp:'梯度消失問題（梯度傳遞效率差）的主要解決方法是改用 ReLU 等不易飽和的激活函數（取代 Sigmoid/Tanh），改善梯度回傳效率。'},
+  {id:546,sub:'sci1',topic:'data-eng',src:'official_115',q:'某市政府建置城市治理資料平台，需整合交通車流偵測資料、路口監視器影像，以及民眾透過陳情系統提交的文字通報。由於各類資料格式、儲存方式與資料型態差異甚大，導致資料清理與整合成本顯著增加。就大數據特性而言，此專案最主要面臨下列哪一項挑戰？',
+   opts:['Volume','Velocity','Variety','Veracity'],
+   ans:2,exp:'多種格式（影像、數值、文字）的整合挑戰屬於大數據的 Variety（多樣性）挑戰。'},
+  {id:547,sub:'sci1',topic:'ml',src:'official_115',q:'某企業規劃導入 AI 技術支援多項資料分析任務中，下列何種屬於結構化預測（Structured Prediction）問題？',
+   opts:['判斷一封電子郵件是否為垃圾郵件','預測未來一週的產品需求量','預測客戶是否可能流失','為語音內容轉換後的文字進行逐詞標註'],
+   ans:3,exp:'結構化預測的輸出是具有結構的序列或圖（如序列標註），逐詞標註是典型例子。單一分類或迴歸不屬於結構化預測。'},
+  {id:548,sub:'sci1',topic:'ai-concept',src:'official_115',q:'某物流公司想導入 AI 以提升營運效率，評估不同資料型態與模型架構。下列哪一種應用情境最適合採用卷積神經網路（CNN）作為主要模型架構？',
+   opts:['依據包裹每日掃描紀錄的時間序列，預測下週各倉庫的進貨量波動','根據客服對話逐句內容的先後順序，判斷客訴是否可能升級為申訴案件','根據倉庫監視器影像，自動辨識貨架是否缺貨並標示缺貨區域位置','依據車隊 GPS 路徑點的連續軌跡，預測下一段可能行駛路線'],
+   ans:2,exp:'倉庫監視器影像分析是影像辨識任務，CNN 最適合處理影像的空間特徵。時序資料適合 LSTM，序列文字適合 RNN/Transformer。'},
+  {id:549,sub:'sci1',topic:'ml',src:'official_115',q:'某 AI 科技公司在工業缺陷檢測領域已有成熟辨識產品經驗。現欲與新客戶合作開發類似產品的表面瑕疵檢測系統，但新產品量產不久，標註樣本極為稀少且專家標註成本高昂。在不大幅增加標註預算的前提下，下列哪一種做法最能利用該公司既有的技術優勢來提升模型表現？',
+   opts:['增加模型參數規模，使模型具備更強表達能力','透過資料增強（Data Augmentation）擴展影像變化，以提升模型穩定性','重新蒐集大量影像並進行完整人工標註','採用遷移學習（Transfer Learning），利用既有預訓練模型進行調整'],
+   ans:3,exp:'遷移學習利用在來源域（已有成熟模型）學到的特徵，在標註資料極少的目標域進行微調，最能利用既有技術優勢。'},
+  {id:550,sub:'sci1',topic:'ml',src:'official_115',q:'某醫院使用機器學習模型篩檢癌症患者。模型預測結果會決定哪些病人需要進一步檢查。院方非常重視盡量找出所有可能的癌症患者，即希望降低漏診（Missed Diagnosis）風險，即便這可能增加一些誤判。下列哪一個評估指標最能反映模型找出癌症患者的能力？',
+   opts:['精準率（Precision）','召回率（Recall）','假陽性率（False Positive Rate）','ROC-AUC 曲線'],
+   ans:1,exp:'召回率（Recall）= TP/(TP+FN)，衡量所有正樣本中被正確找出的比例，能直接反映降低漏診的能力。精準率關注誤報；假陽性率關注誤判。'},
+];
+
+// ═══════ 原有題庫（完整保留，此處僅做 const 宣告佔位，實際內容從外部載入保持不變）
+const QB1 = [
+  {id:101,sub:'sci1',topic:'ai-gov',src:'official',q:'在人工智慧系統的決策流程中，下列哪一種情境最符合「人在迴圈上（Human-over-the-loop）」所強調的監督機制？',opts:['AI 系統只能提供建議，人類需主動下達命令才能進行決策','人類對 AI 的運行進行日常監督，必要時可立即介入修正或干預','人類平時不參與 AI 的運作，僅在發生異常或重大錯誤時才接手控制','AI 的所有判斷與行動在執行前，皆須經過人類逐一審核與批准'],ans:1,exp:'Human-over-the-loop 指人類持續監控 AI 系統，可隨時介入修正。相對地，Human-in-the-loop 每步皆需人工審核；Human-on-the-loop 僅在異常時介入。'},
+  {id:102,sub:'sci1',topic:'data-eng',src:'official',q:'下列哪一種特徵工程技巧，最適合將「星期幾」和「24小時制時間」這兩個欄位結合，以預測通勤時間？',opts:['One-hot 編碼（One-hot encoding）','正規化（Normalization）','特徵交叉（Feature Cross）','寬深模型（Wide and Deep）'],ans:2,exp:'特徵交叉（Feature Cross）將兩個特徵組合成新特徵，能捕捉交互效果。'},
+  {id:103,sub:'sci1',topic:'data-eng',src:'official',q:'關於 ETL（Extract-Transform-Load），下列敘述何者為正確？',opts:['E 表示將資料直接儲存至目標儲存庫','ETL 的處理順序可以自由調整為 TEL','L 表示將目標儲存庫經過反加密處理載入資料','T 包括資料的清理與排序'],ans:3,exp:'ETL 流程：E（Extract）從來源擷取資料；T（Transform）包含清理、格式轉換、排序、彙總等；L（Load）將處理後資料載入目標儲存庫，順序固定。'},
+  {id:104,sub:'sci1',topic:'ml',src:'official',q:'關於資料正則化（Regularization）L1、L2 方法，下列敘述何者正確？',opts:['L1 權重個數愈多，愈可以提升模型的正確率','L2 稱為 Lasso 正則化','L1 運用減少權重的絕對值來控制模型的複雜度','L2 較 L1 正則化方法會將特徵權重趨近於零'],ans:2,exp:'L1（Lasso）懲罰權重絕對值之和，促使稀疏解（部分權重歸零）；L2（Ridge）懲罰權重平方和，使權重趨近但不為零。'},
+  {id:105,sub:'sci1',topic:'ml',src:'official',q:'在機器學習中，「偏差與變異權衡（Bias-Variance Tradeoff）」主要用來解決下列哪一類型的問題？',opts:['因資料來源或收集方式限制，導致模型學習到的資訊不足','測試資料樣本與訓練資料高度重複，造成模型泛化能力評估失準','訓練資料中類別分布不均，使模型在少數類別上表現不佳','如何在模型偏差與變異之間取得平衡，以避免過度擬合或欠擬合'],ans:3,exp:'偏差（Bias）高→欠擬合；變異（Variance）高→過擬合。Bias-Variance Tradeoff 是尋找兩者平衡，使模型在訓練集與測試集均有良好表現。'},
+  {id:106,sub:'sci1',topic:'ml',src:'official',q:'在 Lasso 模型中，L1 正則化（Regularization）導致參數收斂為零的原因為何？',opts:['L1 正則化忽略目標變數','L1 對梯度有平滑作用','L1 對大係數懲罰較強，促使稀疏解','L1 會轉換損失函數為非凸形'],ans:2,exp:'L1 懲罰項為 |w|，梯度為常數符號函數（+1 或 -1），對小係數施加相對較大的懲罰，迫使部分權重精確歸零，產生稀疏解，進而達到特徵選擇效果。'},
+  {id:107,sub:'sci1',topic:'ml',src:'official',q:'貝氏分類器（Naive Bayes Classifier）最適合歸類於下列哪一類？',opts:['透過直接學習輸入特徵與目標標籤之間的邊界或關係來進行分類的模型','透過建構資料的整體分布，並利用條件關係進行推斷和分類的模型','側重探索資料中樣本間的相似性，將資料自動分成不同群組的模型','透過試錯學習，根據行動結果的獎勵或懲罰來優化決策策略的模型'],ans:1,exp:'Naive Bayes 是生成式模型，透過估算 P(X|Y) 和 P(Y) 建構聯合分布，再利用貝氏定理計算 P(Y|X)，屬於「生成式分類器」。'},
+  {id:108,sub:'sci1',topic:'gen-ai',src:'official',q:'為提升生成式 AI 系統回應的語境一致性，常會結合哪類模型技術？',opts:['決策樹分類器（Decision Tree Classifier）','條件語言模型（Conditional Language Model）','強化學習 Q-learning 函數模型','基因演算法（Genetic Algorithm）'],ans:1,exp:'條件語言模型（Conditional LM）根據給定的上下文條件（如角色、歷史對話）生成文本，能有效維持語境一致性，是 ChatGPT 等對話系統的核心技術。'},
+  {id:109,sub:'sci1',topic:'ai-gov',src:'official',q:'根據 2025 年 9 月行政院通過之《人工智慧基本法》草案，政府推動 AI 之「創新實驗環境」制度，主要參考歐盟的何種制度？',opts:['Data Protection Impact Assessment','Regulatory Sandbox','AI Trust Label','AI Ethics Review Board'],ans:1,exp:'Regulatory Sandbox（監理沙盒）允許企業在受控環境中測試創新技術，暫時豁免部分法規限制。歐盟 AI Act 亦建立 AI Sandbox，我國《人工智慧基本法》草案參考此概念。'},
+  {id:110,sub:'sci1',topic:'ai-gov',src:'official',q:'根據《金融機構運用人工智慧技術作業規範》，下列何者並非規範所明訂須落實的治理措施？',opts:['辦理人工智慧人才培育','清楚了解生成式 AI 技術之運作模式','每日公布人工智慧系統運作狀況','指派高階主管或委員會進行監督管理'],ans:2,exp:'《金融機構運用 AI 技術作業規範》明訂：人才培育、了解 AI 運作、指派高階主管監督等治理措施，但並未要求「每日公布」系統運作狀況。'},
+  {id:111,sub:'sci1',topic:'ml',src:'official',q:'下列哪一類問題最適合使用非監督式學習（Unsupervised Learning）來處理？',opts:['根據已標記的醫療影像訓練模型診斷疾病','根據使用者行為將用戶分群，以優化行銷策略','透過已知交通事故記錄預測未來事故發生機率','根據歷史股價預測未來股市的走勢'],ans:1,exp:'非監督式學習不需標籤，適合發現資料結構。用戶分群（Clustering）是典型非監督式任務。'},
+  {id:112,sub:'sci1',topic:'data-viz',src:'official',q:'下列哪一種圖表最適合用來呈現並分析「兩個數值型變數」之間的關係？',opts:['散佈圖（Scatter Plot）','折線圖（Line Chart）','直方圖（Histogram）','長條圖（Bar Chart）'],ans:0,exp:'散佈圖（Scatter Plot）專門用於視覺化兩個連續數值變數的關係與相關性，可觀察趨勢、群聚與離群值。'},
+  {id:113,sub:'sci1',topic:'ml',src:'official',q:'下列哪一項應用情境與機器學習類型搭配正確？',opts:['醫療影像少量標註+大量未標註，結合已標註與未標註 — 監督式學習','自駕車模擬，獲得安全通過路口的獎懲訊號 — 非監督式學習','顧客是否流失的已知標籤，訓練預測新顧客 — 強化式學習','股票歷史序列，將未來走勢分成上升型/盤整型/下降型群組（無標籤） — 非監督式學習'],ans:3,exp:'選項D：無標籤的群組劃分 = 非監督式學習（聚類）✓。選項A應為半監督學習；選項B應為強化學習；選項C應為監督式學習（分類）。'},
+  {id:114,sub:'sci1',topic:'data-eng',src:'official',q:'下列哪一個最接近「預測性分析（Predictive Analysis）」的特性？',opts:['視覺化所有產品線過去月銷售走勢與標準差，觀察其分佈情況','藉由資料比對分析，找出去年母親節促銷失效的地區與品類組合','建構模型推算下一季的主力商品銷量，以規劃備貨與倉儲資源配置','透過熱圖分析廣告投放成本與訂單轉換率之間的潛在關聯性'],ans:2,exp:'預測性分析（Predictive）使用模型預測未來。選項A=描述性；選項B=診斷性；選項C=預測性✓；選項D=探索性。'},
+  {id:115,sub:'sci1',topic:'ml',src:'official',q:'某模型使用 KNN（K=3），最接近的3筆資料類別為：類別A、類別B、類別A。預測為哪一類？',opts:['類別 A','類別 B','類別 A 與 B 各一半，無法分類','類別 A 或 B，視距離遠近加權而定'],ans:0,exp:'KNN 以多數決（Majority Vote）決定類別。3個鄰居中 A=2票、B=1票，故預測為類別 A。'},
+  {id:116,sub:'sci1',topic:'ml',src:'official',q:'下列哪一項敘述最符合使用 RNN 可能會遇到的挑戰？',opts:['RNN 無法處理可變長度的序列輸入，因此在實務上限制極大','RNN 在長序列訓練中可能出現梯度消失，影響模型效果','RNN 無法捕捉時間上的依賴關係，因此預測準確度低','RNN 只能用於分類任務，不能應用於時間序列預測'],ans:1,exp:'RNN 的梯度在長序列中反向傳播時會指數級縮小（梯度消失），使其難以學習長期依賴關係。LSTM 和 GRU 正是為解決此問題而設計的。'},
+  {id:117,sub:'sci1',topic:'ml',src:'official',q:'智慧投資系統根據市場變化自動決定買進/持有/賣出，根據盈虧結果逐步優化策略，不依賴標記資料。此系統最可能採用哪一種學習方法？',opts:['強化式學習（Reinforcement Learning）','監督式學習（Supervised Learning）','非監督式學習（Unsupervised Learning）','遷移學習（Transfer Learning）'],ans:0,exp:'強化學習中 Agent 透過與環境互動，根據行動所獲得的獎勵（盈利）或懲罰（虧損）調整策略，無需預先標記資料，最符合此情境。'},
+  {id:118,sub:'sci1',topic:'ml',src:'official',q:'關於 Q-Learning 與 Deep Q-Learning，下列敘述何者最正確？',opts:['Q-Learning 與 Deep Q-Learning 的差異在於是否使用標記資料作為學習基礎','Q-Learning 可處理任意維度的狀態空間，因此比 Deep Q-Learning 更靈活','Deep Q-Learning 透過深度神經網路近似 Q 值，避免了 Q 表在高維空間中難以擴展的問題','Deep Q-Learning 無法搭配經驗回放（Experience Replay），因為會導致樣本順序被打亂'],ans:2,exp:'Q-Learning 使用 Q 表儲存每個狀態-行動對的值，但高維空間中 Q 表無法擴展；DQN 用神經網路近似 Q 函數，並搭配 Experience Replay 打破樣本相關性以穩定訓練。'},
+  {id:119,sub:'sci1',topic:'ml',src:'official',q:'若任務為預測房價，應選用下列哪一種損失函數（Loss Function）？',opts:['均方誤差（MSE）','交叉熵損失（Cross-Entropy Loss）','Hinge 損失（Hinge Loss）','KL 散度（Kullback-Leibler Divergence）'],ans:0,exp:'MSE（Mean Squared Error）適合回歸任務（預測連續值如房價）；Cross-Entropy 適合分類任務；Hinge Loss 用於 SVM；KL 散度用於機率分布比較。'},
+  {id:120,sub:'sci1',topic:'ml',src:'official',q:'醫院希望根據患者年齡、血壓與BMI預測罹患糖尿病的機率（0~1），依據預測值是否超過0.5做出風險警示。哪一種模型最適合？',opts:['邏輯迴歸（Logistic Regression）','支援向量機（Support Vector Machine）','決策樹（Decision Tree）','K 平均演算法（K-means）'],ans:0,exp:'邏輯迴歸輸出 0~1 之間的機率值，最適合二元分類且需要機率輸出的場景。K-means 是非監督式聚類，不適合分類預測。'},
+  {id:121,sub:'sci1',topic:'ml',src:'official',q:'金融科技公司需大量處理財務特徵，希望提升預測的穩定性與泛化能力，下列哪一種鑑別式AI模型最適合？',opts:['邏輯迴歸（Logistic Regression）','支援向量機（Support Vector Machine）','決策樹（Decision Tree）','隨機森林（Random Forest）'],ans:3,exp:'隨機森林（集成學習）透過多棵決策樹投票，對特徵眾多的高維資料具有良好的穩定性與泛化能力，且能評估特徵重要性，適合金融風控場景。'},
+  {id:122,sub:'sci1',topic:'gen-ai',src:'official',q:'關於變分自編碼器（Variational Autoencoder, VAE）的運作流程，下列何者敘述最為正確？',opts:['解碼器的任務是將低維壓縮向量分類為不同類別','編碼器將輸入資料轉換為可視化圖像以利模型學習','編碼器將資料轉換為潛在空間表示，解碼器再重建資料','編碼器利用最大邊際機率對資料進行異常點偵測'],ans:2,exp:'VAE 架構：編碼器（Encoder）將輸入映射到潛在空間（均值和方差），從中採樣後，解碼器（Decoder）重建原始資料，透過重建損失與 KL 散度訓練。'},
+  {id:123,sub:'sci1',topic:'ai-gov',src:'official',q:'下列何者不是我國數位發展部 AI 產品與系統評測中心對生成式 AI 的評測項目？',opts:['當責性','可靠性','隱私及資安','互動性'],ans:3,exp:'數位部 AI 評測中心的評測項目包含：當責性、可靠性、隱私及資安、透明度等核心 AI 治理面向，「互動性」並非官方評測項目。'},
+  {id:124,sub:'sci1',topic:'gen-ai',src:'official',q:'將 GPT-OSS 模型參數量從20億提升至120億，並假設有足夠訓練資料，下列敘述何者最正確？',opts:['模型參數增加會線性提升效能，且即使訓練資料不變也不會遇到瓶頸','參數越多模型推理越快，因為每層可以並行計算更多參數','較大的參數量能提升模型的表達能力與預測效能，但需足夠訓練資料支持','增加參數量不影響記憶體使用，只會影響計算速度'],ans:2,exp:'規模定律（Scaling Law）：增加參數量通常能提升模型能力，但需要匹配的訓練資料量才能充分發揮；更大的模型同時需要更多記憶體和計算資源。'},
+  {id:125,sub:'sci1',topic:'data-eng',src:'official',q:'為了減少訓練語料中偏見對模型的影響，哪種資料處理策略屬於常見的「資料去偏（Data Debiasing）」做法？',opts:['讓模型在訓練時隨機替換輸出，以抵消資料中存在的系統性偏差','增加模型的參數量，依賴更大的模型自動消除原始資料中的偏見','調整或擴充訓練語料，使不同群體或類型資料的比例更加平衡','對訓練資料施加額外正則化或噪音，使模型對偏見敏感度降低'],ans:2,exp:'資料去偏的核心做法：重新採樣使各群體資料比例均衡、補充代表性不足的群體資料、或使用去偏詞嵌入，從資料源頭解決問題。'},
+  {id:126,sub:'sci1',topic:'ml',src:'official',q:'深度學習模型微調（Fine-tuning）過程中的「災難性遺忘（Catastrophic Forgetting）」最可能造成哪種情況？',opts:['由於計算資源或訓練步驟不足，模型無法完整收斂，導致學習效果受限','微調後模型的表現變得隨機，無法有效記憶新學到的模式與知識','微調後模型的部分權重產生偏移，導致模型無法針對較長文字進行回應','模型過度適應微調資料，逐漸遺忘先前預訓練所獲得的廣泛知識，在原有任務上表現變差'],ans:3,exp:'災難性遺忘（Catastrophic Forgetting）：模型在特定任務上微調時，過度更新權重導致預訓練階段習得的通用知識被「覆蓋」，在原有或其他任務上表現退步。'},
+  {id:127,sub:'sci1',topic:'gen-ai',src:'official',q:'大型 Transformer 模型的效能優化「剪枝（Pruning）」，下列哪一項最符合該方法的核心概念？',opts:['將模型中所有權重按比例縮小，使其值更接近零，以降低計算量','移除模型中影響較小或冗餘的部分權重參數，以減少模型大小並提升推理效率','在訓練時僅更新部分權重而將其他權重凍結，從而減少需要調整的參數數量','根據注意力分數動態跳過處理部分輸入 Token，以減少每次前向傳播的計算'],ans:1,exp:'剪枝（Pruning）透過識別並移除對模型輸出貢獻較小的權重、神經元或注意力頭，縮小模型體積、加速推理，是模型壓縮的主要方法之一。'},
+  {id:128,sub:'sci1',topic:'gen-ai',src:'official',q:'對非常長的輸入序列進行推理，Transformer 模型的主要計算瓶頸通常是什麼？',opts:['模型輸出層產生文本的過程，因為每生成一個詞都必須重新訓練整個模型','詞嵌入查找操作，因為其時間複雜度隨詞彙表大小指數級增長','Softmax 函數的計算，因為對每個 Token 都需要執行繁重的運算','自注意力層的計算和其記憶體使用，因為注意力矩陣的大小隨序列長度呈平方級增長'],ans:3,exp:'Transformer 自注意力機制的計算複雜度為 O(n²)，n 為序列長度，注意力矩陣大小隨序列長度平方增長，是長序列推理的主要瓶頸，催生了 FlashAttention、Sparse Attention 等優化技術。'},
+  {id:129,sub:'sci1',topic:'xai',src:'official',q:'LIME（Local Interpretable Model-agnostic Explanations）方法最核心的應用目的是什麼？',opts:['解釋單一樣本（局部預測）的黑箱模型決策過程','全面提升黑箱模型整體的預測準確度','將黑箱模型轉換成完全可解釋的模型作為替代','用於生成大量擬真數據來替代訓練集'],ans:0,exp:'LIME 在特定樣本附近進行局部擾動，用可解釋的線性模型近似局部決策邊界，回答「這筆樣本為何被預測為此類別？」屬於局部解釋方法（Local Explanation）。'},
+  {id:130,sub:'sci1',topic:'xai',src:'official',q:'在醫療診斷決策支援系統等高風險領域中，「可解釋人工智慧（XAI）」的核心價值最主要呈現在哪個面向？',opts:['透過提供可理解的決策依據，促進患者與醫療專業人員對系統診斷結果的信任與接受度','以可解釋性方法優化臨床資料蒐集與管理流程，降低整體醫療作業成本','利用解釋機制增強模型預測的統計顯著性與準確度','透過提供透明化的運作過程，進而減輕臨床人員負擔並提升整體效率'],ans:0,exp:'XAI 在高風險領域的核心價值在於建立信任：醫師需理解 AI 為何做出診斷建議，才能負責任地採用或質疑系統輸出，同時滿足法規對 AI 決策可解釋性的要求。'},
+  {id:131,sub:'sci1',topic:'xai',src:'official',q:'金融科技信貸決策系統導入反事實解釋（Counterfactual Explanation）的核心挑戰為何？',opts:['需要建立完整的客戶行為預測模型來估算建議改變的實施成本','必須使用聯邦學習技術保護客戶隱私，同時計算跨機構的反事實解釋結果','需要建構時間序列因果圖來處理客戶信用狀況的動態變化','生成的反事實樣本必須滿足特徵間的因果約束和業務邏輯約束，同時確保建議的改變在現實中具有可操作性且符合公平放貸法規'],ans:3,exp:'反事實解釋需告知用戶「如何改變才能獲得貸款核准」，但需同時確保：特徵間的因果一致性（如無法讓年齡變小）、現實可操作性、業務邏輯正確性，以及符合公平放貸法規。'},
+  {id:132,sub:'sci1',topic:'stats',src:'official',q:'樣本來自母體但呈現明顯偏態分布，且樣本數有限，下列哪一項策略最能減少推估母體參數的偏誤？',opts:['直接使用樣本平均數與變異數估計母體參數，不做任何調整','增加樣本數並考慮使用分位數或中位數作為中心趨勢估計','將樣本隨機重新排列後，多次計算平均值以消除偏態影響','完全依賴樣本標準差來估計母體參數，忽略分布形態'],ans:1,exp:'偏態分布中，中位數（Median）比平均數更具代表性（不受極端值影響）。增加樣本數可提升估計精度；使用分位數估計也更穩健，是偏態資料的最佳實踐。'},
+  {id:133,sub:'sci1',topic:'data-eng',src:'official',q:'工業物聯網異常事件發生頻率極低（高度不平衡時序資料），哪種方法最能兼顧模型穩定性與異常偵測效能？',opts:['將每筆異常事件資料複製多次以提升辨識敏感度，搭配 LSTM','對時間序列進行差分與標準化後，使用 SVM 進行分類訓練','使用時間序列特化的 SMOTE 技術生成異常樣本','採用基於重建誤差的自編碼器模型（Seq2Seq Autoencoder）進行異常偵測，並僅使用正常資料訓練'],ans:3,exp:'對於極度不平衡的異常偵測，自編碼器（Autoencoder）只用正常資料訓練，學習正常模式的重建；若輸入為異常資料，重建誤差會偏大，可設定閾值判斷異常。此方法避免了依賴稀少異常樣本的困境。'},
+  {id:134,sub:'sci1',topic:'data-eng',src:'official',q:'零售業資料倉儲中多個欄位儲存相同的購買金額資訊但格式不一（amount_usd/total_price/transaction_value），最合適的資料處理策略為何？',opts:['利用資料探勘技術自動選擇最敏感的欄位，其他捨棄','保留所有相似欄位，交由高階模型自動學習','建立欄位命名標準，統一金額單位與格式，進行欄位正規化與語義合併','將重複欄位視為類別欄位，進行 One-hot 編碼後輸入模型'],ans:2,exp:'處理語義重疊與結構冗餘應從資料治理入手：建立欄位標準（Data Dictionary）、統一單位格式、合併重複欄位，減少特徵工程階段的歧義。'},
+  {id:135,sub:'sci1',topic:'data-eng',src:'official',q:'商品推薦模型中，部分類別（高價商品）樣本數量極少，若此不平衡問題未妥善處理，最可能在實際推薦結果中發生什麼？',opts:['模型傾向輸出稀有類別，導致精確率（Precision）顯著下降','模型因類別分布不均，難以建立有效的線性分離邊界','模型過度聚焦稀有類別，導致對多數類別的預測能力下降','模型學到的決策邊界主要由多數類別主導，忽視稀有類別，造成該類別的召回率（Recall）大幅降低'],ans:3,exp:'類別不平衡時，模型傾向預測多數類別（低價商品），對少數類別（高價商品）的召回率（Recall=TP/(TP+FN)）極低。高價商品難以被推薦，影響業務。'},
+  {id:136,sub:'sci1',topic:'data-eng',src:'official',q:'電商資料團隊希望先進行探索性資料分析（EDA），下列哪一項最符合 EDA 的做法？',opts:['建立隨機森林模型，預測使用者是否會完成購買','使用 K-means 對使用者群進行分群並立即制定促銷策略','繪製各類流量來源對轉換率的關聯圖，尋找潛在關係','對不同購物路徑設定統計假設並進行雙樣本 t 檢定'],ans:2,exp:'EDA（探索性資料分析）是初步視覺化與統計摘要，目的是發現資料中的模式與關係，而非建立預測模型或進行正式統計檢定。繪製關聯圖探索潛在關係是典型 EDA 作法。'},
+  {id:137,sub:'sci1',topic:'stats',src:'official',q:'金融科技公司建立詐騙偵測模型，發現樣本間存在明顯時間序列相關性，導致模型在實際偵測新交易時誤判率升高。最合適的做法是？',opts:['擴充樣本數量，但維持既有的隨機抽樣方式不變','採取時間序列敏感的抽樣策略，例如依交易時間區間進行分層，保存原始的時間結構特性','將資料完全隨機打散，以降低序列相關性對模型訓練的影響','在模型評估時，針對相鄰時間區段進行誤差合併'],ans:1,exp:'時間序列資料具有時間依賴性，隨機打散會造成資訊洩漏（未來資料用於訓練）。應使用時間序列交叉驗證（如 Walk-forward Validation），按時間順序分割資料集。'},
+  {id:138,sub:'sci1',topic:'rag',src:'official',q:'企業建置RAG知識查詢系統，發現回應偶爾過時且每次更新文件都需完整重建索引，系統更新期間無法服務。最適合的解決方案為？',opts:['調整生成模型的回應隨機性參數，以降低答案偏差並提升一致性','提升檢索與索引的運算效能，縮短查詢與更新所需時間','採用索引的增量或分段更新方式，使新資料能即時納入而不需全部重建','建立常見問題的標準答案集，透過快速檢索回應以降低模型負擔'],ans:2,exp:'增量索引（Incremental Indexing）只處理新增/更新的文件，不需重建整個索引，可以做到近即時更新且不影響線上服務，解決全量重建導致服務中斷的問題。'},
+  {id:139,sub:'sci1',topic:'stats',src:'official',q:'醫院開發住院日數預測模型，多數3-7天但少數重症患者住院偏長。哪一種評估方式最符合兼顧大多數病人與重症個案的需求？',opts:['在模型檢核時，同時呈現平均絕對誤差（MAE）與重症子群的誤差指標','僅針對一般病人樣本進行交叉驗證，以避免重症個案拉高誤差','將所有病人的住院日數進行標準化處理，以減少數值範圍差異的影響','只採用單一的整體決定係數（R²）作為模型優劣的判斷依據'],ans:0,exp:'整體指標（MAE/R²）反映大多數樣本表現；重症子群單獨評估確保對極端值的預測品質。多層次評估策略能同時滿足一般病人和重症個案的需求。'},
+  {id:140,sub:'sci1',topic:'ml',src:'official',q:'關於監督式學習與非監督式學習的目標，下列敘述何者錯誤？（多選擇錯的）',opts:['3、5、6（非監督式+少量標註=完全轉化為監督式；監督式必須大量標註；非監督式不需目標變數）','1、4、6','2、4、6','2、3、5（監督式不適合異常偵測；非監督+少量標註不等於監督式；監督式不必定需要大量資料）'],ans:3,exp:'錯誤敘述：(2)監督式可用於異常偵測（One-Class SVM）；(3)少量標籤+大量未標籤=半監督式，不完全等同監督式；(5)監督式可透過遷移學習、少樣本學習在少量資料下運作。'},
+  {id:141,sub:'sci1',topic:'data-eng',src:'official',q:'旅遊平台預測顧客是否再次訂房，「主要交通方式」欄位（火車/飛機/自駕/公車）最適合哪種特徵工程方法？',opts:['布林轉換（Boolean Conversion）','序數編碼（Ordinal Encoding）','數值標準化（Numerical Standardization）','One-hot 編碼（One-hot Encoding）'],ans:3,exp:'交通方式為名義類別（Nominal Category），類別間無順序關係（飛機不大於火車）。One-hot 編碼將每個類別轉為獨立二元特徵，避免模型誤解類別間的大小關係。'},
+  {id:142,sub:'sci1',topic:'ai-gov',src:'official',q:'跨國醫療機構希望利用各地醫院病患資料建立模型，但原始資料無法集中到單一伺服器。哪一種方法最能同時滿足「資料不外流」與「跨院學習」的需求？',opts:['資料匿名化（Data Anonymization）','差分隱私（Differential Privacy）','聯邦學習（Federated Learning）','交叉驗證（Cross-validation）'],ans:2,exp:'聯邦學習（Federated Learning）：各醫院本地訓練模型，僅上傳梯度更新（不上傳原始資料），由中央伺服器聚合更新全局模型，確保原始資料不離開本地。'},
+  {id:143,sub:'sci1',topic:'data-eng',src:'official',q:'員工離職風險預測模型，績效分數（1-5）、加班時數（0-80）、年齡（20-65）輸入邏輯迴歸，可能導致收斂緩慢或權重偏斜。最適合哪種特徵工程方法？',opts:['布林轉換（Boolean Conversion）','時間序列分解（Time Series Decomposition）','One-hot 編碼（One-hot Encoding）','數值標準化（Numerical Standardization）'],ans:3,exp:'數值標準化（Z-score 或 Min-Max）將不同量級特徵縮放到一致範圍，使梯度下降在各維度均衡更新，加速收斂並避免大量級特徵主導模型訓練。'},
+  {id:144,sub:'sci1',topic:'ml',src:'official',q:'「叢集（Clustering）」方法最典型的應用情境是下列何者？',opts:['根據歷史交易紀錄與已標註詐欺案例，訓練模型偵測詐欺','使用醫療數據與病患診斷標籤，建立模型預測是否罹患特定疾病','根據顧客的消費行為與特徵，將顧客自動劃分為數個群組，以便進行差異化行銷','透過大量已標註影像，訓練深度學習模型辨識照片中的物件種類'],ans:2,exp:'叢集（Clustering）是非監督式學習，自動發現資料中的自然群組，不需標籤。顧客分群（RFM 分析）是最典型的商業應用場景。'},
+  {id:145,sub:'sci1',topic:'stats',src:'official',q:'病患收縮壓數據大致呈常態分布，研究人員希望妥善處理可能存在的極端血壓數值，最合適的做法為何？',opts:['將所有極端偏高或偏低的血壓數據直接刪除','使用對數轉換（Log Transformation），將數據壓縮至更接近常態','透過Z分數（Z-score）或標準差範圍檢測異常值，並依研究需求決定是否調整或移除','將檢測到的離群值以 Label Encoding 編碼，轉換為序號標籤'],ans:2,exp:'對常態分布資料，Z-score 法（|Z|>3 視為異常）是最標準的離群值偵測方法。不應直接刪除（可能是真實重症值）；對數轉換適用於右偏分布；Label Encoding 不適用於連續值。'},
+  {id:146,sub:'sci1',topic:'data-eng',src:'official',q:'電商公司想預測用戶是否購買商品，希望選出對購買結果最有預測價值的特徵。下列哪種描述最符合監督式特徵選擇（Supervised Feature Selection）的概念？',opts:['根據特徵的整體分布、變異度或資訊量進行篩選，不直接參考目標變數','評估每個特徵與目標變數之間的相關性，選擇對預測結果貢獻最大的特徵','使用模型評估特徵對預測結果的重要性，並保留對目標變數影響較大的欄位','將特徵透過降維方法（如 PCA）轉換為新特徵，再用於模型訓練'],ans:1,exp:'監督式特徵選擇考量特徵與目標變數的關係（如相關係數、互資訊、ANOVA F值），選擇與預測目標最相關的特徵，是最符合定義的選項（B=Filter Method，C=Wrapper/Embedded Method，兩者均屬監督式）。'},
+  {id:147,sub:'sci1',topic:'ml',src:'official',q:'訓練神經網路時，為提升收斂速度與穩定性，避免梯度消失或梯度爆炸，下列哪一種做法最常被使用？',opts:['對輸入資料進行隨機旋轉或水平翻轉，以增加資料多樣性','選用 ReLU 或其變體作為隱藏層的啟動函數，以改善梯度傳播','減少樣本量提升訓練速度','對目標變數或特徵進行標準化'],ans:1,exp:'ReLU（Rectified Linear Unit）在正值區域梯度為1，不會出現飽和（Sigmoid/Tanh 在大值時梯度趨近於零），有效緩解梯度消失問題，是深度神經網路最廣泛使用的激活函數。'},
+  {id:148,sub:'sci1',topic:'data-viz',src:'official',q:'若希望檢視某一連續型數據的分布情形（集中程度、偏態或是否呈現多峰），最適合使用直方圖（Histogram）的情境是？',opts:['探討顧客年齡資料的整體分布特徵，並檢視是否存在異常集中或分散現象','比較不同商品在各月份的銷售額變化趨勢，以觀察季節性波動','追蹤公司近一年營收的時間序列變化，以了解整體成長趨勢','檢視產品價格與月銷售量之間的關聯性'],ans:0,exp:'直方圖（Histogram）將連續型資料分組顯示頻率分布，最適合分析單一連續變數的整體分布形態（偏態、多峰、集中趨勢）。時間序列用折線圖；相關性用散佈圖。'},
+  {id:149,sub:'sci1',topic:'ai-gov',src:'official',q:'下列何者並非我國數位發展部 AI 產品與評測中心在評估大型語言模型安全性時所指出的常見使用指標？',opts:['資料複雜性','事實正確性','偏見與歧視','惡意與濫用可能性'],ans:0,exp:'數位部 AI 安全評測指標包含：事實正確性（Factuality）、偏見與歧視（Bias）、惡意與濫用可能性（Harmful/Misuse）、隱私洩露等，「資料複雜性」不是官方評測指標。'},
+  {id:150,sub:'sci1',topic:'gen-ai',src:'official',q:'大型語言模型部署於線上系統，以批次推論（Batch Inference）方式處理每日上百萬筆用戶請求，下列哪一項通常不會被視為批次推論階段的主要難題？',opts:['如何確保訓練語料的涵蓋性與標註品質，以避免模型偏差影響輸出','當批次規模增大時，如何降低推論延遲並保持即時回應能力','在推論過程中，有效管理與分配龐大的輸入資料量以避免資源壅塞','在叢集環境中精確安排推論任務，以提升 GPU/TPU 等硬體資源的利用率'],ans:0,exp:'訓練語料品質是「訓練階段」的挑戰，而非「推論（Inference）階段」的問題。批次推論面對的是：延遲控制、資源管理、任務排程等「部署與服務」層面的挑戰。'},
+];
+
+// ═══════ v1 模擬題庫（自製・55題）═══════
+const QB_MOCK = [
+  {id:301,sub:'sci1',topic:'ai-concept',src:'mock',q:'下列哪一項最能描述「人工智慧」的定義？',opts:['僅指能下棋的電腦程式','使機器能模擬人類智能行為，執行感知、推理及學習等任務的技術','只限於自動化工廠機械手臂','用來加速網路傳輸速度的協定'],ans:1,exp:'人工智慧（AI）泛指使機器能夠模擬人類智能的技術，包含感知、推理、學習與決策等能力，不限於特定應用場景。'},
+  {id:302,sub:'sci1',topic:'ai-concept',src:'mock',q:'以下哪一個是「強 AI（Strong AI）」與「弱 AI（Narrow AI）」最主要的區別？',opts:['運算速度的快慢','弱 AI 只能執行特定任務，強 AI 具備通用推理能力','強 AI 只能用在軍事領域','弱 AI 需要更多能源'],ans:1,exp:'弱 AI（Narrow AI）專注於特定單一任務（如圖像辨識、語音辨識）；強 AI 則具備跨域通用推理能力，目前尚未實現。'},
+  {id:303,sub:'sci1',topic:'ai-concept',src:'mock',q:'「機器學習」與「傳統程式設計」最大的不同是什麼？',opts:['機器學習不需要電腦','傳統程式需要手動撰寫規則，機器學習從資料中自動學習規則','機器學習只能處理文字資料','傳統程式設計速度比較慢'],ans:1,exp:'傳統程式設計由工程師手動定義規則；機器學習則讓演算法從大量資料中自動發現模式與規律，無需明確撰寫規則。'},
+  {id:304,sub:'sci1',topic:'ai-concept',src:'mock',q:'下列哪一項屬於 AI 的「感知」能力？',opts:['預測股票漲跌','語音辨識與圖像辨識','資料庫存取','網路封包傳輸'],ans:1,exp:'AI 感知能力包括語音辨識（聽）、圖像辨識（看）、自然語言理解（讀）等，能讓機器感知環境資訊。'},
+  {id:305,sub:'sci1',topic:'ai-concept',src:'mock',q:'「深度學習（Deep Learning）」主要是基於哪一種結構？',opts:['決策樹','多層神經網路（Multi-layer Neural Network）','支持向量機（SVM）','線性回歸'],ans:1,exp:'深度學習以多層人工神經網路為基礎，透過多層次特徵提取，在圖像、語音、語言等任務上達到突破性表現。'},
+  {id:306,sub:'sci1',topic:'ai-concept',src:'mock',q:'AI 治理的核心目標是什麼？',opts:['最大化 AI 的運算速度','確保 AI 系統的透明、公平、問責與安全','降低 AI 系統的訓練成本','讓 AI 取代所有人類工作'],ans:1,exp:'AI 治理旨在確保 AI 系統開發與部署過程中具備透明性、公平性、問責制與安全性，保護個人與社會利益。'},
+  {id:307,sub:'sci1',topic:'data',src:'mock',q:'「大數據（Big Data）」的 3V 特性不包括下列哪一項？',opts:['Volume（量大）','Velocity（速度快）','Variety（多樣性）','Vulnerability（脆弱性）'],ans:3,exp:'大數據 3V 指 Volume（大量）、Velocity（高速）、Variety（多樣性），有時加上 Veracity（真實性）成為 4V，但 Vulnerability 不屬其中。'},
+  {id:308,sub:'sci1',topic:'data',src:'mock',q:'以下哪一項是「結構化資料」的例子？',opts:['社群媒體圖片','Excel 試算表中的銷售記錄','錄音檔案','網頁 HTML 原始碼'],ans:1,exp:'結構化資料具有固定格式與欄位定義，如關聯式資料庫表格、Excel 試算表；圖片、音訊、HTML 屬於非結構或半結構化資料。'},
+  {id:309,sub:'sci1',topic:'data',src:'mock',q:'「資料清洗（Data Cleaning）」的主要目的是？',opts:['將資料加密以防洩露','移除或修正資料中的錯誤、缺失與重複值','壓縮資料以節省儲存空間','加快資料傳輸速度'],ans:1,exp:'資料清洗是處理資料品質問題的過程，包括填補缺失值、移除重複紀錄、修正格式錯誤，確保資料可用於建模。'},
+  {id:310,sub:'sci1',topic:'data',src:'mock',q:'「特徵工程（Feature Engineering）」的目的是？',opts:['設計 AI 晶片的電路架構','從原始資料中萃取、轉換有助於模型學習的特徵','降低網路頻寬消耗','設計使用者介面'],ans:1,exp:'特徵工程透過選擇、轉換和創建特徵，幫助機器學習模型更有效地學習資料中的規律，是提升模型性能的關鍵步驟。'},
+  {id:311,sub:'sci1',topic:'data',src:'mock',q:'以下哪一種方法常用於處理資料集中的「類別不平衡（Imbalanced Class）」問題？',opts:['增加訓練回合數','使用 SMOTE 進行過採樣或調整類別權重','刪除所有少數類別樣本','改用線性回歸模型'],ans:1,exp:'處理類別不平衡的方法包括：過採樣（如 SMOTE）、欠採樣、調整損失函數中的類別權重，或使用集成方法。'},
+  {id:312,sub:'sci1',topic:'ml',src:'mock',q:'「監督式學習（Supervised Learning）」需要什麼條件？',opts:['不需要任何訓練資料','帶有正確標籤的訓練資料（labeled data）','只需要大量未標記資料','需要人類即時反饋'],ans:1,exp:'監督式學習使用帶有正確答案（標籤）的訓練資料，學習輸入與輸出的對應關係，以便對新資料做出預測。'},
+  {id:313,sub:'sci1',topic:'ml',src:'mock',q:'以下哪一個任務屬於「分類（Classification）」問題？',opts:['預測明天的溫度','判斷電子郵件是否為垃圾郵件','估算房屋售價','計算未來銷售量'],ans:1,exp:'分類問題的輸出為離散類別，如垃圾郵件判斷（是/否）；預測溫度、房價、銷售量等屬於回歸（連續值）問題。'},
+  {id:314,sub:'sci1',topic:'ml',src:'mock',q:'「過擬合（Overfitting）」是指？',opts:['模型在訓練集上表現差','模型在訓練集上表現過好，但在新資料上表現差','模型訓練速度過慢','模型使用了過多的特徵數量'],ans:1,exp:'過擬合指模型過度學習訓練資料的細節和雜訊，導致對新資料（測試集）的泛化能力降低。常見解法包括正則化、Dropout 等。'},
+  {id:315,sub:'sci1',topic:'ml',src:'mock',q:'「隨機森林（Random Forest）」是哪一種機器學習方法？',opts:['一種強化學習演算法','集成學習方法，結合多棵決策樹的預測結果','單一深層神經網路','一種聚類演算法'],ans:1,exp:'隨機森林是集成學習（Ensemble Learning）方法，建立多棵決策樹並透過投票（分類）或平均（回歸）整合結果，提升準確性與穩定性。'},
+  {id:316,sub:'sci1',topic:'ml',src:'mock',q:'在機器學習中，「交叉驗證（Cross-Validation）」的主要用途是？',opts:['加速模型訓練速度','評估模型在未見過資料上的泛化能力，避免過擬合','增加訓練資料量','降低模型複雜度'],ans:1,exp:'交叉驗證將資料分成多個子集，輪流作為驗證集，能更可靠地評估模型泛化能力，減少因資料分割方式不同造成的評估偏差。'},
+  {id:317,sub:'sci1',topic:'ml',src:'mock',q:'「非監督式學習（Unsupervised Learning）」常用於哪一類任務？',opts:['影像分類','客戶分群（Clustering）','語音識別','人臉辨識'],ans:1,exp:'非監督式學習不使用標籤，主要用於發現資料中的隱藏結構，常見應用包括聚類（客戶分群）、降維（PCA）、異常偵測等。'},
+  {id:318,sub:'sci1',topic:'disc-ai',src:'mock',q:'以下哪一項是「鑑別式 AI（Discriminative AI）」的典型應用？',opts:['生成逼真的人臉圖片','判斷 X 光片是否含有腫瘤（疾病辨識）','自動寫作文章','根據文字描述生成影片'],ans:1,exp:'鑑別式 AI 專注於分類與預測，判斷輸入屬於哪個類別，如醫療影像診斷、詐騙偵測、語音辨識。生成圖片/文字屬於生成式 AI。'},
+  {id:319,sub:'sci1',topic:'disc-ai',src:'mock',q:'「自然語言處理（NLP）」中的情感分析屬於哪一類任務？',opts:['資料壓縮','文本分類（鑑別式任務）','影像生成','音訊合成'],ans:1,exp:'情感分析將文本分類為正面、負面或中性，是典型的文本分類任務，屬於鑑別式 AI 應用。'},
+  {id:320,sub:'sci1',topic:'disc-ai',src:'mock',q:'「混淆矩陣（Confusion Matrix）」中，「精確率（Precision）」計算的是？',opts:['所有預測為正例中，真正正例的比例','所有實際正例被正確預測的比例','模型整體正確率','錯誤預測的比例'],ans:0,exp:'精確率 = TP / (TP + FP)，代表模型預測為正例的樣本中，實際上確為正例的比例。召回率（Recall）= TP / (TP + FN）。'},
+  {id:321,sub:'sci2',topic:'nocode',src:'mock',q:'「No-code」工具的最大優勢是？',opts:['執行速度比傳統程式快','讓非技術人員也能建立應用程式，降低開發門檻','可以取代所有工程師','只適合大型企業使用'],ans:1,exp:'No-code 工具透過視覺化拖拉介面，使非技術背景人員（如業務、行銷）也能自行建立應用，大幅降低 AI 民主化的門檻。'},
+  {id:322,sub:'sci2',topic:'nocode',src:'mock',q:'「Low-code」與「No-code」的主要差異是？',opts:['Low-code 完全不需要程式碼','Low-code 需要少量程式碼，提供更高彈性；No-code 完全不需撰寫程式','No-code 比 Low-code 速度更快','兩者功能完全相同'],ans:1,exp:'Low-code 仍需少量程式碼，適合有基礎技術能力的用戶，提供更高自訂彈性；No-code 完全無須程式碼，面向一般使用者。'},
+  {id:323,sub:'sci2',topic:'nocode',src:'mock',q:'以下哪一項是典型的 No-code AI 應用工具？',opts:['TensorFlow','PyTorch','Make（Integromat）流程自動化','C++ 編譯器'],ans:2,exp:'Make（前 Integromat）是 No-code 自動化工具，可視覺化串接各種服務；TensorFlow、PyTorch 需要 Python 程式碼。'},
+  {id:324,sub:'sci2',topic:'gen-ai',src:'mock',q:'「生成式 AI（Generative AI）」的核心特點是？',opts:['只能分析已有資料，無法產生新內容','能夠生成新的文字、圖像、音訊等原創內容','僅用於醫療影像分析','需要人類監控每一步輸出'],ans:1,exp:'生成式 AI 能夠根據訓練學到的模式，生成全新的內容（文字、圖像、音樂、影片等），是與鑑別式 AI 最大的差異。'},
+  {id:325,sub:'sci2',topic:'gen-ai',src:'mock',q:'「大型語言模型（LLM）」的訓練主要依賴什麼？',opts:['小量高品質標記資料','大規模無標記文字語料庫（自監督學習）','真人一對一教學','固定的百科全書資料庫'],ans:1,exp:'LLM 使用自監督學習，在大規模文字語料（網頁、書籍等）上預訓練，透過預測下一個詞的任務學習語言結構與知識。'},
+  {id:326,sub:'sci2',topic:'prompt-eng',src:'mock',q:'「提示工程（Prompt Engineering）」的目的是？',opts:['優化 AI 模型的硬體效能','透過設計有效的輸入提示，引導 AI 生成更準確的回應','撰寫 AI 訓練程式碼','設計 AI 晶片架構'],ans:1,exp:'提示工程是在不修改模型參數的情況下，透過精心設計輸入提示（Prompt），引導模型產出更符合需求的高品質輸出。'},
+  {id:327,sub:'sci2',topic:'gen-ai',src:'mock',q:'「幻覺（Hallucination）」在生成式 AI 中是指？',opts:['AI 產生視覺效果的能力','AI 生成虛假、不準確或捏造資訊，但看起來像真實內容','AI 的夢境模擬功能','AI 拒絕回答問題的行為'],ans:1,exp:'幻覺是 LLM 的主要風險之一，模型可能生成聽起來合理但實際上錯誤或虛構的資訊，使用者需謹慎驗證。'},
+  {id:328,sub:'sci2',topic:'rag',src:'mock',q:'「RAG（檢索增強生成）」技術的主要優點是？',opts:['讓模型速度更快','結合外部知識庫，減少幻覺並提供更即時、準確的回應','降低模型訓練成本','讓模型不需要任何訓練資料'],ans:1,exp:'RAG 在生成回應前先從外部文件庫檢索相關資訊，使模型回應有據可查，有效降低幻覺並支援最新知識查詢。'},
+  {id:329,sub:'sci2',topic:'prompt-eng',src:'mock',q:'「零樣本提示（Zero-shot Prompting）」是指？',opts:['提供大量範例給 AI 參考','不提供任何範例，直接要求 AI 完成任務','只給 AI 負面範例','需要人類示範操作步驟'],ans:1,exp:'零樣本（Zero-shot）提示不提供任何範例，直接描述任務要求；少樣本（Few-shot）則提供少量範例引導模型。'},
+  {id:330,sub:'sci2',topic:'prompt-eng',src:'mock',q:'「思維鏈提示（Chain-of-Thought, CoT）」的效果是？',opts:['讓 AI 產生更長的文章','引導 AI 逐步展示推理過程，提升複雜問題的解決準確性','加快 AI 的回應速度','減少 AI 使用的記憶體'],ans:1,exp:'CoT 提示引導模型逐步說明推理過程（如數學解題步驟），在需要多步推理的任務上顯著提升準確率。'},
+  {id:331,sub:'sci2',topic:'gen-ai',src:'mock',q:'以下哪一項是「多模態 AI（Multimodal AI）」的能力？',opts:['只能處理純文字輸入','同時處理文字、圖像、音訊等多種輸入形式','只能生成圖像','僅限於語音辨識'],ans:1,exp:'多模態 AI 能整合多種資料形式（文字、圖像、音訊、影片），如 GPT-4V 可同時理解圖片與文字，提供更豐富的互動。'},
+  {id:332,sub:'sci2',topic:'gen-ai',src:'mock',q:'「微調（Fine-tuning）」與「提示工程」最大的差異是？',opts:['兩者功能完全相同','微調需修改模型參數（需訓練資源），提示工程不改變模型本身','提示工程需要更多訓練資料','微調只適用於圖像任務'],ans:1,exp:'微調透過在特定領域資料上重新訓練，修改模型參數；提示工程則在推理階段透過設計輸入引導輸出，不改變模型本身。'},
+  {id:333,sub:'sci2',topic:'ai-plan',src:'mock',q:'企業導入生成式 AI 的第一步應該是？',opts:['立即購買最貴的 AI 服務','評估業務需求與 AI 應用場景的適合性','直接訓練自有大型語言模型','全面取代所有人工作業'],ans:1,exp:'AI 導入規劃應從業務需求出發，識別高價值應用場景，評估技術可行性、資料準備度與風險後，再進行試點與擴展。'},
+  {id:334,sub:'sci2',topic:'ai-plan',src:'mock',q:'「AI 倫理」在企業導入 AI 時，最需要關注哪一個議題？',opts:['AI 的計算速度','演算法偏見（Algorithmic Bias）與公平性','AI 系統的外觀設計','是否使用最新模型'],ans:1,exp:'AI 倫理關注演算法公平性（避免歧視特定族群）、透明性、隱私保護、問責制等，是負責任 AI 開發的核心議題。'},
+  {id:335,sub:'sci2',topic:'ai-plan',src:'mock',q:'在評估 AI 工具時，「Total Cost of Ownership（TCO）」包含哪些面向？',opts:['僅計算初期購買費用','包含初期建置、維護、訓練、升級及資料費用等全週期成本','只考慮雲端服務月費','只需評估人力成本'],ans:1,exp:'TCO 涵蓋初期建置成本、訂閱/授權費、人員培訓、維護升級、資料管理等全週期費用，是企業 AI 採購決策的重要依據。'},
+  {id:336,sub:'sci2',topic:'ai-plan',src:'mock',q:'「AI 治理框架」中，「可解釋性（Explainability）」的重要性在於？',opts:['讓 AI 執行速度更快','使利益相關者能理解 AI 決策過程，建立信任並符合法規要求','降低 AI 的訓練成本','確保 AI 具備多語言能力'],ans:1,exp:'可解釋性讓用戶、監管單位能理解 AI 為何做出特定決策，對於金融、醫療等高風險領域尤其重要，也是 EU AI Act 等法規的核心要求。'},
+  {id:337,sub:'sci2',topic:'ai-plan',src:'mock',q:'「AI 風險管理」中，下列哪一項是生成式 AI 特有的主要風險？',opts:['網路延遲過高','深度偽造（Deepfake）與內容真實性問題','數學計算錯誤','儲存容量不足'],ans:1,exp:'生成式 AI 特有風險包括：深度偽造（偽造人臉/聲音）、幻覺（生成虛假資訊）、著作權爭議、提示注入攻擊等。'},
+  {id:338,sub:'sci1',topic:'ml',src:'mock',q:'「強化學習（Reinforcement Learning）」的學習方式是？',opts:['從標記資料學習','透過與環境互動，以獎勵與懲罰機制學習最佳策略','從大量未標記資料中找規律','由人類專家示範學習'],ans:1,exp:'強化學習透過 Agent 與環境互動，根據行動後獲得的獎勵或懲罰來調整策略，常用於遊戲 AI（AlphaGo）、機器人控制等。'},
+  {id:339,sub:'sci2',topic:'gen-ai',src:'mock',q:'「Transformer」架構在 NLP 領域的革命性創新是？',opts:['使用更多層的 CNN','引入「自注意力機制（Self-Attention）」，能平行處理序列資料','使用 RNN 記憶長期依賴','引入卷積操作'],ans:1,exp:'Transformer 的自注意力機制讓模型能夠捕捉序列中任意位置間的關係，並支援並行計算，是 GPT、BERT 等 LLM 的基礎架構。'},
+  {id:340,sub:'sci2',topic:'ai-plan',src:'mock',q:'「GDPR」與 AI 的關聯性主要體現在哪裡？',opts:['規定 AI 模型的最低準確率','要求 AI 系統在處理個人資料時取得同意、提供透明度並保障資料主體權利','禁止使用生成式 AI','只適用於歐盟境內的 AI 公司'],ans:1,exp:'GDPR 對個人資料的收集、使用、存儲有嚴格規範，AI 系統需確保資料最小化、目的限制、資料主體知情同意及被遺忘權等原則。'},
+  {id:341,sub:'sci1',topic:'data',src:'mock',q:'以下哪一種資料型態屬於「非結構化資料」？',opts:['關聯式資料庫表格','社群媒體貼文與圖片','CSV 格式的銷售紀錄','JSON 格式的 API 回應'],ans:1,exp:'非結構化資料沒有固定格式，如文字貼文、圖片、音訊、影片等；CSV、JSON 及資料庫屬於結構化或半結構化資料。'},
+  {id:342,sub:'sci2',topic:'gen-ai',src:'mock',q:'在使用 ChatGPT 等生成式 AI 工具時，「溫度（Temperature）」參數的作用是？',opts:['控制模型的運算速度','調整輸出的隨機性：溫度越高越創意多樣，越低越穩定保守','設定最大輸出長度','決定使用哪個語言模型'],ans:1,exp:'Temperature 控制輸出的隨機程度，高溫（如1.0）產生更多樣創意的輸出，低溫（如0.1）使輸出更確定性與保守，適合需要準確答案的任務。'},
+  {id:343,sub:'sci1',topic:'ai-concept',src:'mock',q:'「電腦視覺（Computer Vision）」的主要任務不包括哪一項？',opts:['物件偵測','圖像分類','情感分析（情緒辨識）','圖像語義分割'],ans:2,exp:'電腦視覺處理圖像/影片相關任務：分類、偵測、分割、追蹤等。情感分析（分析文字情緒）屬於 NLP，不屬於電腦視覺。'},
+  {id:344,sub:'sci2',topic:'nocode',src:'mock',q:'「AI 民主化（AI Democratization）」的核心概念是？',opts:['讓 AI 只服務於政府機構','降低 AI 技術的使用門檻，使更多人能受益於 AI 技術','只允許大型科技公司使用 AI','讓 AI 公開投票決策'],ans:1,exp:'AI 民主化旨在透過 No-code/Low-code 工具、開放原始碼模型及雲端 API，使各規模的組織與個人都能使用 AI，而非僅限於大型科技公司。'},
+  {id:345,sub:'sci1',topic:'ml',src:'mock',q:'「梯度下降（Gradient Descent）」是用來做什麼的？',opts:['生成訓練資料','最小化損失函數，優化模型參數','加快資料讀取速度','評估模型準確率'],ans:1,exp:'梯度下降是機器學習的核心優化演算法，透過計算損失函數對參數的梯度，沿梯度反方向更新參數，逐步找到最小化損失的模型參數。'},
+  {id:346,sub:'sci1',topic:'disc-ai',src:'mock',q:'「推薦系統（Recommendation System）」使用的主要技術包含？',opts:['只使用規則型系統','協同過濾（Collaborative Filtering）與內容過濾（Content-based Filtering）','只使用深度強化學習','只依賴人工編寫的規則'],ans:1,exp:'推薦系統主要方法：協同過濾（根據相似用戶行為）、內容過濾（根據物品特徵），以及混合兩者的混合式推薦。Netflix、Amazon 廣泛使用。'},
+  {id:347,sub:'sci2',topic:'rag',src:'mock',q:'「向量資料庫（Vector Database）」在生成式 AI 應用中的角色是？',opts:['儲存關聯式資料表格','儲存文字/圖片的向量嵌入，支援語意相似度搜尋，是 RAG 的核心元件','取代所有傳統資料庫','加快模型訓練速度'],ans:1,exp:'向量資料庫（如 Pinecone、Chroma）儲存文本的語意向量表示，支援高效的語意相似度搜尋，是 RAG 系統的核心儲存元件。'},
+  {id:348,sub:'sci2',topic:'ai-plan',src:'mock',q:'導入生成式 AI 時，「AI 試點（Pilot）」的目的是？',opts:['直接全面部署到生產環境','在小範圍內驗證 AI 方案的可行性、效益與風險，再決定是否全面推廣','測試最新 AI 模型的技術能力','減少人員編制'],ans:1,exp:'AI 試點在受控環境中小規模驗證方案，收集實際使用者回饋、衡量 ROI，識別潛在問題後再決定是否擴大部署，降低風險。'},
+  {id:349,sub:'sci1',topic:'ml',src:'mock',q:'「K-means」屬於哪一類機器學習方法？',opts:['監督式學習：分類','監督式學習：回歸','非監督式學習：聚類','強化學習'],ans:2,exp:'K-means 是非監督式學習的聚類演算法，不需要標籤，自動將資料分成 K 個群組，廣泛用於客戶分群、文件分類等。'},
+  {id:350,sub:'sci2',topic:'gen-ai',src:'mock',q:'「AGI（通用人工智慧）」與現今 AI 最大的差別是？',opts:['AGI 運算速度更快','AGI 能跨任意領域進行類人推理，現今 AI 仍以單一任務為主','AGI 不需要訓練資料','AGI 已經被實現'],ans:1,exp:'AGI 指能在任何智識任務上達到人類水準的通用 AI，目前尚未實現。現有 AI 均為 Narrow AI，只能在特定任務上表現優秀。'},
+  {id:351,sub:'sci2',topic:'gen-ai',src:'mock',q:'「RLHF（人類回饋強化學習）」在大型語言模型中的用途是？',opts:['加快模型訓練速度','透過人類偏好標注，對齊模型輸出更符合人類期望的行為','減少模型的記憶體使用','自動生成訓練資料'],ans:1,exp:'RLHF 讓人類標注員對模型輸出進行排序，訓練獎勵模型，再使用 PPO 算法微調 LLM，使輸出更有用、安全且符合人類偏好（如 ChatGPT 採用此方法）。'},
+  {id:352,sub:'sci1',topic:'data',src:'mock',q:'「資料標準化（Normalization）」的目的是？',opts:['壓縮資料檔案大小','將不同量級的數值特徵縮放到相同範圍，避免某些特徵主導模型訓練','加密保護資料安全','移除資料中的缺失值'],ans:1,exp:'資料標準化（如 Min-Max 或 Z-score）將特徵值縮放到一致範圍，防止量級較大的特徵對模型訓練造成不合理的主導影響。'},
+  {id:353,sub:'sci2',topic:'ai-plan',src:'mock',q:'在生成式 AI 導入中，「提示注入攻擊（Prompt Injection）」是指？',opts:['駭客攻擊 AI 訓練伺服器','惡意用戶透過精心設計的提示，讓 AI 忽略系統指令並執行未授權行為','過度使用 AI 導致成本超支','AI 自動更新系統設定'],ans:1,exp:'提示注入是一種針對 LLM 的攻擊，攻擊者將惡意指令混入輸入，試圖覆蓋系統提示，讓模型洩露機密或執行有害操作，是企業部署 AI 需防範的安全風險。'},
+  {id:354,sub:'sci1',topic:'ai-concept',src:'mock',q:'「遷移學習（Transfer Learning）」的優勢是？',opts:['需要更多資料才能訓練','將預訓練模型的知識應用到新任務，大幅降低資料與計算資源需求','只適用於圖像任務','每次都需從零開始訓練'],ans:1,exp:'遷移學習利用在大量資料上預訓練的模型（如 ImageNet、GPT），在少量標記資料的特定任務上進行微調，顯著降低訓練成本與資料需求。'},
+  {id:355,sub:'sci2',topic:'nocode',src:'mock',q:'「工作流程自動化（Workflow Automation）」結合生成式 AI 最主要的效益是？',opts:['增加人工作業步驟','自動化重複性任務（如報告生成、資料摘要），提升工作效率並減少人為錯誤','取代所有員工','提高系統硬體成本'],ans:1,exp:'將生成式 AI（如 GPT API）整合進工作流程（如 Make、Zapier），可自動化報告生成、郵件回覆、資料摘要等重複任務，顯著提升生產力。'},
+];
+
+// ═══════ 考試樣題（114年4月版，50題）═══════
+const QB_SAMPLE = [
+  {id:401,sub:'sci1',topic:'ai-concept',src:'sample',q:'關於 AI，下列敘述何者正確？',opts:['AI 僅能處理結構化數據的分析','AI 涵蓋多種專業領域與技術','AI 系統只能在學術研究中應用','AI 無法應用於金融領域'],ans:1,exp:'AI 人工智慧涵蓋自然語言處理、電腦視覺、機器學習、深度學習等多種專業領域與技術，廣泛應用於金融、醫療、製造、教育等各行各業，並能處理結構化與非結構化資料。'},
+  {id:402,sub:'sci1',topic:'ml',src:'sample',q:'下列何者最適合訓練電腦下圍棋、自動駕駛等動態重複地互動的問題？',opts:['監督式學習（Supervised Learning）','非監督式學習（Unsupervised Learning）','半監督式學習（Semi-supervised Learning）','強化學習（Reinforcement Learning）'],ans:3,exp:'強化學習透過 Agent 與環境反覆互動，根據行動的獎勵或懲罰調整策略，最適合動態決策問題，如下圍棋（AlphaGo）、自動駕駛、機器人控制等。'},
+  {id:403,sub:'sci1',topic:'ml',src:'sample',q:'深度學習模型中，下列哪一項通常用來降低過擬合（Overfitting）問題？',opts:['增加訓練數據量','增加模型的複雜度','增加學習率','增加正則化項'],ans:3,exp:'正則化（Regularization）在損失函數中加入懲罰項（如L1/L2），限制模型複雜度，是降低過擬合最常見的方法。增加訓練數據也有幫助，但本題選項D（增加正則化項）是深度學習中最直接的防止過擬合手段。'},
+  {id:404,sub:'sci1',topic:'ai-gov',src:'sample',q:'在 AI 治理中，下列何者是國際合作的重要性？',opts:['統一 AI 發展標準','避免 AI 技術的濫用','促進 AI 技術的轉移','以上皆是'],ans:3,exp:'AI 國際合作的重要性包含：(A)統一AI發展標準以確保互通性；(B)避免AI技術被用於危害人類的目的；(C)促進技術轉移讓更多國家受益。以上皆是正確答案。'},
+  {id:405,sub:'sci1',topic:'ml',src:'sample',q:'若要設計一個能夠辨識並過濾垃圾郵件的系統，應該選擇下列哪一種機器學習演算法以實現最佳效果？',opts:['監督式學習（Supervised Learning）','非監督式學習（Unsupervised Learning）','半監督式學習（Semi-supervised Learning）','強化學習（Reinforcement Learning）'],ans:0,exp:'垃圾郵件過濾有明確的標籤（垃圾/非垃圾），屬於二元分類問題，最適合監督式學習。可使用Naive Bayes、SVM、決策樹等分類演算法。'},
+  {id:406,sub:'sci1',topic:'ai-gov',src:'sample',q:'假設某國正在考慮使用 AI 技術來進行社會信用評分，並根據年齡、缺陷、種族等特徵來評定個人信用；同時在公眾場所使用遠程生物辨識系統進行執法。根據歐盟《人工智慧法》（AI Act）的風險分級，這類應用屬於哪一風險等級？',opts:['不可接受風險','高風險','有限風險','小或低風險'],ans:0,exp:'歐盟 AI Act 將以下應用列為「不可接受風險」（禁止）：基於種族、性別等敏感屬性的社會信用評分、公共場所即時遠程生物辨識系統用於執法。這些應用嚴重侵害個人基本權利與尊嚴。'},
+  {id:407,sub:'sci1',topic:'data',src:'sample',q:'下列何者非大數據時代資料的特性？',opts:['資料量大','資料變動速度快','資料多樣性','資料存儲位置固定'],ans:3,exp:'大數據 4V 特性：Volume（量大）、Velocity（速度快）、Variety（多樣性）、Veracity（真實性）。「資料存儲位置固定」並非大數據特性，大數據通常分散儲存在多個節點（分散式儲存）。'},
+  {id:408,sub:'sci1',topic:'ml',src:'sample',q:'關於 K 平均法（K-means），下列敘述何者「不」正確？',opts:['希望找出 k 個互不交集的群集','不同的起始群集中心，可能會造成不同的分群結果','容易受雜訊與離群值（Outlier）影響其群集中心','可以處理類別型資料'],ans:3,exp:'K-means 使用歐式距離計算，只能處理數值型資料，無法直接處理類別型資料（如性別、顏色等）。其他選項均正確：K-means確實找k個不重疊群集、受起始點影響、受離群值影響。'},
+  {id:409,sub:'sci1',topic:'data',src:'sample',q:'下列哪一種資料類型不屬於非結構化資料？',opts:['X 光醫學影像','監控錄影畫面','客服電話錄音','組織內部的關係型資料庫記錄'],ans:3,exp:'關係型資料庫（如MySQL）以固定格式行列儲存，屬於結構化資料。X光影像、錄影畫面、電話錄音均屬非結構化資料（無固定格式，難以直接用表格表示）。'},
+  {id:410,sub:'sci1',topic:'data',src:'sample',q:'下列資料型態，何者最常用來儲存員工年齡、員工年資、貨品銷售量等資料？',opts:['文字型（Text）','數值型（Numeric）','日期型（Date）','布林型（Boolean）'],ans:1,exp:'年齡、年資、銷售量等都是可以計算的量化數值，最適合使用數值型（Numeric）資料型態儲存，支援加減乘除等數學運算。'},
+  {id:411,sub:'sci1',topic:'stats',src:'sample',q:'在品質管理中，若一產品的生產過程中標準差顯著偏大，通常意味著什麼？',opts:['資料點高度集中，產品質量穩定','生產過程波動大，產品品質不穩定','資料無法反映產品實際狀況','中位數數值高，品質良率較高'],ans:1,exp:'標準差衡量資料分散程度。標準差越大=資料越分散=生產過程波動越大=產品品質越不穩定=良率越低。這是統計製程控制（SPC）的核心概念。'},
+  {id:412,sub:'sci1',topic:'stats',src:'sample',q:'在檢視資料品質時，可參考資料的變異程度及資料的集中趨勢。下列何者不屬於資料集中趨勢衡量的方法？',opts:['平均數（Mean）','中位數（Median）','眾數（Mode）','標準差（Standard Deviation）'],ans:3,exp:'集中趨勢衡量方法：平均數（Mean）、中位數（Median）、眾數（Mode）。標準差（Standard Deviation）衡量的是資料的「分散程度（變異程度）」，不是集中趨勢。'},
+  {id:413,sub:'sci1',topic:'ml',src:'sample',q:'某醫院研究特定心血管疾病的成因，收集了 50 名病患與 150 名正常人的年齡、血壓、血型等三項屬性變數。此研究適合使用下列哪一種機器學習模型？',opts:['決策樹（Decision Tree）','線性廻歸（Linear Regression）','基於密度之含噪空間聚類法（DBSCAN）','K-means 聚類（K-means Clustering）'],ans:0,exp:'此問題有明確標籤（病患/正常人），是二元分類問題，需使用監督式學習。決策樹（Decision Tree）適合有類別標籤的分類問題，且可解釋性高，適合醫療研究。線性迴歸適合連續值預測；DBSCAN和K-means是非監督式聚類。'},
+  {id:414,sub:'sci1',topic:'ai-concept',src:'sample',q:'銀行想建立聊天機器人，可透過下列哪一種領域技術來達成？',opts:['資料庫管理技術','機器學習與自然語言處理','網頁開發技術','網路安全技術'],ans:1,exp:'聊天機器人需要「理解自然語言輸入」（自然語言處理/NLP）和「根據上下文產生回應」（機器學習/深度學習），結合NLP的意圖識別、實體提取和對話管理實現。'},
+  {id:415,sub:'sci1',topic:'ml',src:'sample',q:'線性迴歸模型最適合解決哪種類型的問題？',opts:['圖像分類','銷售額預測','聚類分析','遊戲策略學習'],ans:1,exp:'線性迴歸用於預測連續數值輸出，最適合銷售額預測（連續值）。圖像分類=CNN分類；聚類分析=非監督式（K-means）；遊戲策略=強化學習。'},
+  {id:416,sub:'sci1',topic:'data-eng',src:'sample',q:'請問下列何者不是常見的特徵選取技術或方法？',opts:['皮爾森積差相關分析（Pearson Correlation）','主成分分析（Principal Components Analysis, PCA）','迴歸分析（Regression Analysis）','隨機森林（Random Forest）'],ans:2,exp:'常見特徵選取方法：過濾法（Pearson相關係數）、降維法（PCA）、嵌入法（Random Forest特徵重要性）。「迴歸分析」本身是一種預測建模方法，而非特徵選取技術（雖然係數可間接反映重要性，但不是主要的特徵選取方法）。'},
+  {id:417,sub:'sci1',topic:'ml',src:'sample',q:'交叉驗證的主要目的是什麼？',opts:['提高模型的訓練速度','驗證數據是否線性可分','減少模型的過擬合風險','測試模型的容錯能力'],ans:2,exp:'交叉驗證（Cross-Validation）將資料分成多個子集輪流作驗證集，評估模型在未見資料上的泛化能力，主要目的是減少過擬合風險，確保模型不是只在訓練集上表現好。'},
+  {id:418,sub:'sci1',topic:'ml',src:'sample',q:'神經網路與傳統機器學習模型的主要區別是什麼？',opts:['神經網路無法處理非線性數據','神經網路透過多層結構學習複雜特徵','神經網路只適用於迴歸問題','神經網路不需要大量數據支持'],ans:1,exp:'神經網路的核心特點是透過多個隱藏層進行多層次特徵提取，每層學習不同抽象程度的特徵，能自動學習複雜的非線性特徵，這是與傳統機器學習（需人工設計特徵）的主要區別。'},
+  {id:419,sub:'sci1',topic:'disc-ai',src:'sample',q:'下列關於生成對抗網路（GAN）的描述正確的是哪一項？',opts:['GAN 由生成器和鑑別器組成','GAN 僅用於分類問題','GAN 的結果始終高度可解釋','GAN 不能生成高品質的數據'],ans:0,exp:'GAN 由兩個神經網路組成：生成器（Generator）負責生成假樣本，鑑別器（Discriminator）負責區分真假樣本，兩者對抗訓練。GAN能生成高品質圖像，但不用於分類，且結果較難解釋（黑箱）。'},
+  {id:420,sub:'sci1',topic:'disc-ai',src:'sample',q:'在下列哪一種應用領域中，生成式 AI 最有可能被使用來創建新的圖像或影片內容？',opts:['產品品質檢測','醫學影像分析','監控系統','虛擬現實圖像'],ans:3,exp:'虛擬現實（VR）圖像創建需要大量多樣的視覺內容，生成式AI可自動生成逼真場景、角色和物件，是最典型的生成式AI圖像應用。產品品質檢測、醫學影像分析、監控系統主要使用鑑別式AI（分類/偵測）。'},
+  {id:421,sub:'sci1',topic:'disc-ai',src:'sample',q:'關於目前生成式 AI 的主要應用，不包括下列哪一項？',opts:['創建合成數據樣本','模擬數據分佈','分類醫學影像','生成文本'],ans:2,exp:'分類醫學影像是鑑別式AI（CNN）的應用，而非生成式AI。生成式AI的主要應用包括：創建合成數據樣本（數據增強）、模擬數據分佈（GAN/VAE）、生成文本（LLM）、圖像生成等。'},
+  {id:422,sub:'sci1',topic:'disc-ai',src:'sample',q:'下列哪項是生成式 AI 支援鑑別式 AI 的典型案例？',opts:['模擬交通場景以訓練自動駕駛模型','使用 CNN 對腫瘤分類','使用 SVM 分析風險','創建更好的分類演算法'],ans:0,exp:'生成式AI支援鑑別式AI的典型案例：生成式AI模擬各種交通場景（雨天/夜晚/事故），為鑑別式AI（自動駕駛決策模型）提供多樣化訓練資料，解決真實數據不足的問題。'},
+  {id:423,sub:'sci1',topic:'ai-concept',src:'sample',q:'關於自然語言處理（NLP）核心技術，下列敘述何者不正確？',opts:['語音識別技術將語音轉換為文本，並用於語音助理和語音輸入','自然語言生成技術可以生成自然流暢的文本，用於聊天機器人和自動文案生成','語意分析技術理解文本的語意，並主要用於語音識別和機器翻譯','機器翻譯技術自動翻譯文本，促進多語言支援和全球溝通'],ans:2,exp:'語意分析（Semantic Analysis）主要用於理解文本的含義和語境，應用於情感分析、問答系統、資訊擷取等，並非主要用於語音識別（語音識別是ASR技術）。選項C描述有誤。'},
+  {id:424,sub:'sci1',topic:'ai-gov',src:'sample',q:'關於「負責任的 AI」，下列敘述何者較為正確？',opts:['AI 系統的開發者對 AI 系統的行為負責','AI 系統的使用者對 AI 系統的結果負責','AI 系統本身對其行為負責','政府對 AI 系統的發展負責'],ans:0,exp:'負責任的AI強調開發者在設計、開發和部署AI系統時應承擔主要責任，包括確保系統的公平性、透明性、安全性和可靠性。AI系統本身無法承擔法律責任，政府負責監管而非直接負責。'},
+  {id:425,sub:'sci1',topic:'disc-ai',src:'sample',q:'關於生成式 AI 的基本原理，下列敘述何者較正確？',opts:['生成式 AI 通過分析大量數據來生成新數據，模擬數據分佈以創造與訓練數據相似的結果','生成式 AI 主要通過預定義的規則來進行數據處理和分類','生成式 AI 專注於數據分類和迴歸預測，幫助識別已知數據中的模式','生成式 AI 通過自動化的方式清洗數據，提升數據分析的準確性'],ans:0,exp:'生成式AI的核心是學習訓練資料的統計分布（P(x)），並從中採樣生成新的、相似但非完全相同的數據樣本（文字/圖像/音樂）。選項B/C描述的是鑑別式AI；選項D描述的是數據清洗工具。'},
+  {id:451,sub:'sci2',topic:'nocode',src:'sample',q:'下列何者最能表達 No Code / Low Code 平台的主要特色？',opts:['需要撰寫大量程式碼','運用模板快速建立應用程式','僅供專業開發人員使用','只能製作靜態網站'],ans:1,exp:'No Code / Low Code 平台的主要特色是提供視覺化介面與模板，讓用戶不需撰寫（或僅需少量）程式碼即可快速建立應用程式，支援動態與互動式應用開發，降低門檻。'},
+  {id:452,sub:'sci2',topic:'nocode',src:'sample',q:'關於 No Code AI 工具，下列敘述何者最為準確？',opts:['已經完全取代傳統的 AI 開發模式','只適用於大型企業','是一種降低 AI 技術複雜性和開發成本的新興方法','工具都具有完全相同的功能和性能'],ans:2,exp:'No Code AI 工具透過圖形化介面及預建模組，使用者無需撰寫程式碼即可實現開發工作，有效降低技術複雜性與開發成本。它無法完全取代傳統開發（複雜場景仍需技術人員），且各工具功能不同，也不限大型企業使用。'},
+  {id:453,sub:'sci2',topic:'nocode',src:'sample',q:'下列哪種情況，選擇 Low Code 平台可能比 No Code 平台更為適合？',opts:['需要非技術人員快速進行開發與應用','應用需求簡單，無需自訂功能','需要較複雜的業務邏輯並使用自訂整合功能','預算和時間極度有限'],ans:2,exp:'Low Code 平台允許在視覺化設計基礎上加入少量程式碼，更適合需要複雜業務邏輯、系統整合或高度客製化的場景。非技術人員快速開發→No Code；複雜邏輯客製整合→Low Code。'},
+  {id:454,sub:'sci2',topic:'nocode',src:'sample',q:'關於生成式 AI 與 No Code / Low Code 平台的應用，下列何者最不適合？',opts:['自動生成程式碼','自動化生成行銷文案','快速開發個人化 App','自動化生成法律判決'],ans:3,exp:'法律判決的生成需要高度專業法律知識、嚴格的合規性審查，以及對具體案例事實的精確理解，這超出了No Code/Low Code平台的主要功能範疇。法律判決具有嚴肅性和法律效力，不適合AI自動生成。'},
+  {id:455,sub:'sci2',topic:'nocode',src:'sample',q:'關於 No Code / Low Code 平台，下列敘述何者較正確？',opts:['兩者完全相同','Low Code 平台不需要任何程式設計知識','Low Code 平台更適合開發靈活且可擴展的解決方案','No Code 平台可以無限客製化'],ans:2,exp:'Low Code 平台允許少量程式碼進行更高的客製化，具備更大的靈活性與擴展性，適合開發更複雜的解決方案。No Code 完全不需程式碼但自訂能力有限；Low Code 仍需基本技術知識。'},
+  {id:456,sub:'sci2',topic:'nocode',src:'sample',q:'使用 Low-Code 平台進行開發時，企業應特別留意下列哪一項潛在風險？',opts:['可能造成企業內部敏感資料的洩露','難以進行大規模的應用擴展和維護','開發成本將大幅增加','可能有未經 IT 部門管理的應用程式擴散'],ans:3,exp:'Low-Code 平台降低了開發門檻，可能導致業務人員在未獲 IT 部門授權的情況下自行建立應用（影子IT / Shadow IT），形成管理漏洞，這是企業採用Low-Code時最需特別留意的潛在風險。'},
+  {id:457,sub:'sci2',topic:'ai-plan',src:'sample',q:'下列哪一種技術方案適用於改善客戶體驗？',opts:['智慧排程系統','消費行為洞察模型','預測性維護工具','自然語言處理（NLP）和生成式回應模組'],ans:3,exp:'改善客戶體驗最直接的技術是NLP和生成式回應模組：NLP理解客戶自然語言輸入，生成式AI產生個人化、自然流暢的回應，打造更好的客服互動體驗（如智慧客服機器人）。'},
+  {id:458,sub:'sci2',topic:'gen-ai',src:'sample',q:'下列哪一項技術是生成式 AI 的基礎？',opts:['決策樹模型','聚類演算法','生成對抗網路','隨機森林技術'],ans:2,exp:'生成對抗網路（GAN）是生成式AI的核心基礎技術之一，由生成器和鑑別器對抗學習，能夠生成高品質、逼真的數據（圖像/文字/音訊）。決策樹和隨機森林是鑑別式AI；聚類是非監督式學習。'},
+  {id:459,sub:'sci2',topic:'gen-ai',src:'sample',q:'能使用 DALL·E-2 生成各式逼真的圖片，最關鍵的應用技術為何？',opts:['卷積神經網絡（CNN）','生成對抗網絡（GAN）','擴散模型（Diffusion Model）','自然語言處理（NLP）'],ans:2,exp:'DALL-E 2 的核心技術是擴散模型（Diffusion Model）：訓練時逐步向圖片加入高斯雜訊，生成時反向去除雜訊重建圖像。相比GAN，擴散模型能生成更高品質、更多樣化的圖像，且訓練更穩定。'},
+  {id:460,sub:'sci2',topic:'gen-ai',src:'sample',q:'下列何者不是生成式 AI 核心技術？',opts:['Variational Autoencoders（VAE）','Generative Adversarial Networks（GAN）','Visual Geometry Group（VGG）','Autoregressive Models（AR Model）'],ans:2,exp:'VGG（Visual Geometry Group）是牛津大學開發的深度CNN架構，專用於圖像分類（鑑別式AI），不是生成式AI技術。VAE、GAN、自迴歸模型（如GPT）都是生成式AI的核心架構。'},
+  {id:461,sub:'sci2',topic:'gen-ai',src:'sample',q:'使用生成式 AI 技術或工具生成內容時，應採取下列哪一項措施以確保內容品質？',opts:['使用內容直接進行學術報告','適當標注引用來源','減少人工參與的審查過程','排除所有生成的資料'],ans:1,exp:'使用生成式AI生成的內容時，適當標注引用來源是確保內容品質的重要措施：避免抄襲問題、尊重原作者的知識產權、提供內容的可靠性和可追溯性。應保留人工審查，而非排除所有生成資料。'},
+  {id:462,sub:'sci2',topic:'gen-ai',src:'sample',q:'下列哪一項不是生成式 AI 工具在使用體驗方面的優化方向？',opts:['提供更直觀的操作設計','支援自然語言指令','提供智慧化的參數調整建議','限制使用者自訂生成內容'],ans:3,exp:'生成式AI工具使用體驗優化方向：直觀操作設計（降低學習曲線）、自然語言指令（提升互動性）、智慧化參數建議（提升輸出品質）。「限制使用者自訂生成內容」與優化方向相反，會降低使用體驗。'},
+  {id:463,sub:'sci2',topic:'gen-ai',src:'sample',q:'學校教師如何引導學生正確使用生成式 AI 工具？',opts:['不應使用 AI 工具於教學場域','無限制地使用 AI 工具','訂立清晰的使用規範並進行說明','僅鼓勵學生利用 AI 完成課堂作業'],ans:2,exp:'教師應訂立清晰的使用規範並向學生說明AI的適用場景、倫理考量及限制，培養學生的批判性思維，將AI作為輔助學習的資源而非替代自主學習的過程。完全禁止或無限制使用均不合理。'},
+  {id:464,sub:'sci2',topic:'ai-plan',src:'sample',q:'企業若要有效支援生成式 AI 的運行，內部 IT 環境最需要具備下列何種條件？',opts:['提供更多的辦公設備，以提升員工生產力','精簡企業內部流程，以加速決策效率','擁有高效能運算資源與彈性儲存空間，以支援 AI 模型訓練與推理','增加部門之間的交流機會，以促進跨部門合作'],ans:2,exp:'生成式AI模型訓練和推理需要大量GPU計算資源（如NVIDIA A100）和彈性儲存空間（存放模型參數和訓練資料），這是支援生成式AI運行的核心IT基礎設施需求。'},
+  {id:465,sub:'sci2',topic:'gen-ai',src:'sample',q:'A 企業想要實現客服自動化，希望透過 AI 理解客戶發送的文本訊息，並根據文本內容調用相對應的圖片和影片進行回覆。A 企業應該選擇哪一種模型？',opts:['強化學習模型','多模態模型','圖像分類模型','單模態大語言模型'],ans:1,exp:'多模態模型能同時處理多種形式的輸入（文字、圖像、影片、音訊），並整合不同模態產生回應。本案需同時理解文本和調用圖片/影片，必須使用多模態模型（如GPT-4V、Gemini等）。'},
+  {id:466,sub:'sci2',topic:'prompt-eng',src:'sample',q:'下列哪一種情境最能展現提示工程（Prompt Engineering）的價值？',opts:['使用者輸入一個模糊的問題，AI 給出一個非常確定的答案','使用者輸入一個非常具體的問題，AI 給出一個相關但不完全符合的答案','使用者輸入一個精準有架構的問題，AI 生成符合架構的答案','使用者輸入一個簡單的問題，AI 給出一個非常複雜的答案'],ans:2,exp:'提示工程的核心價值在於透過精準有架構的提示設計（明確的角色定義、任務說明、輸出格式要求），引導AI模型生成完全符合需求的結構化輸出。這展示了Prompt Engineering將模糊需求轉化為精確指令的能力。'},
+  {id:467,sub:'sci2',topic:'gen-ai',src:'sample',q:'下列敘述何者最能反映生成式 AI 在圖像生成領域的發展趨勢？',opts:['生成式 AI 目前僅能生成基於簡單算法的低解析度圖像，無法應用於高解析度或細節豐富的圖像創建','隨著生成式 AI 技術的進步，圖像不僅風格多樣，且逼真度顯著提升，並可處理更複雜的圖像生成任務','生成式 AI 技術目的為加快生成速度，可生成靜態圖像，無法生成動態圖像','生成式 AI 在圖像生成方面的發展主要集中於圖像風格轉換，無涉及其他類型的視覺內容生成'],ans:1,exp:'生成式AI圖像生成技術持續進步：Midjourney、DALL-E 3、Stable Diffusion等已能生成高解析度、逼真度極高的多樣化圖像，也能生成動態圖像（影片），應用範圍不限於風格轉換。'},
+  {id:468,sub:'sci2',topic:'gen-ai',src:'sample',q:'關於生成式 AI，下列 A~E 敘述哪些正確？A.生成的內容不會帶有偏見 B.具有高度準確性，不會有虛假信息 C.生成內容的準確性，建議需要經過人類審核 D.每次生成的內容都可能不同 E.生成式 AI 具有高度安全性，不會導致數據外流',opts:['C、D','A、C、D','A、B、D、E','A、C、D、E'],ans:0,exp:'正確敘述：C（生成內容需人類審核）和D（因溫度參數，每次輸出可能不同）。錯誤：A（生成內容可能帶有訓練資料的偏見）；B（LLM存在幻覺問題，會產生虛假信息）；E（存在訓練資料洩漏、提示詞攻擊等安全風險）。'},
+  {id:469,sub:'sci2',topic:'ai-plan',src:'sample',q:'一家跨國企業計劃在財務部門導入生成式 AI，並結合自動化系統進行報告產出。導入此系統後，最有可能實現的效益為何？',opts:['增加財務收益','顯著提升報告準確性並減少人工錯誤','加速市場推廣活動並提高銷售業績','提高品牌曝光度並增強客戶關係管理'],ans:1,exp:'在財務部門導入生成式AI用於報告產出，最直接的效益是：自動化重複性報告工作、提升報告準確性（減少人工輸入錯誤）、加快報告生成速度。增加財務收益是間接效益，而非最直接效益。'},
+  {id:470,sub:'sci2',topic:'ai-plan',src:'sample',q:'在生成式 AI 導入過程中，資料安全與隱私保護的哪一方面是最重要的考量？',opts:['設定目標優先級','增強客服回饋（反饋）能力','資料視覺化能力','權限控管與合規要求'],ans:3,exp:'在生成式AI導入過程中，資料安全最重要的考量是權限控管與合規要求：確保只有授權人員能存取敏感資料、符合GDPR等個資法規、建立資料存取稽核機制。'},
+  {id:471,sub:'sci2',topic:'ai-plan',src:'sample',q:'若企業將資料安全管理外包給第三方服務供應商，屬於哪種風險應對策略？',opts:['風險緩解','風險轉移','風險接受','風險規避'],ans:1,exp:'風險轉移：透過外包、購買保險或與外部合作夥伴簽署協議，將部分或全部風險責任轉移給第三方。企業將資料安全管理外包即是將相關風險責任轉移給服務供應商。'},
+  {id:472,sub:'sci2',topic:'ai-plan',src:'sample',q:'在生成式 AI 的風險管理中，下列哪一項屬於倫理風險？',opts:['AI 生成的內容可能帶有偏見或歧視','系統運行中斷可能導致企業業務受到影響','因資料需求增加而引起的存儲成本上升','員工培訓成本增加'],ans:0,exp:'倫理風險是指AI系統可能帶來的道德和公平性問題，如AI生成內容帶有偏見或歧視（對特定性別、種族、族群）。系統中斷是技術風險；存儲成本是財務風險；培訓成本是運營風險。'},
+  {id:473,sub:'sci2',topic:'ai-plan',src:'sample',q:'在企業導入 AI 的實施/營運階段，為持續發揮導入 AI 的價值，下列步驟的正確排序應為何？A.AI 價值擴散  B.上線部署  C.模型監控與優化',opts:['ACB','ABC','BAC','BCA'],ans:3,exp:'實施/營運階段正確順序：B（上線部署：將驗證後的模型部署到生產環境）→ C（模型監控與優化：持續監控效能、數據漂移，進行優化和重新訓練）→ A（AI價值擴散：將成功經驗推廣至其他業務單位）。'},
+  {id:474,sub:'sci2',topic:'ai-plan',src:'sample',q:'在管理生成式 AI 系統的隱私風險時，下列哪一種技術最能確保數據使用的安全性？',opts:['強化學習（Reinforcement Learning）','深度學習（Deep Learning）','零信任架構（Zero Trust Architecture）','注意力機制（Attention Mechanism）'],ans:2,exp:'零信任架構（Zero Trust Architecture）採用「永不信任、始終驗證」原則，對每次資源存取請求都需進行驗證和授權，不論請求來源在網路內外，最能確保數據使用的安全性。RL、DL、Attention是AI訓練技術，非安全架構。'},
+  {id:475,sub:'sci2',topic:'ai-plan',src:'sample',q:'在驗證生成式 AI 應用的概念驗證（POC）時，若企業希望確保模型生成的公平性，最適合採用哪種評估策略？',opts:['壓力測試（Stress Testing）','對抗性測試（Adversarial Testing）','偏差檢測（Bias Detection）','延遲測試（Latency Testing）'],ans:2,exp:'偏差檢測（Bias Detection）專門識別並量化模型輸出中對特定群體的不公平偏見，是確保模型生成公平性的最適評估策略。壓力測試評估系統負載；對抗性測試評估安全性；延遲測試評估速度。'},
+];
+
+
+QB_115_1_S1.forEach(q=>q.src='official_115');
+
+// ═══════ 115年第一次科目二 50題 ═══════
+const QB_115_1_S2 = [
+  {id:551,sub:'sci2',topic:'nocode',q:'在 Low Code 平台的開發應用設計中，關於「模型（Model）」，下列敍述何者最符合實際情況？',opts:['模型僅扮演設計視覺化的輔助工具，對應用邏輯的影響有限','模型是用來抽象描述資料結構、業務流程與介面邏輯的核心元素，影響應用的設計與維護','模型僅依循 UML 等傳統建模方式，缺乏針對 Low Code 環境的延展性','模型在 Low Code 平台中已被自動程式碼生成全面取代'],ans:1,exp:'在 Low-code 平台中，Model 是核心抽象層，定義資料結構、業務規則和介面邏輯，是 CRUD 操作、流程自動化和 UI 綁定的基礎，貫穿整個應用設計與維護週期。'},
+  {id:552,sub:'sci2',topic:'ai-gov',q:'企業導入生成式 AI 平台時，希望在確保隱私的前提下讓模型持續優化並降低資料外洩風險，下列哪一種方法最適合？',opts:['同態加密（Homomorphic Encryption）','安全多方計算（Secure Multi-party Computation）','零知識證明（Zero-knowledge Proofs）','聯邦學習（Federated Learning）'],ans:3,exp:'聯邦學習讓各部門在本地訓練，只共享梓度更新不共享原始資料，是「資料不動模型動」的隱私保護分散式學習方案，最適合敏感資料的跨部門 AI 優化場景。'},
+  {id:553,sub:'sci2',topic:'nocode',q:'企業利用 No Code/Low Code 平台開發內部系統，確保跨部門流程與外部服務整合的可測試性，下列哪一項作法最為合適？',opts:['依賴平台提供的即時預覽與基本單元測試功能，快速驗證常見流程','導入可重複執行的自動化測試流程，並透過 API 或服務虛擬化進行模組化驗證','將測試肁焦於使用者介面互動與操作流程驗證','依靠使用者回饋與正式上線後的監控資料作為修正依據'],ans:1,exp:'生產級系統的測試應導入自動化測試（Automated Testing）和服務虛擬化（Service Virtualization），確保每次變更都能可重複驗證，比手動點擊測試更可非且可維護。'},
+  {id:554,sub:'sci2',topic:'prompt-eng',q:'結合自動提示工程（APE）與圖提示（Graph Prompting）分析使用者互動關係，最可能遇到的挑戰為何？',opts:['圖結構轉換為文字提示時，可能導致部分關聯資訊遺失','​APE 在圖資料上無法產生任何提示內容','圖轉文字後能完整保留所有上下文，對推理不造成影響','Graph Prompting 僅能處理線性路徑，限制多分支探索'],ans:0,exp:'圖結構（節點、邊、屬性）轉換為文字序列時，拓撲結構信息可能部分丢失（語言模型天然是線性序列處理器）。如何有效表達圖的結構性關係是 Graph Prompting 的核心挑戰。'},
+  {id:555,sub:'sci2',topic:'prompt-eng',q:'在超長上下文任務中使用自動提示工程（APE），可能面臨的最大限制是什麼？',opts:['迭代優化難以因應上下文的不斷變動，導致調整失效','模型的記憶容量有限，無法完整保留所有長篇資訊','提示內容難以有效分解，無法支援複雜任務拆解','回饋機制通常僅針對局部片段，難以全面評估最終輸出品質'],ans:3,exp:'APE 依賴評估函數對提示進行自動優化，但超長上下文中輸出品質難以用局部評估函數捕捉全局效果，回饋訊號不足導致優化困難，是 APE 在長上下文任務中的核心限制。'},
+  {id:556,sub:'sci2',topic:'nocode',q:'設計團隊在短時間內完成行動應用，需同時達到高度個人化、快速生成介面與行銀內容自動產出。結合 No Code/Low Code 與生成式 AI，哪一種整合策略最能符合目標？',opts:['使用生成式 AI 自動產生 API 呼叫與元件配置，並由開發者手動整合至 No Code 平台流程','透過生成式 AI 在 No Code 平台中自動建立介面模板，並結合使用者數据即時生成個人化功能與行銀推播內容','在 No Code 平台中導入生成式 AI，快速建立跨專案可重用的通用模組，專注於提升開發速度','在 No Code 平台中完全依賴生成式 AI 自動產生所有應用功能與流程，不經人工設計或驗證'],ans:1,exp:'最佳策略是：No Code 平台提供快速開發框架，生成式 AI 負責動態內容生成（個人化介面、推播文案）並結合使用者數据，兩者協同而非完全自動化（選項D過於激進且有風險）。'},
+  {id:557,sub:'sci2',topic:'ai-system',q:'透過 MCP（Model Context Protocol）實現 AI 查詢 GitHub 程式碼庫，MCP 運作流程的正確順序為何？',opts:['MCP Server → AI Host → MCP Client → 資料查詢 → 結果回傳 AI Host','MCP Client → AI Host → MCP Server → 資料查詢 → 結果回傳 AI Host','AI Host → MCP Client → MCP Server → 資料查詢 → 結果回傳 AI Host','AI Host → MCP Server → MCP Client → 資料查詢 → 結果回傳 AI Host'],ans:2,exp:'MCP 標準流程：AI Host（如 Claude）發起請求 → MCP Client（連接層）轉發 → MCP Server（GitHub 服務端）執行資料查詢 → 結果回傳給 AI Host。AI Host 是起點和終點。'},
+  {id:558,sub:'sci2',topic:'ai-system',q:'在 Agent-to-Agent（A2A）架構中，下列敍述何者最符合 Client Agent 與 Remote Agent 的互動流程？',opts:['Remote Agent 主動分派任務給 Client Agent','由人工事先設定 Client Agent 與 Remote Agent 處理任務的先後順序','Client Agent 發起任務，Remote Agent 執行並回傳結果','Client Agent 與 Remote Agent 同時處理任務並同步處理結果'],ans:2,exp:'A2A 架構中：Client Agent 是任務發起方，負責規劃並分配任務；Remote Agent 是執行方，接收任務、執行後回傳結果。類似 Client-Server 架構在多 Agent 系統中的應用。'},
+  {id:559,sub:'sci2',topic:'prompt-eng',q:'在導入生成式 AI 的應用規劃中，上下文工程（Context Engineering）的核心目的為何？',opts:['縮短模型訓練時間','優化提示與上下文','增加模型參數數量','優化 Fine-tuning 正確率'],ans:1,exp:'Context Engineering（上下文工程）專注於設計最佳的輸入上下文（包含系統提示、範例、背景資訊），以引導模型產出高品質回應，是提示工程的延伸，不涉及模型訓練。'},
+  {id:560,sub:'sci2',topic:'gen-ai',q:'測試人員在輸入的上下文中放入互相矛盾的資訊（同一員工被描述為入職三年與入職五年），最常見的模型行為會是什麼？',opts:['永遠選擇第一段資訊作為答案依據','可能生成幻覚或隨機採信其中一方的內容','拒絕回答，並要求提供更一致的輸入','自動判斷並只選擇正確的資訊'],ans:1,exp:'LLM 面對矛盾資訊時，缺乏確認哪方為真的能力，通常會：選擇其中一個（不確定性選擇）、生成融合的矛盾內容（幻覚），或輸出前後不一致的回應，無法像人類一樣要求澄清。'},
+  {id:561,sub:'sci2',topic:'ai-system',q:'Agentic AI 在解决方案圖譜（Solution Graph）上尋找最佳解决路徑時，通常使用什麼搜尋策略？',opts:['使用廣度優先、深度優先或最佳優先等演算法進行探索','每一步都隨機選擇動作，反覆嘗試直到找到可行路徑','只執行事先假定的一條路徑，失敗就停止','完全依靠 LLM 一次性推斷最優完整路徑'],ans:0,exp:'Agentic AI 在解决方案空間中進行搜尋，採用 BFS（廣度優先）、DFS（深度優先）或 A*（最佳優先）等演算法系統性探索可能的行動序列，而非隨機嘗試或單次推斷。'},
+  {id:562,sub:'sci2',topic:'ai-plan',q:'企業考慮將開源大型語言模型（GPT-OSS）自行部署在本地伺服器，最能代表本地部署對企業的實際好處為何？',opts:['可以達到無運算成本，因為本地部署不會產生額外資源消耗','模型預測能力會比在雲端運行時更精度，因為本地環境更可靠','可確保輸入模型的敏感資料不會傳輸給第三方，提升資料隱私和自主控制','以上皆是'],ans:2,exp:'本地部署（On-premise）的核心優勢是資料主權：敏感資料不離開企業環境，不受第三方雲端服務商存取，滿足金融、醫療、政府等高隱私要求行業的合規需求。'},
+  {id:563,sub:'sci2',topic:'gen-ai',q:'關於 GitHub Copilot，下列敍述何者正確？',opts:['GitHub Copilot 基於程式碼片段查詢工具，透過後端搜尋大型程式碼資料庫提供建議','GitHub Copilot 僅適用於 GitHub 上的開源專案，無法在私有程式碼庫或本地環境中提供建議','GitHub Copilot 利用靜態分析技術分析程式碼，根據邏輯流程推導下一步應寫的程式碼','GitHub Copilot 由 OpenAI 的 Codex 模型提供技術支援，可即時在開發者編輯時給出整行或整個函式建議'],ans:3,exp:'GitHub Copilot 基於 OpenAI Codex（GPT 系列的程式碼版本），透過理解自然語言與程式碼上下文，即時生成整行或整個函式的建議，支援各類 IDE（VS Code、JetBrains 等）和私有庫。'},
+  {id:564,sub:'sci2',topic:'ai-system',q:'電商導入 Agentic AI 處理客服，Agent 回答 FAQ 常出錯且無法幫客戶修改訂單，最可能缺少哪兩項工具？',opts:['API 調用（API Calling）＋任務規劃器（Task Planner）','向量資料庫檢索（Vector Retrieval）＋ API 調用（API Calling）','向量資料庫檢索（Vector Retrieval）＋任務規劃器（Task Planner）','任務規劃器（Task Planner）＋溫度參數（Temperature）設定'],ans:1,exp:'FAQ 常出錯 → 缺乏向量資料庫檢索（RAG）提供正確知識；無法修改訂單 → 缺乏 API 調用（呼叫訂單管理系統）。向量檢索+API調用是 Agentic AI 客服的兩大核心能力。'},
+  {id:565,sub:'sci2',topic:'gen-ai',q:'客服自動回應系統希望根據不同客戶群體調整回覆風格。在兼顧即時性與效果前提，下列哪一種方案最適合？',opts:['直接微調預訓練模型，針對每個客戶群體分別訓練不同風格模型','利用控制變量（Control Tokens）或風格標簽在同一模型內動態調整風格','利用生成對抗網路（GAN）生成不同風格文本，並透過人工篩選最終答案','採用規則式替換方法，替換回覆詞彙以符合不同風格要求'],ans:1,exp:'Control Tokens 或 Style Prompts 在推理時動態注入風格指令，在同一模型中靜活切換風格，無需為每種風格分別微調，兼具即時性與成本效益。'},
+  {id:566,sub:'sci2',topic:'ai-system',q:'建置多代理 LLM 系統時，如果沒有清楚定義每個代理的任務啟動條件和角色分工，最可能出現什麼問題？',opts:['回覆內容前後不連賫，系統邏輯斷裂','不同代理的答案互相衝突，無法判斷最終決策','系統陷入無限對話循環，導致資源耗盡','多個代理重複做同樣的任務，造成效率低落'],ans:3,exp:'缺乏明確角色分工和任務啟動條件時，多個 Agent 可能都認為某任務屬於自己的職責範疇，導致重複執行相同工作，浪費運算資源且可能產生衝突結果。'},
+  {id:567,sub:'sci2',topic:'rag',q:'企業部署結合 Fine-tuning 與 RAG 的語言模型系統，需確保回覆語氣一致、能即時查詢每日新增文件、維持效能穩定，避免頻繁重新訓練。長期維護下最合適的策略為何？',opts:['每週重新 Fine-tune 模型，將新文件整合進模型知識，逐步取代 RAG 模組','完全依靠基礎模型與 RAG，不進行 Fine-tune，僅透過提示設計控制語氣','每日進行増量 Fine-tune，讓模型即時學習新文件內容','保留語氣相關 Fine-tuning，僅透過檢索系統更新文件內容，不頻繁改動模型'],ans:3,exp:'最佳策略：Fine-tuning 用於固化語氣風格（一次性或低頻）；RAG 負責動態知識更新（高頻文件變更）。兩者職責分離，避免頻繁重訓導致的高成本和系統不穩定。'},
+  {id:568,sub:'sci2',topic:'rag',q:'客服系統回覆「訂單取消政策」時，即使滫度固定為0.6，回覆品質仓常出現差異。調查顯示檢索到的政策內容有時是舊版本。若要優先改善品質波動，應先解決哪一項問題？',opts:['調整滫度參數，降低生成隨機性','加強 Prompt 設計，限制模型表達方式','優化微調語料，減少含糊描述','提升檢索系統品質，確保取得的政策內容正確且最新'],ans:3,exp:'根本原因是「檢索到過時文件」，而非滫度或 Prompt 問題。GIGO（Garbage In, Garbage Out）原則：無論生成多精細，錯誤的輸入資料必然導致錯誤輸出。應優先修復資料源。'},
+  {id:569,sub:'sci2',topic:'ai-system',q:'醫院智慧系統 ASR→LLM→醫療資料庫API，詢問「術後復健流程」卻查到「術前注意事項」。已排除語音辨識錯誤，最可能的原因為何？',opts:['醫療資料庫 API 對應規則設計不清，造成意圖映射模糊','LLM 的 Prompt 缺乏明確指示，導致語意分類判斷錯誤','查詢 API 回傳速度過慢，影響系統處理正確性','LLM 未經醫療領域微調，難以正確理解專業性詞彙'],ans:1,exp:'ASR 無誤（文字正確）→ LLM 接收到正確文字卻錯誤判斷意圖（術後→術前）→ 根本原因是 LLM Prompt 未明確定義意圖分類規則，導致語意歧義時判斷錯誤。應優化 Prompt 的意圖分類指引。'},
+  {id:570,sub:'sci2',topic:'ai-plan',q:'醫院將生成式 AI 模型運用於胸腔 X 光影像診斷，最可能成為主要風險的是？',opts:['模型在生成報告時語句流暢，但僅在文字表達上有差異，對診斷結果沒有重大影響','模型若資料不足，僅會降低生成報告的完整性，而非影響判斷病炐的正確性','模型偵向生成內容而非分類，但此差異僅影響效率，不會造成誤診風險','模型可能生成與實際影像不符的診斷結論，導致誤判並引發醫療與法律風險'],ans:3,exp:'生成式 AI（如 GPT）設計用途是生成文字，而非判斷醫學影像中的病炐。強行用於影像診斷可能憑空生成診斷結論（幻覚），造成誤診、延誤治療，並引發醫療責任與法律問題。'},
+  {id:571,sub:'sci2',topic:'ai-system',q:'智慧車載語音助理：ASR辨識錯誤率高、LLM回覆不精確、系統延遲尚可接受。若目標是「優先提升準確性與回答品質」，最合理的執行順序為何？',opts:['1（擴充標註汽車語音資料，微調 ASR） → 2（微調 LLM+RAG） → 4（調整滫度） → 3（優化批次推論降延遲）','2 → 1 → 3 → 4','1 → 3 → 2 → 4','3 → 1 → 2 → 4'],ans:0,exp:'優先解決最上游問題：ASR錯誤率高→先修復ASR（步驔1）；再修復LLM準確性（步驔2）；調整滫度優化輸出品質（步驔4）；延遲尚可接受故最後優化（步驔3）。'},
+  {id:572,sub:'sci2',topic:'gen-ai',q:'生成式 AI 協助撰寫數据分析報告，但生成結果多半只是替換數値關鍵詞，未展現針對不同專案的多樣化推理。最合理的解釋為何？',opts:['模型缺乏對字體與排版的優化能力','測試資料涵蓋過多統計圖表，導致模型無法專注於文字多樣化表達','模型過度依賴訓練語料中的常見報告範式，導致生成結果以樣板化結構取代真正的推理','模型因無法正確辨識頁碼與標題層級，才出現樣板化的結果'],ans:2,exp:'這是 LLM 的「樣板化過擬合」現象：模型在大量商業報告語料上訓練，學到了固定的報告結構和表達套路，導致生成結果缺乏真正的邏輯推理，只是填充數字的模板。解決方法包括 CoT 提示、角色設定等。'},
+  {id:573,sub:'sci2',topic:'prompt-eng',q:'在應用零樣本提示（Zero-Shot Prompting）時，哪一種情境最可能因缺乏示範而失敗？',opts:['要求模型判斷一段影評文字的情感傾向','要求模型將一段新訞摘要濃縮為一句話','要求模型將一段繁體中文翻譯成英文','要求模型從表格中擷取所有城市的最高氣溫'],ans:3,exp:'從非結構化表格中精確擷取特定格式資料需要精確的格式理解，Zero-shot 難以讓模型確切知道輸出格式。情感分析、摘要、翻譯是 LLM 預訓練中大量見過的標準任務，Zero-shot 表現良好。'},
+  {id:574,sub:'sci2',topic:'ai-plan',q:'保險公司導入生成式 AI 內部合約查詢系統，高層強調客戶資料隱私與合規風險控管，即使需要更多資源也必須確保資料不外泄。最符合需求的策略為何？',opts:['導入開源模型並由 IT 團隊自建，後續逐步補強隱私與合規控管','在需求確認階段即納入法遵與稽核單位，設定準確率 KPI，並透過 MVP 驗證成效','優先使用雲端大型 API 模型快速部署，並根據使用數據持續調整','投入資源自訓並私有化部署 LLM，並同步建立自動化風控機制'],ans:3,exp:'高隱私合規優先的場景：私有化部署確保敏感合約資料不離開企業環境，結合自動化風控機制滿足法規要求。雲端 API（選項C）資料仍需傳輸至第三方，不符合最高隱私要求。'},
+  {id:575,sub:'sci2',topic:'gen-ai',q:'圖像描述生成系統能根據輸入照片自動產生說明文字，為使描述文字能與圖片資訊精準對應，下列哪一種設計思路最關鍵？',opts:['強化語言模型的句法與流暢性，確保生成文字更自然易讀','在生成過程中結合圖片特徵與語言建模，讓模型同時利用影像內容與文字資訊','調整生成策略（如 Beam Search 或溫度參數），以提升輸出文字的合理性','專注於文字序列上下文的建模，只提升文字間的連賫性'],ans:1,exp:'圖像描述生成（Image Captioning）的核心是多模態對齊：利用 CNN/ViT 提取圖片視覚特徵，並在語言生成過程中持續參考視覺特徵（Cross-attention），確保文字與圖片內容緊密對應。'},
+  {id:576,sub:'sci2',topic:'gen-ai',q:'電商平台希望生成的商品描述在風格與用詞上保持一致性，但不需要新增專業知識，下列哪種方法最適合？',opts:['擴充語料庫並微調模型，使風格統一','增加提示詞複雜度，引導模型風格一致','降低生成溫度，以減少隨機性並提升風格一致性','使用全連接神經網路對生成結果後期篩選'],ans:2,exp:'降低 Temperature 減少輸出的隨機性，使模型尾向選擇高機率（符合訓練分布）的詞彙和表達方式，達到風格一致性。微調（選項A）成本高且需要資料，對此需求過於複雜。'},
+  {id:577,sub:'sci2',topic:'gen-ai',q:'企業整合生成式 AI 進行「會議即時摘要」，哪一種策略最能提升摘要的語意品質與使用價値？',opts:['使用語音轉文字模型即時輸出逐字稿並轉入 GPT 摘要','將語音逐段切分並建立關鍵字索引，以利摘要模型擷取核心內容','將語音轉文字後標註發言角色與主題邊界，結合語意分群進行動態摘要','將所有語音內容儲存為完整紀錄，提供事後人工摘要比對用'],ans:2,exp:'高品質會議摘要需要：(1)發言角色標註（Diarization）→ 知道誰說什麼；(2)主題邊界識別 → 區分議題；(3)語意分群 → 按主題而非時間整理摘要，遠優於純逐字稿送入 GPT。'},
+  {id:578,sub:'sci2',topic:'prompt-eng',q:'下列哪一個提示最符合「少樣本提示（Few-Shot Prompting）」的設計原則？',opts:['「請回答顧客詢問：如何申請退貨？」','「以下是兩組客服對話範例，請依照相同風格回覆新的顧客問題」','「請逐步分析顧客投訴的原因，並依照推理過程生成合適回覆」','「請以正式的語氣回覆顧客的提問」'],ans:1,exp:'Few-Shot Prompting 的關鍵特徵是提供若干輸入-輸出範例（In-context Examples），讓模型從示範中學習格式和風格。選項A=Zero-shot；選項C=Chain-of-Thought；選項D=角色指定。'},
+  {id:579,sub:'sci2',topic:'rag',q:'投資公司導入生成式 AI 即時分析股市波動，希望兼顧「即時性」與「可靠性」，哪一項設計最能有效提升表現？',opts:['將 AI 系統連結至公司內部歷史交易資料庫，以便快速調用既有案例','調整模型的回應邏輯，讓 AI 優先輸出最新市場行情，而不是完整背景分析','建立與外部即時行情來源同步的查詢模組，確保 AI 能即時擷取最新金融數據','增加訓練資料中模擬的金融危機與市場異常案例，以提升 AI 在特殊情境下的表現'],ans:2,exp:'股市分析的核心痛點是 LLM 訓練資料有截止日期。RAG + 即時行情 API 能讓模型在生成時檢索最新數據（如當前股價、成交量），解決知識時效性問題，同時保持分析可靠性。'},
+  {id:580,sub:'sci2',topic:'ai-plan',q:'大型物流公司導入AI系統，規劃四個步驟的正確執行順序為何？（1.建立 AI 對話邏輯與應答範本 2.明確定義目標並設定 KPI 3.搜集清理客服紀錄資料 4.評估並選擇AI技術供應商或開源方案）',opts:['2 → 3 → 4 → 1','3 → 2 → 1 → 4','2 → 1 → 3 → 4','1 → 4 → 3 → 2'],ans:0,exp:'標準 AI 專案導入流程：先明確目標與KPI（2）→ 搜集清理資料（3）→ 評估選擇技術方案（4）→ 建立對話邏輯（1）。需求導向、資料先行、技術後選，最後才設計具體功能。'},
+  {id:581,sub:'sci2',topic:'ai-gov',q:'跨國電商導入生成式 AI 處理顧客服務，資安與法遵部門擔心 AI 可能洩漏顧客個資。若要優先避免觸法風險，下列哪一項措施最符合要求？',opts:['在加密環境下導入完整的顧客訂單與行為資料，並透過嚴格存取控管降低泄漏風險','實施資料最小化與去識別化，確保 AI 在訓練與生成過程中不直接處理或暴露敏感個資','強化模型的回覆審查流程，透過自動過濾與人工抄查結合，降低個資外泄的機率','設定 AI 的角色與回覆範圍，讓其專注於客服相關內容，避免回答其他敏感議題'],ans:1,exp:'GDPR 等個資法的核心原則：資料最小化（只處理必要資料）和去識別化（匿名化），確保 AI 系統從根本上不接觸原始個資，是降低觸法風險最直接有效的措施。'},
+  {id:582,sub:'sci2',topic:'ai-plan',q:'國際銀行導入生成式 AI 彙整各國金融監管機構合規規範，建立跨國合規知識庫。確保知識庫查詢與報告生成正確性的最關鍵 AI 能力為何？',opts:['具備跨語言專業術語對齊與條文語意抽取能力，能正確辨識不同國家規範間的對應與差異','能自動最佳化文件檢索效率，縮短跨國法規查詢的延遲時間','能將合規文件轉換為多種輸出形式（如簡報、摘要或法規清單），以符合不同決策層級需求','具備根據歷史案例生成合規解釋的能力'],ans:0,exp:'跨國合規知識庫的核心挑戰是多語言法律術語的語意對齊（不同語言的同一概念可能有不同表述）和條文差異識別，這要求 AI 具備跨語言法律語意理解能力，遠超一般文件摘要或格式轉換。'},
+  {id:583,sub:'sci2',topic:'nocode',q:'企業導入 MLOps 過程中，No Code 平台最能有效解決的挑戰為何？',opts:['自動化大量資料的標註與前處理，以降低數據準備成本','提升運算基礎設施的可擴展性，以因應大規模服務需求','透過可視化建模介面，降低技術門櫊並促進跨部門協作','提供進階特徵工程能力，優化高維度數據的處理效率'],ans:2,exp:'No-code 平台最大優勢是可視化介面降低技術門櫊，使業務人員、數據分析師等非工程師能參與 MLOps 流程（模型監控、特徵定義等），促進跨部門協作。複雜特徵工程和基礎設施擴展仍需傳統工具。'},
+  {id:584,sub:'sci2',topic:'ai-plan',q:'醫療機構導入生成式 AI 協助撰寫病歷摘要，技術測試階段最應優先關注的指標為何？',opts:['資料儲存與存取架構的完整性，確保長期運作的數據可追溯性','生成內容的醫療準確性與臨床一致性，避免出現錯誤或誤導性資訊','模型在不同病例語境下的泛化能力','系統回應時間的穩定性，以支援醫療場域的即時需求'],ans:1,exp:'醫療 AI 的首要考量永遠是「不傷害（Do No Harm）」原則。病歷摘要中的錯誤資訊可能導致誤診或用藥錯誤，醫療準確性（Accuracy）和臨床一致性（Clinical Consistency）是技術測試的核心指標。'},
+  {id:585,sub:'sci2',topic:'ai-plan',q:'即時客服系統的延遲測試（Latency Testing）中，下列哪一項指標最能反映系統是否符合用戶即時互動需求？',opts:['AI 模型在同一分鐘內可完成的回覆訊息數量','客戶從輸入問題到收到第一個完整回應所需的時間','客服系統能連續提供服務的運行時長','​AI 產生回答時用詞的多樣性與表達創意程度'],ans:1,exp:'端到端延遲（End-to-End Latency）= 用戶發送問題到收到回應的時間，是用戶感知「即時性」最直接的指標。吞吐量（選項A）、可用性（選項C）是其他維度的指標。'},
+  {id:586,sub:'sci2',topic:'ai-gov',q:'航空公司導入生成式 AI 聲控客服，有人試圖讓系統洩漏內部安檢流程。降低提示攻擊（Prompt Injection）風險的最佳策略為何？',opts:['導入輸入檢測與回應審核流程，防止敏感指令被執行','限制 AI 可回應的主題範圍，使系統僅回答非敏感的航班與票務查詢','隨機變化回覆內容，讓攻擊者難以預測回應行為','擴充與更新航班與票務資料來源，以提升模型的知識正確性'],ans:0,exp:'防穡提示注入的最有效方法：(1)輸入驗證（過濾惡意指令）；(2)回應審核（防止敏感資訊洩露）；(3)最小權限原則。僅限制主題範圍（選項B）不足以防穡所有注入攻擊手法。'},
+  {id:587,sub:'sci2',topic:'ai-plan',q:'機器學習模型實務應用中，「數据漂移（Data Drift）」主要是指下列哪一種情況？',opts:['訓練時使用的資料分佈，與部署後實際輸入資料的統計特徵隨時間逐漸出現差異，導致模型表現衰退','在資料前處理過程中，因特徵刪減或缺失補啡不當，造成樣本資訊量下降','模型對訓練數據擬合過度，在未知數據上泛化能力不足','後端資料庫因欄位定義或結構調整，導致特徵提取流程與原始設計不一致'],ans:0,exp:'Data Drift（資料漂移/概念漂移）：生產環境中輸入資料的統計特性隨時間變化（如用戶行為改變、季節性變化），偏離訓練時的資料分佈，導致模型預測能力下降。是 MLOps 持續監控的核心指標。'},
+  {id:588,sub:'sci2',topic:'ai-gov',q:'銀行導入生成式 AI 放貸審核系統，測試發現模型對不同族群的核准率存在顯著差異，可能引發演算法偏見。為降低此風險，最合適的措施為何？',opts:['提升模型運算速度與效能，以確保大量申請中快速回應','全面移除與申貸人身份相關的敏感屬性，避免模型因變數影響而產生偏差','導入資料與結果的公平性檢測流程，並依合規規範調整模型或決策邏輯','減少訓練樣本數量，降低偏見被放大的可能性'],ans:2,exp:'演算法公平性需系統性處理：(1)量化公平性指標（如族群間核准率差異）；(2)識別偏見來源；(3)依法規（公平放貸法）調整模型或加入後處理機制。僅刪除敏感屬性（選項B）可能因代理變數（Proxy Variables）仍造成間接歧視。'},
+  {id:589,sub:'sci2',topic:'prompt-eng',q:'下列兩個情境，分別最適合採用哪一種提示方法？情境一：電商客服助理查詢退款流程；情境二：活動策劃AI規劃多場跨部門行銀活動，需比較不同方案可行性。',opts:['情境一採用 CoT，情境二採用 ToT','情境一採用 ToT，情境二採用 CoT','情境一與情境二都適合 CoT','情境一與情境二都適合 ToT'],ans:0,exp:'CoT（Chain-of-Thought）適合單一線性推理路徑（退款流程有明確規範，逐步推理即可）；ToT（Tree-of-Thoughts）適合需要探索多條路徑並比較方案的複雜決策（跨部門活動規劃需同時考量多個變數和方案）。'},
+  {id:590,sub:'sci2',topic:'prompt-eng',q:'Graph Prompting 在處理複雜關係資料時，為何通常比 Chain-of-Thought（CoT）更有效？',opts:['Graph Prompting 幾乎不需要推理，只依靠圖結構即可得出結論','Graph Prompting 僅需單次提示，即可避免多輪推理的誤差累積','Graph Prompting 的生成速度通常更快，因此效率更高','Graph Prompting 能捕捉非線性結構與上下文關聯，適合處理網絡化資訊'],ans:3,exp:'CoT 是線性序列推理；Graph Prompting 透過圖結構表達節點間的非線性關係（社交網路、知識圖譜），能捕捉複雜的多跳推理路徑和上下文依賴關係，對複雜關係資料更為有效。'},
+  {id:591,sub:'sci2',topic:'prompt-eng',q:'少樣本提示（Few-shot）僅能提供1-2個範例，若遇到領域偏移（Domain Shift），模型最可能面臨的核心挑戰為何？',opts:['範例數量過少，無法涵蓋新領域的多樣性，導致模型泛化不足','範例表徵有限，模型容易依賴單一樣本特性而降低適應力','範例覆蓋不足，使模型難以抽取跨領域的穩定模式','範例資訊過於稀缺，模型缺乏應對不同輸入情境的能力'],ans:0,exp:'Domain Shift（領域偏移）指測試領域與訓練領域差異。僅1-2個範例無法充分代表新領域的多樣性模式（如從電商評論遷移到醫療文本），使模型難以泛化到新領域的各種輸入情形。'},
+  {id:592,sub:'sci2',topic:'rag',q:'金融機構導入 RAG 模型，由於大型模型運算成本過高，若考慮引入知識證馆（Knowledge Distillation, KD）技術，主要效益為何？',opts:['讓小型模型學習大型模型的知識，在降低運算成本的同時維持檢索與生成品質','只能應用於語音或影像辨識，無法提升文字檢索生成效能','因為 RAG 已有檢索機制，因此無需額外證馆知識','僅能依賴特定 API 供應商才能使用，無法在自建模型中實現'],ans:0,exp:'知識證醆（Knowledge Distillation）：用大型教師模型（Teacher）的軟標簽訓練小型學生模型（Student），使學生模型在大幅降低參數量（降低推理成本）的同時，保留大模型的知識和能力，可與 RAG 結合使用。'},
+  {id:593,sub:'sci2',topic:'gen-ai',q:'評估大型語言模型（70B、13B、175B 參數規模），模型規模對基準測試結果的影響，下列哪一種說法最為恰當？',opts:['小模型在正確調整下能超越大模型，因此模型大小並不重要','大模型在多數情境下表現較好，但在特定任務上略遜於小模型','模型規模與基準測試結果完全無關，影響主要來自測試設計','模型越大，Benchmark 結果可能提升，但幅度取決於訓練數據品質與資源配置'],ans:3,exp:'規模定律（Scaling Law）表明：增大模型規模通常提升性能，但邊際效益遞減，且高度依賴訓練資料品質和計算資源分配（計算最優訓練：Chinchilla Scaling Law）。並非線性關係，也非完全無關。'},
+  {id:594,sub:'sci2',topic:'ai-system',q:'MCP（Model Context Protocol）與 RAG 都能擴展模型的能力，兩者的核心差異主要為何？',opts:['MCP 擴展模型工具，但主要用於補足訓練資料不足','MCP 能標準化連接資源，但仍需依賴向量資料庫','RAG 常用於擴展知識庫內容，而 MCP 更著重於動態工具與 API 呼叫的整合','RAG 透過統一協議，提升回答相關性'],ans:2,exp:'RAG（檢索增強生成）：從向量資料庫檢索靜態知識文件，擴展知識廣度。MCP（Model Context Protocol）：標準化 AI 與外部工具/服務的連接協議，支援動態 API 調用（如查詢資料庫、執行程式碼），兩者互補而非競爭。'},
+  {id:595,sub:'sci2',topic:'gen-ai',q:'下列哪一個資料集專門設計用於測試大型語言模型在多領域、多任務語言理解（人文、科學、社會科學），而非專門用於數學推理或中文專業知識？',opts:['MMLU','GSM8K','MATH','C-Eval'],ans:0,exp:'MMLU（Massive Multitask Language Understanding）：涵蓋57個科目的多選題，測試廣泛領域的語言理解能力；GSM8K=小學數學；MATH=競賽數學；C-Eval=中文學科知識測試。'},
+  {id:596,sub:'sci2',topic:'ai-plan',q:'智慧工廠導入生成式 AI 協助產線工程師即時產生維修指引，下列哪一項並非加入 Guardrails（防護機制）的主要目的？',opts:['檢查工程師輸入內容，避免觸發錯誤或危險需求','過濾與驗證 AI 輸出的維修指引，確保符合安全標準','確保生成的操作建議符合法規與產業安全規範','完整重建並追蹤 AI 模型的全部推理過程'],ans:3,exp:'Guardrails（防護機制）的目的是：輸入過濾（防止危險指令）、輸出驗證（確保安全合規）、內容過濾等。「完整重建 AI 推理過程」是可解釋性（XAI）的範雴，不是防護機制的主要功能。'},
+  {id:597,sub:'sci2',topic:'rag',q:'顧問公司導入生成式 AI 檢索長篇法規文件，發現回應常出現不相關或過於分散的內容。決定對文件進行文本切分（Chunking）的主要目的為何？',opts:['讓模型在回答時能加快推理速度','提高檢索相關性與降低長上下文噪音','降低系統記憶體和硬體資源的負擔','使模型在生成回覆時更具創造性與多樣化'],ans:1,exp:'Chunking（文本切分）將長文件分割為較小的語意段落，使向量檢索能更精準地找到相關片段（而非整份長文件），降低無關內容噪音，提升 RAG 系統的檢索精確率和相關性。'},
+  {id:598,sub:'sci2',topic:'rag',q:'企業內部知識檢索系統採用多向量檢索器（Multi-vector Retriever），主要以何種方式提升查詢的完整性與精準度？',opts:['支援同時處理多種資訊表示，提升跨文本型態的檢索效果','透過多向量壓縮與共享權重方式，降低檢索過程的運算與儲存成本','以切分並過濾文件片段，減少上下文長度帶來的 Token 負擔','透過調整生成階段的溫度參數，使模型在回覆時更穩定一致'],ans:0,exp:'多向量檢索器為同一文件建立多種向量表示（如：文件摘要向量+段落向量+關鍵句向量），支援不同粒度和角度的查詢，顯著提升對複雜查詢的召回率和精確率。'},
+  {id:599,sub:'sci2',topic:'ai-system',q:'在 Agentic AI 的架構中，解决方案圖譜（Solution Graph）常被用來輔助代理的任務執行，其主要作用為何？',opts:['透過圖形結構完全取代大型語言模型的推理，讓代理只依靠圖演算法完成任務','僅用於保存代理的輸出結果，方便後續檢視與稽核，而不影響實際推理流程','將代理限制在既定流程內，避免其產生偏離設計脚本的行為','作為代理在執行過程中的參考框架，用於組織決策步驟並支援任務推理'],ans:3,exp:'Solution Graph（解决方案圖譜）為 Agentic AI 提供任務分解的結構化框架，代理在執行過程中參考圖譜進行路徑規劃、步驟追蹤和決策，而非取代 LLM 推理，也不只是記錄結果。'},
+  {id:600,sub:'sci2',topic:'gen-ai',q:'小明想開發部落格寫作工具，用戶輸入文筆開頭，系統自動續寫後續內容。若要實現此功能，最適合選擇哪一類任務？',opts:['序列到序列建模（Sequence-to-Sequence Modeling），透過輸入序列產生新的輸出序列','遠罩語言建模（Masked Language Modeling），補齊文字中缺失的詞語或片段','生成式語言建模（Text Generation），依據上下文持續產生新的內容','文本分類（Text Classification），針對輸入文本判斷情感、主題或標簽'],ans:2,exp:'文筆續寫（Text Continuation）是典型的自回歸語言生成任務（Causal Language Modeling）：根據已有上下文逐詞生成後續內容，使用 GPT 類模型。Seq2Seq 適合翻譯/摘要；MLM（如 BERT）用於填空，非生成。'},
+];
+QB_115_1_S2.forEach(q=>q.src='official_115');
+
+const QB_OFFICIAL_ALL = [...QB1, ...QB2, ...QB_115_1_S1, ...QB_115_1_S2];
+const QB_ALL = [...QB_OFFICIAL_ALL, ...QB_MOCK, ...QB_SAMPLE];
+
+const TOPICS = [
+  {id:'ml',name:'機器學習原理與演算法',icon:'⚙️',sub:'sci1',code:'L113'},
+  {id:'data-eng',name:'資料工程與特徵處理',icon:'🔧',sub:'sci1',code:'L112'},
+  {id:'stats',name:'統計推論與評估方法',icon:'📐',sub:'sci1',code:'L113'},
+  {id:'ai-gov',name:'AI 治理與法規',icon:'⚖️',sub:'sci1',code:'L115'},
+  {id:'gen-ai',name:'生成式AI技術架構',icon:'✨',sub:'sci2',code:'L122'},
+  {id:'xai',name:'可解釋 AI（XAI）',icon:'🔍',sub:'sci1',code:'L114'},
+  {id:'data-viz',name:'資料視覺化',icon:'📊',sub:'sci1',code:'L112'},
+  {id:'rag',name:'RAG 檢索增強生成',icon:'📚',sub:'sci2',code:'L122'},
+  {id:'prompt-eng',name:'提示工程',icon:'💬',sub:'sci2',code:'L122'},
+  {id:'nocode',name:'No-code / Low-code',icon:'🧩',sub:'sci2',code:'L121'},
+  {id:'ai-system',name:'AI Agent 系統架構',icon:'🤖',sub:'sci2',code:'L122'},
+  {id:'ai-plan',name:'AI 應用導入規劃',icon:'📋',sub:'sci2',code:'L123'},
+  {id:'ai-concept',name:'AI 基礎概念',icon:'💡',sub:'sci1',code:'L111'},
+  {id:'data',name:'資料處理基礎',icon:'🗄️',sub:'sci1',code:'L112'},
+  {id:'disc-ai',name:'鑑別式 AI 應用',icon:'🎯',sub:'sci1',code:'L114'},
+];
+
+let S={qs:[],cur:0,ans:[],correct:0,timer:null,timeLeft:0,totalDone:0,totalCorrect:0,wrongIds:[]};
+let lastMode='random';
+try{const d=JSON.parse(localStorage.getItem('ipas_v7')||'{}');if(d.totalDone)Object.assign(S,{totalDone:d.totalDone,totalCorrect:d.totalCorrect,wrongIds:d.wrongIds||[]});}catch(e){}
+function save(){try{localStorage.setItem('ipas_v7',JSON.stringify({totalDone:S.totalDone,totalCorrect:S.totalCorrect,wrongIds:S.wrongIds}));}catch(e){}updateStats();}
+function updateStats(){
+  document.getElementById('s-done').textContent=S.totalDone;
+  document.getElementById('s-acc').textContent=S.totalDone>0?Math.round(S.totalCorrect/S.totalDone*100)+'%':'─';
+}
+updateStats();
+
+const PAGE_TITLES={home:'首頁總覽',exam:'模擬考試',practice:'分科練習',review:'錯題複習',study:'考試重點',sources:'學習資源庫',settings:'個人設定'};
+function gp(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(el){document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));el.classList.add('active');}
+  document.getElementById('ptitle').textContent=PAGE_TITLES[id]||id;
+  if(id==='practice')renderTopics();
+  if(id==='review')renderWrong();
+  if(id==='study')renderStudy();
+  if(id==='sources')renderTopicAnalysis();
+  closeSB();
+}
+function toggleSB(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('show');}
+function closeSB(){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('show');}
+
+function startExam(mode){
+  lastMode=mode;
+  const cnt=parseInt(document.getElementById('set-cnt').value)||20;
+  let pool;
+  if(mode==='sci1_114') pool=[...QB1];
+  else if(mode==='sci1_115_1') pool=[...QB_115_1_S1];
+  else if(mode==='sci2_115_1') pool=[...QB_115_1_S2];
+  else if(mode==='sci1_all') pool=[...QB1,...QB_115_1_S1];
+  else if(mode==='sci2') pool=[...QB2];
+  else if(mode==='sci2_all') pool=[...QB2,...QB_115_1_S2];
+  else if(mode==='full50') pool=[...QB_OFFICIAL_ALL];
+  else if(mode==='mock') pool=[...QB_MOCK];
+  else if(mode==='sample') pool=[...QB_SAMPLE];
+  else if(mode==='wrong') pool=QB_ALL.filter(q=>S.wrongIds.includes(q.id));
+  else pool=[...QB_ALL];
+  if(!pool.length){alert('此題庫目前為空，或沒有錯題記錄！');return;}
+  pool=pool.sort(()=>Math.random()-.5);
+  const n=(mode==='sci1_115_1'||mode==='sci2_115_1'||mode==='sci1_114'||mode==='sci2')?Math.min(50,pool.length)
+        :(mode==='full50')?Math.min(200,pool.length)
+        :(mode==='sci1_all')?Math.min(100,pool.length)
+        :(mode==='sci2_all')?Math.min(100,pool.length)
+        :(mode==='mock')?Math.min(55,pool.length)
+        :(mode==='sample')?Math.min(50,pool.length)
+        :Math.min(cnt,pool.length);
+  S.qs=pool.slice(0,n);S.ans=new Array(n).fill(null);S.cur=0;S.correct=0;
+  const timerOn=document.getElementById('tog-t').classList.contains('on');
+  if(timerOn){S.timeLeft=n*72;startTimer();}else{clearInterval(S.timer);document.getElementById('timer').textContent='∞';}
+  gp('exam',document.querySelectorAll('.nav-item')[1]);
+  document.getElementById('exam-area').style.display='block';
+  document.getElementById('result-area').style.display='none';
+  document.getElementById('eq-tot').textContent=n;
+  renderQ();
+}
+function startTimer(){clearInterval(S.timer);updTimer();S.timer=setInterval(()=>{S.timeLeft--;updTimer();if(S.timeLeft<=0){clearInterval(S.timer);endExam();}},1000);}
+function updTimer(){const m=Math.floor(S.timeLeft/60),s=S.timeLeft%60;const el=document.getElementById('timer');el.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;el.classList.toggle('urgent',S.timeLeft<=60);}
+
+function srcLabel(q){
+  if(q.src==='official_115')return `<span class="stag stag-115">🆕 115年官方</span>`;
+  if(q.src==='mock')return `<span class="stag stag-mock">🔶 模擬題</span>`;
+  if(q.src==='sample')return `<span class="stag" style="background:rgba(255,165,0,.12);color:#ffa500;border:1px solid rgba(255,165,0,.3)">📝 樣題</span>`;
+  return `<span class="stag stag-official">🏛 114年官方</span>`;
+}
+function srcBorderColor(q){
+  if(q.src==='official_115')return '#ffaa33';
+  if(q.src==='mock')return 'var(--gold)';
+  if(q.src==='sample')return '#ffa500';
+  return 'var(--accent)';
+}
+
+function renderQ(){
+  const q=S.qs[S.cur],ua=S.ans[S.cur];
+  const expOn=document.getElementById('tog-e').classList.contains('on');
+  document.getElementById('eq-n').textContent=S.cur+1;
+  document.getElementById('qprog').textContent=`${S.cur+1} / ${S.qs.length}`;
+  const keys=['A','B','C','D'];
+  const t=TOPICS.find(t=>t.id===q.topic);
+  let html=`<div class="q-card"><div class="q-meta"><div class="q-num">Q ${String(S.cur+1).padStart(2,'0')}</div>`;
+  if(t)html+=`<span class="q-source-tag ${t.sub==='sci1'?'t1':'t2'}" style="background:${t.sub==='sci1'?'rgba(76,141,255,.12)':'rgba(0,229,176,.1)'};padding:2px 7px;border-radius:3px">${t.icon} ${t.name}</span>`;
+  html+=srcLabel(q);
+  html+=`</div><div class="q-text">${q.q}</div><div class="opts">`;
+  q.opts.forEach((o,i)=>{
+    let cls='opt';
+    if(ua!==null){if(i===q.ans)cls+=' ok';else if(i===ua&&i!==q.ans)cls+=' no';}
+    else if(i===ua)cls+=' sel';
+    html+=`<div class="${cls}" onclick="pick(${i})"><span class="opt-k">${keys[i]}</span><span>${o}</span></div>`;
+  });
+  html+=`</div>`;
+  if(ua!==null&&expOn)html+=`<div class="exp-box show"><strong>📌 解析：</strong>${q.exp}</div>`;
+  html+=`</div>`;
+  document.getElementById('qcon').innerHTML=html;
+  document.getElementById('btn-prev').disabled=S.cur===0;
+  document.getElementById('btn-next').textContent=S.cur===S.qs.length-1?'交卷 ✓':'下一題 →';
+}
+function pick(i){if(S.ans[S.cur]!==null)return;S.ans[S.cur]=i;if(i===S.qs[S.cur].ans){S.correct++;document.getElementById('eq-c').textContent=S.correct;}renderQ();}
+function nextQ(){if(S.cur===S.qs.length-1)endExam();else{S.cur++;renderQ();}}
+function prevQ(){if(S.cur>0){S.cur--;renderQ();}}
+function endExam(){
+  clearInterval(S.timer);
+  const n=S.qs.length;
+  const correct=S.ans.filter((a,i)=>a===S.qs[i].ans).length;
+  const pct=Math.round(correct/n*100);
+  S.totalDone+=n;S.totalCorrect+=correct;
+  S.qs.forEach((q,i)=>{
+    if(S.ans[i]!==q.ans&&!S.wrongIds.includes(q.id))S.wrongIds.push(q.id);
+    else if(S.ans[i]===q.ans)S.wrongIds=S.wrongIds.filter(id=>id!==q.id);
+  });
+  save();showResult(correct,n,pct);
+}
+function showResult(correct,n,pct){
+  document.getElementById('exam-area').style.display='none';
+  const pass=pct>=70;
+  const C=364.4;
+  let html=`<div class="result-hero">
+    <div class="ring-wrap">
+      <svg viewBox="0 0 130 130" width="130" height="130">
+        <circle class="ring-bg" cx="65" cy="65" r="54"/>
+        <circle class="ring-fill" cx="65" cy="65" r="54"
+          stroke="${pass?'var(--accent2)':'var(--warn)'}"
+          stroke-dasharray="${C}" stroke-dashoffset="${C*(1-pct/100)}"
+          style="transition:stroke-dashoffset 1.1s ease"/>
+      </svg>
+      <div class="ring-center"><div class="ring-num">${correct}</div><div class="ring-sub">/ ${n}</div></div>
+    </div>
+    <div style="font-size:17px;font-weight:700;margin-bottom:6px">${pct>=90?'🏆 優秀！':pct>=70?'✅ 通過！達到及格線 70%':pct>=50?'⚠️ 未達標，需加強複習':'❌ 需大幅加強練習'}</div>
+    <div style="color:var(--text-dim);font-size:13px">正確率 ${pct}%，及格線 70 分（${Math.ceil(n*.7)} 題）</div>
+  </div>
+  <div class="result-stats">
+    <div class="rs"><div class="v" style="color:var(--accent2)">${correct}</div><div class="l">答對題數</div></div>
+    <div class="rs"><div class="v" style="color:var(--warn)">${n-correct}</div><div class="l">答錯題數</div></div>
+    <div class="rs"><div class="v" style="color:var(--accent)">${pct}%</div><div class="l">得分率</div></div>
+  </div>`;
+  const keys=['A','B','C','D'];
+  S.qs.forEach((q,i)=>{
+    const ua=S.ans[i],ok=ua===q.ans;
+    html+=`<div class="rev-item" style="border-left:3px solid ${srcBorderColor(q)}">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-wrap:wrap">
+        <div class="rev-badge ${ok?'rb-ok':'rb-no'}">${ok?'✓ 正確':'✗ 錯誤'}</div>
+        ${srcLabel(q)}
+      </div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:8px">${q.q}</div>
+      <div style="font-size:12px;color:var(--text-dim);margin-bottom:4px">你的答案：<span style="color:${ok?'var(--accent2)':'var(--warn)'}">${ua!==null?keys[ua]+'. '+q.opts[ua]:'（未作答）'}</span></div>
+      ${!ok?`<div style="font-size:12px;color:var(--accent2);margin-bottom:8px">正確答案：${keys[q.ans]}. ${q.opts[q.ans]}</div>`:''}
+      <div class="exp-box show" style="margin-top:0"><strong>📌</strong> ${q.exp}</div>
+    </div>`;
+  });
+  html+=`<div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap">
+    <button class="btn btn-primary" onclick="startExam(lastMode)">🔄 重新考試</button>
+    <button class="btn btn-ghost" onclick="gp('home',null)">← 回首頁</button>
+    <button class="btn btn-ghost" onclick="gp('review',null)">📋 錯題複習</button>
+  </div>`;
+  const ra=document.getElementById('result-area');ra.innerHTML=html;ra.style.display='block';
+}
+
+function renderTopics(){
+  const html=TOPICS.map(t=>{
+    const offCnt=QB_OFFICIAL_ALL.filter(q=>q.topic===t.id).length;
+    const mockCnt=[...QB_MOCK,...QB_SAMPLE].filter(q=>q.topic===t.id).length;
+    const s115Cnt=QB_115_1_S1.filter(q=>q.topic===t.id).length;
+    const total=offCnt+mockCnt;
+    if(!total)return '';
+    return `<div class="card" style="cursor:pointer;transition:border-color .18s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'" onclick="startTopicExam('${t.id}')">
+      <div style="font-size:26px;margin-bottom:10px">${t.icon}</div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:8px;line-height:1.35">${t.name}</div>
+      <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
+        <span class="tag ${t.sub==='sci1'?'t1':'t2'}">${t.code}</span>
+        ${offCnt?`<span class="stag stag-official">${offCnt-s115Cnt} 114年</span>`:''}
+        ${s115Cnt?`<span class="stag stag-115">${s115Cnt} 115年</span>`:''}
+        ${mockCnt?`<span class="stag stag-mock">${mockCnt} 模擬</span>`:''}
+      </div>
+      <div style="font-size:11px;color:var(--text-muted);display:flex;justify-content:space-between">
+        <span>共 ${total} 題</span><span>開始練習 →</span>
+      </div>
+    </div>`;
+  }).filter(Boolean).join('');
+  document.getElementById('topic-grid').innerHTML=html;
+}
+function startTopicExam(tid){
+  const pool=QB_ALL.filter(q=>q.topic===tid).sort(()=>Math.random()-.5);
+  const cnt=parseInt(document.getElementById('set-cnt').value)||10;
+  S.qs=pool.slice(0,Math.min(cnt,pool.length));S.ans=new Array(S.qs.length).fill(null);S.cur=0;S.correct=0;lastMode='topic_'+tid;
+  const timerOn=document.getElementById('tog-t').classList.contains('on');
+  if(timerOn){S.timeLeft=S.qs.length*72;startTimer();}else{clearInterval(S.timer);document.getElementById('timer').textContent='∞';}
+  gp('exam',document.querySelectorAll('.nav-item')[1]);
+  document.getElementById('exam-area').style.display='block';
+  document.getElementById('result-area').style.display='none';
+  document.getElementById('eq-tot').textContent=S.qs.length;renderQ();
+}
+
+function renderWrong(){
+  const wrongs=QB_ALL.filter(q=>S.wrongIds.includes(q.id));
+  const el=document.getElementById('wrong-list');
+  if(!wrongs.length){el.innerHTML=`<div style="text-align:center;padding:60px;color:var(--text-muted)"><div style="font-size:44px;margin-bottom:14px">🎉</div><div style="font-size:15px">目前沒有錯題紀錄</div></div>`;return;}
+  const keys=['A','B','C','D'];
+  let html=`<div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center">
+    <button class="btn btn-primary" onclick="startExam('wrong')">🔁 練習全部錯題（${wrongs.length}題）</button>
+  </div>`;
+  wrongs.forEach(q=>{
+    const t=TOPICS.find(t=>t.id===q.topic);
+    html+=`<div class="rev-item" style="border-left:3px solid ${srcBorderColor(q)}">
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:8px;flex-wrap:wrap">
+        <span class="rev-badge rb-no">✗ 錯誤</span>${srcLabel(q)}
+        <span style="font-size:11px;color:var(--text-muted)">${t?.icon||'📌'} ${t?.name||q.topic}</span>
+      </div>
+      <div style="font-size:13px;font-weight:500;margin-bottom:8px">${q.q}</div>
+      <div style="font-size:12px;color:var(--accent2);margin-bottom:8px">正確答案：${keys[q.ans]}. ${q.opts[q.ans]}</div>
+      <div class="exp-box show" style="margin-top:0"><strong>📌</strong> ${q.exp}</div>
+    </div>`;
+  });
+  el.innerHTML=html;
+}
+
+function renderTopicAnalysis(){
+  const el=document.getElementById('topic-analysis');if(!el)return;
+  const topicMeta={
+    'ml':{name:'機器學習原理',icon:'⚙️'},'data-eng':{name:'資料工程',icon:'🔧'},
+    'stats':{name:'統計推論',icon:'📐'},'ai-gov':{name:'AI治理法規',icon:'⚖️'},
+    'gen-ai':{name:'生成式AI',icon:'✨'},'xai':{name:'可解釋AI',icon:'🔍'},
+    'data-viz':{name:'資料視覺化',icon:'📊'},'rag':{name:'RAG',icon:'📚'},
+    'prompt-eng':{name:'提示工程',icon:'💬'},'nocode':{name:'No/Low Code',icon:'🧩'},
+    'ai-system':{name:'Agent系統',icon:'🤖'},'ai-plan':{name:'AI導入規劃',icon:'📋'},
+    'ai-concept':{name:'AI基礎概念',icon:'💡'},'data':{name:'資料基礎',icon:'🗄️'},'disc-ai':{name:'鑑別式AI',icon:'🎯'},
+  };
+  const allIds=[...new Set(QB_ALL.map(q=>q.topic))];
+  let html=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px">`;
+  allIds.forEach(tid=>{
+    const off114=QB1.filter(q=>q.topic===tid).length+QB2.filter(q=>q.topic===tid).length;
+    const off115=QB_115_1_S1.filter(q=>q.topic===tid).length;
+    const other=[...QB_MOCK,...QB_SAMPLE].filter(q=>q.topic===tid).length;
+    const total=off114+off115+other;
+    if(!total)return;
+    const meta=topicMeta[tid]||{name:tid,icon:'📌'};
+    html+=`<div class="card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:18px">${meta.icon}</span><div style="font-size:13px;font-weight:600">${meta.name}</div></div>
+      <div style="display:flex;gap:8px;margin-bottom:10px">
+        ${off114?`<div style="text-align:center;flex:1;background:rgba(76,141,255,.07);border-radius:6px;padding:6px 4px"><div style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:700;color:#7ab4ff">${off114}</div><div style="font-size:9px;color:var(--text-muted)">114年</div></div>`:''}
+        ${off115?`<div style="text-align:center;flex:1;background:rgba(255,170,51,.08);border-radius:6px;padding:6px 4px"><div style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:700;color:#ffaa33">${off115}</div><div style="font-size:9px;color:var(--text-muted)">115年</div></div>`:''}
+        ${other?`<div style="text-align:center;flex:1;background:rgba(240,192,64,.07);border-radius:6px;padding:6px 4px"><div style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:700;color:var(--gold)">${other}</div><div style="font-size:9px;color:var(--text-muted)">模擬/樣題</div></div>`:''}
+      </div>
+      <div style="font-size:10px;color:var(--text-muted)">合計 ${total} 題</div>
+    </div>`;
+  });
+  html+=`</div>`;el.innerHTML=html;
+}
+
+function renderStudy(){
+  const con=document.getElementById('study-con');
+  con.innerHTML=`
+<div class="study-tab-nav">
+  <button class="stab-btn active" onclick="switchTab('s115',this)" style="border-color:rgba(255,170,51,.4);color:#ffaa33">🆕 115年第一次考點</button>
+  <button class="stab-btn" onclick="switchTab('s31',this)">3.1 人工智慧概念</button>
+  <button class="stab-btn" onclick="switchTab('s32',this)">3.2 資料處理與分析</button>
+  <button class="stab-btn" onclick="switchTab('s33',this)">3.3 機器學習概念</button>
+  <button class="stab-btn" onclick="switchTab('s34',this)">3.4 鑑別式 vs 生成式AI</button>
+  <button class="stab-btn" onclick="switchTab('s35',this)" style="border-color:rgba(176,143,255,.3);color:#b08fff">3.5 No-code / Low-code</button>
+  <button class="stab-btn" onclick="switchTab('s36',this)" style="border-color:rgba(176,143,255,.3);color:#b08fff">3.6 生成式AI應用</button>
+  <button class="stab-btn" onclick="switchTab('s37',this)" style="border-color:rgba(176,143,255,.3);color:#b08fff">3.7 AI導入評估</button>
+  <button class="stab-btn" onclick="switchTab('s38',this)" style="border-color:rgba(240,192,64,.35);color:var(--gold)">⚡ 秒選速查</button>
+  <button class="stab-btn" onclick="switchTab('s39',this)" style="border-color:rgba(240,192,64,.35);color:var(--gold)">🔬 訓練流程×架構深解</button>
+</div>
+
+<!-- 115年考點 -->
+<div id="study-s115" class="study-chapter active">
+  <div class="chapter-header" style="background:linear-gradient(135deg,rgba(255,170,51,.08),rgba(255,165,0,.04));border-color:rgba(255,170,51,.3)">
+    <div class="chapter-badge" style="background:rgba(255,170,51,.15);color:#ffaa33">🆕 115年第一次 · 科目一</div>
+    <h3>115年第一次考試重點整理</h3>
+    <p>來源：115年第一次初級AI應用規劃師_第一科_人工智慧基礎概論_公告試題（115年03月21日考試）</p>
+  </div>
+
+  <div class="study-section-title"><span class="sst-icon">📊</span>115年第一次考題分類統計 <span class="sst-badge">50題全解析</span></div>
+  <table class="kv-table">
+    <tr><th style="width:30%">類別</th><th style="width:10%">題數</th><th>代表題目 / 考點</th></tr>
+    <tr><td class="kv-key">機器學習（ml）</td><td>14</td><td>非監督式特徵、二分搜尋、強化學習策略函數、半監督、結構化預測、F1-score、Recall、遷移學習、學習模式辨析</td></tr>
+    <tr><td class="kv-key">資料處理（data-eng）</td><td>10</td><td>資料整合目的、SMOTE、標準化防洩漏、One-hot編碼、VAE異常偵測、對數轉換、Variety挑戰、結構化數據</td></tr>
+    <tr><td class="kv-key">生成式AI（gen-ai）</td><td>10</td><td>Softmax輸出層、VAE圖像生成、LLM基礎、RLHF、Batching機制、Flash Attention、擴散模型、LSTM、梯度消失改善</td></tr>
+    <tr><td class="kv-key">AI基礎概念（ai-concept）</td><td>7</td><td>感測器網路、AI產業對應、電腦視覺（影像分割）、AutoML、弱AI/窄AI、CNN應用、Apple成熟度判斷</td></tr>
+    <tr><td class="kv-key">可解釋AI（xai）</td><td>5</td><td>VAE異常偵測、LIME分類、SHAP貢獻值、反事實解釋、Saliency Map</td></tr>
+    <tr><td class="kv-key">AI治理法規（ai-gov）</td><td>3</td><td>金融機構規範（非必要揭露）、資料去識別化、寬深模型</td></tr>
+    <tr><td class="kv-key">統計（stats）</td><td>1</td><td>百分位數定義</td></tr>
+  </table>
+
+  <div class="study-section-title"><span class="sst-icon">🔑</span>115年高頻新考點（114年未考或加強出現）</div>
+  <table class="kv-table">
+    <tr><th style="width:30%">考點</th><th>答案要點</th><th style="width:25%">題號</th></tr>
+    <tr><td class="kv-key">資料整合目的 <span class="hot">★★★</span></td><td>統一格式、處理重複、整合多來源。<br><strong>不是：延長資料留存期限（答案D）</strong></td><td>Q1（第501題）</td></tr>
+    <tr><td class="kv-key">SMOTE <span class="hot">★★★</span></td><td><strong>依少數類別特徵空間合成新樣本</strong>（答案B）；非刪除多數類別、非調整損失函數</td><td>Q5（第505題）</td></tr>
+    <tr><td class="kv-key">標準化防洩漏 <span class="hot">★★★</span></td><td><strong>僅以訓練資料計算統計量，再套用至測試資料</strong>（答案C）</td><td>Q6（第506題）</td></tr>
+    <tr><td class="kv-key">寬深模型（Wide & Deep）<span class="hot">★★</span></td><td>同時有稀疏類別特徵＋數值特徵的推薦場景（答案D）</td><td>Q8（第508題）</td></tr>
+    <tr><td class="kv-key">Softmax 輸出層 <span class="hot">★★★</span></td><td>多類別機率分佈輸出 → Softmax（答案A）；二元分類→Sigmoid；隱藏層激活→ReLU</td><td>Q9（第509題）</td></tr>
+    <tr><td class="kv-key">RLHF 典型活動 <span class="hot">★★★</span></td><td>RLHF三步驟：偏好資料→獎勵模型→策略調整。<br><strong>不屬於：以未標註語料預訓練（答案D，那是第一階段）</strong></td><td>Q24（第524題）</td></tr>
+    <tr><td class="kv-key">Batching 機制 <span class="hot">★★★</span></td><td><strong>提升吞吐量＋GPU效率，但可能增加單筆延遲</strong>（答案A）</td><td>Q25（第525題）</td></tr>
+    <tr><td class="kv-key">LIME 分類 <span class="hot">★★</span></td><td>後處理模型解釋（post-hoc），非內建可解釋、非代理模型（答案C）</td><td>Q26（第526題）</td></tr>
+    <tr><td class="kv-key">SHAP 值 <span class="hot">★★★</span></td><td><strong>在單一預測結果中，各輸入特徵對最終輸出所產生的貢獻分配</strong>（答案C）</td><td>Q27（第527題）</td></tr>
+    <tr><td class="kv-key">反事實解釋 <span class="hot">★★</span></td><td>分析模型不變前提下，申請資料變動對授信決策的影響（答案C）</td><td>Q28（第528題）</td></tr>
+    <tr><td class="kv-key">Flash Attention <span class="hot">★★★</span></td><td><strong>調整計算與資料處理方式，減少中間結果儲存</strong>（答案B）；非忽略小權重、非增加並行度</td><td>Q41（第541題）</td></tr>
+    <tr><td class="kv-key">RAG 增量索引 <span class="hot">★★★</span></td><td>法規更新→導入可支援增量更新的索引管理方式（答案D）；避免全量重建導致停機</td><td>Q42（第542題）</td></tr>
+    <tr><td class="kv-key">擴散模型 Diffusion <span class="hot">★★</span></td><td>穩定性高、多樣性控制佳 → 服裝設計輔助（答案D）；GAN訓練較不穩定</td><td>Q21（第521題）</td></tr>
+    <tr><td class="kv-key">F1-score vs Recall <span class="hot">★★★</span></td><td>類別不平衡＋辨識少數類別 → F1-score（Q40）；降低漏診 → Recall（Q50）</td><td>Q40/Q50</td></tr>
+    <tr><td class="kv-key">遷移學習 Transfer Learning <span class="hot">★★</span></td><td>標註樣本極少＋既有預訓練模型 → 遷移學習（答案D）</td><td>Q49（第549題）</td></tr>
+    <tr><td class="kv-key">影像分割 vs 物件偵測 <span class="hot">★★</span></td><td>找位置用方框 → 物件偵測；精確標示像素區域 → <strong>影像分割（答案C）</strong></td><td>Q32（第532題）</td></tr>
+    <tr><td class="kv-key">半監督式學習 <span class="hot">★★</span></td><td>30%有標註＋70%無標籤 → 半監督式學習（答案A）</td><td>Q31（第531題）</td></tr>
+    <tr><td class="kv-key">學習模式辨析（多選錯）<span class="hot">★★★</span></td><td>錯誤：(2)非監督需預先定義正確輸出、(3)半監督只用未標註、(4)自監督需人工標註<br><strong>答案D：2、3、4</strong></td><td>Q43（第543題）</td></tr>
+    <tr><td class="kv-key">對數轉換 Log Transformation <span class="hot">★★</span></td><td>高度偏態數值特徵 → 對數轉換（答案A）；降低極端值影響</td><td>Q44（第544題）</td></tr>
+    <tr><td class="kv-key">Variety 大數據挑戰 <span class="hot">★★</span></td><td>交通數值＋影像＋文字混合 → Variety（多樣性）挑戰（答案C）</td><td>Q46（第546題）</td></tr>
+  </table>
+
+  <div class="study-section-title"><span class="sst-icon">⚖️</span>115年 vs 114年 考試重點對比</div>
+  <table class="cmp-table">
+    <tr><th>考點</th><th>114年第四梯次</th><th>115年第一次</th></tr>
+    <tr><td>XAI 技術</td><td>LIME（主要）</td><td>LIME + SHAP + Saliency Map + 反事實（全面考核）</td></tr>
+    <tr><td>生成式AI工具</td><td>VAE運作流程</td><td>VAE + 擴散模型 + Flash Attention + RLHF</td></tr>
+    <tr><td>RAG</td><td>增量索引更新</td><td>增量索引（再次考核，重要！）</td></tr>
+    <tr><td>資料不平衡</td><td>類別不平衡 Recall</td><td>SMOTE + F1-score + Recall（多角度）</td></tr>
+    <tr><td>特徵工程</td><td>Feature Cross · One-hot · 標準化</td><td>One-hot · 標準化防洩漏 · 對數轉換 · 寬深模型</td></tr>
+    <tr><td>電腦視覺</td><td>（未直接考）</td><td>影像分割 vs 物件偵測 vs 影像分類（新增）</td></tr>
+    <tr><td>LLM推論</td><td>Transformer O(n²)瓶頸</td><td>Batching機制 + Flash Attention（更深入）</td></tr>
+    <tr><td>學習模式</td><td>Q-Learning · 強化學習</td><td>學習模式多選辨析（半監督/自監督更細分）</td></tr>
+  </table>
+</div>
+
+<!-- 其餘重點頁（精簡版，保留核心） -->
+<div id="study-s31" class="study-chapter">
+  <div class="chapter-header"><div class="chapter-badge cb-sci1">科目一 · L111</div><h3>3.1 人工智慧概念</h3></div>
+  <div class="study-section-title"><span class="sst-icon">🤖</span>AI 定義與分類</div>
+  <table class="kv-table">
+    <tr><th style="width:28%">概念</th><th>說明與重點</th></tr>
+    <tr><td class="kv-key">弱 AI / Narrow AI</td><td>只能執行特定任務（目前所有商用AI均屬此類）。PCB缺陷檢測系統=弱AI（115年Q36）</td></tr>
+    <tr><td class="kv-key">強 AI / AGI</td><td>具備跨任意領域類人推理能力（目前尚未實現）</td></tr>
+    <tr><td class="kv-key">感測器網路 <span class="hot">★★★</span></td><td>直接負責蒐集環境數據（PM2.5等），最適合智慧城市即時監測場景（115年Q2）</td></tr>
+    <tr><td class="kv-key">電腦視覺三層次 <span class="hot">★★★</span></td><td>影像分類（有無）→ 物件偵測（方框位置）→ 影像分割（像素精確區域）（115年Q32）</td></tr>
+    <tr><td class="kv-key">AutoML <span class="hot">★★</span></td><td>缺乏AI專業人員且需快速上線 → 雲端AutoML平台（115年Q34）</td></tr>
+  </table>
+  <div class="study-section-title"><span class="sst-icon">⚖️</span>AI 治理與法規</div>
+  <table class="kv-table">
+    <tr><th style="width:28%">法規 / 概念</th><th>考點</th></tr>
+    <tr><td class="kv-key">人在迴圈三模式 <span class="hot">★★★</span></td><td>Human-in-the-loop（每步審核）；Human-on-the-loop（日常監控可隨時介入）；Human-out-of-loop（完全自動）</td></tr>
+    <tr><td class="kv-key">金融機構AI規範 <span class="hot">★★★</span></td><td>必要揭露：服務對象、是否AI完成、是否有替代方案。<strong>不是：AI模型原始程式碼（115年Q13）</strong></td></tr>
+    <tr><td class="kv-key">資料去識別化 <span class="hot">★★</span></td><td>對具識別風險欄位進行轉換處理並移除直接識別資訊（115年Q35）</td></tr>
+    <tr><td class="kv-key">台灣AI基本法</td><td>創新實驗環境參考歐盟 Regulatory Sandbox</td></tr>
+  </table>
+</div>
+
+<div id="study-s32" class="study-chapter">
+  <div class="chapter-header"><div class="chapter-badge cb-sci1">科目一 · L112</div><h3>3.2 資料處理與分析概念</h3></div>
+  <div class="study-section-title"><span class="sst-icon">🔧</span>資料處理關鍵技術</div>
+  <table class="kv-table">
+    <tr><th style="width:28%">技術</th><th>說明 / 考點</th></tr>
+    <tr><td class="kv-key">ETL <span class="hot">★★★</span></td><td>Extract→Transform（清理/排序）→Load，順序固定</td></tr>
+    <tr><td class="kv-key">SMOTE <span class="hot">★★★</span></td><td>依少數類別特徵空間合成新樣本（115年Q5）；非刪除多數類別</td></tr>
+    <tr><td class="kv-key">標準化防洩漏 <span class="hot">★★★</span></td><td>僅以訓練資料計算統計量，再套用至測試資料（115年Q6）</td></tr>
+    <tr><td class="kv-key">One-hot Encoding <span class="hot">★★★</span></td><td>名義類別（交通方式）→ 各自獨立二元特徵</td></tr>
+    <tr><td class="kv-key">對數轉換 <span class="hot">★★</span></td><td>高度偏態數值特徵（年消費金額）→ 降低極端值影響（115年Q44）</td></tr>
+    <tr><td class="kv-key">Variety 大數據 <span class="hot">★★</span></td><td>影像+數值+文字多種格式整合困難 → Variety挑戰（115年Q46）</td></tr>
+    <tr><td class="kv-key">資料整合目的 <span class="hot">★★★</span></td><td>統一格式、處理重複、提升完整性。延長留存期限不屬於（115年Q1）</td></tr>
+  </table>
+</div>
+
+<div id="study-s33" class="study-chapter">
+  <div class="chapter-header"><div class="chapter-badge cb-sci1">科目一 · L113</div><h3>3.3 機器學習概念</h3></div>
+  <div class="study-section-title"><span class="sst-icon">⚙️</span>核心演算法與評估</div>
+  <table class="kv-table">
+    <tr><th style="width:28%">概念</th><th>說明 / 考點</th></tr>
+    <tr><td class="kv-key">F1-score <span class="hot">★★★</span></td><td>類別不平衡＋需衡量少數類別辨識能力 → F1-score（115年Q40）</td></tr>
+    <tr><td class="kv-key">Recall 召回率 <span class="hot">★★★</span></td><td>降低漏診風險（癌症篩檢）→ Recall（115年Q50）</td></tr>
+    <tr><td class="kv-key">半監督式學習 <span class="hot">★★</span></td><td>30%有標籤+70%無標籤 → 半監督式（115年Q31）</td></tr>
+    <tr><td class="kv-key">結構化預測 <span class="hot">★★</span></td><td>逐詞標註是結構化預測；單一分類/迴歸不是（115年Q47）</td></tr>
+    <tr><td class="kv-key">遷移學習 <span class="hot">★★</span></td><td>標註樣本極少+既有預訓練模型 → 遷移學習（115年Q49）</td></tr>
+    <tr><td class="kv-key">學習模式辨析 <span class="hot">★★★</span></td><td>錯誤：非監督需預先定義輸出(2)、半監督只用未標註(3)、自監督需人工標註(4)→答案D:2,3,4（115年Q43）</td></tr>
+    <tr><td class="kv-key">強化學習策略函數 <span class="hot">★★★</span></td><td>調整策略函數以改變行動選擇機率（115年Q19）</td></tr>
+  </table>
+</div>
+
+<div id="study-s34" class="study-chapter">
+  <div class="chapter-header"><div class="chapter-badge cb-sci1">科目一 · L114</div><h3>3.4 鑑別式AI 與生成式AI</h3></div>
+  <div class="study-section-title"><span class="sst-icon">✨</span>生成式AI新考點（115年）</div>
+  <table class="kv-table">
+    <tr><th style="width:28%">技術</th><th>說明 / 考點</th></tr>
+    <tr><td class="kv-key">擴散模型 Diffusion <span class="hot">★★★</span></td><td>穩定性高、多樣性控制佳，適合高品質圖像生成（服裝設計）（115年Q21）</td></tr>
+    <tr><td class="kv-key">LSTM <span class="hot">★★★</span></td><td>解決 RNN 長期記憶問題（公車到站時間預測）（115年Q33）</td></tr>
+    <tr><td class="kv-key">Flash Attention <span class="hot">★★★</span></td><td>調整計算與資料處理方式，減少中間結果儲存需求，改善速度與記憶體效率（115年Q41）</td></tr>
+    <tr><td class="kv-key">RLHF <span class="hot">★★★</span></td><td>偏好資料→獎勵模型→策略調整；未標註語料預訓練不屬於RLHF（115年Q24）</td></tr>
+    <tr><td class="kv-key">Batching <span class="hot">★★★</span></td><td>提升加速器效率+增加吞吐量，但可能增加單筆延遲（115年Q25）</td></tr>
+    <tr><td class="kv-key">Softmax <span class="hot">★★★</span></td><td>多類別機率分佈輸出層（115年Q9）</td></tr>
+    <tr><td class="kv-key">VAE（生成） <span class="hot">★★★</span></td><td>學習資料潛在分布，生成具變化且風格一致的新圖像（115年Q10）</td></tr>
+    <tr><td class="kv-key">VAE（異常偵測） <span class="hot">★★</span></td><td>學習正常資料分布，重建誤差大=異常，不需異常標籤（115年Q22）</td></tr>
+  </table>
+  <div class="study-section-title"><span class="sst-icon">🔍</span>可解釋AI（XAI）— 115年全面考核</div>
+  <table class="cmp-table">
+    <tr><th>技術</th><th>類型</th><th>功能</th><th>115年題號</th></tr>
+    <tr><td>LIME</td><td>post-hoc（後處理）</td><td>局部擾動解釋單一預測</td><td>Q26</td></tr>
+    <tr><td>SHAP</td><td>post-hoc（後處理）</td><td>各特徵對單一預測的貢獻分配</td><td>Q27</td></tr>
+    <tr><td>Saliency Map</td><td>視覺化</td><td>標示輸入中影響最大的區域</td><td>Q29</td></tr>
+    <tr><td>反事實解釋</td><td>個案分析</td><td>分析輸入變動對決策的影響</td><td>Q28</td></tr>
+  </table>
+  <div class="study-section-title"><span class="sst-icon">📚</span>RAG — 重要考點</div>
+  <table class="kv-table">
+    <tr><th style="width:28%">概念</th><th>說明</th></tr>
+    <tr><td class="kv-key">增量索引 <span class="hot">★★★</span></td><td>法規更新時應導入增量索引，避免全量重建導致系統暫停服務（115年Q42，114年Q38同主題）</td></tr>
+  </table>
+</div>
+
+<div id="study-s35" class="study-chapter">
+  <div class="chapter-header"><div class="chapter-badge" style="background:rgba(176,143,255,.12);color:#b08fff">科目二 · L121</div><h3>3.5 No Code / Low Code 概念</h3></div>
+  <div class="study-section-title"><span class="sst-icon">🧩</span>No Code vs Low Code 核心差異</div>
+  <table class="cmp-table">
+    <tr><th>比較</th><th>No Code</th><th>Low Code</th></tr>
+    <tr><td>程式碼</td><td class="no">完全不需要</td><td>少量程式碼</td></tr>
+    <tr><td>目標用戶</td><td>非技術背景人員</td><td>具基本技術背景</td></tr>
+    <tr><td>適用場景</td><td>快速原型、小型應用</td><td>複雜邏輯、高彈性需求</td></tr>
+  </table>
+</div>
+
+<div id="study-s36" class="study-chapter">
+  <div class="chapter-header"><div class="chapter-badge" style="background:rgba(176,143,255,.12);color:#b08fff">科目二 · L122</div><h3>3.6 生成式AI應用領域與工具使用</h3></div>
+  <div class="study-section-title"><span class="sst-icon">💬</span>提示工程技術對比</div>
+  <table class="cmp-table">
+    <tr><th>方法</th><th>特點</th><th>適用</th></tr>
+    <tr><td>Zero-shot</td><td>不提供範例</td><td>標準任務（情感分析、翻譯）</td></tr>
+    <tr><td>Few-shot</td><td>提供若干範例</td><td>需指定輸出風格格式</td></tr>
+    <tr><td>CoT</td><td>逐步推理</td><td>線性單一流程（退款查詢）</td></tr>
+    <tr><td>ToT</td><td>多路徑樹狀探索</td><td>複雜方案比較（跨部門規劃）</td></tr>
+    <tr><td>Graph Prompting</td><td>非線性節點關係</td><td>社交網絡、知識圖譜</td></tr>
+  </table>
+</div>
+
+<div id="study-s37" class="study-chapter">
+  <div class="chapter-header"><div class="chapter-badge" style="background:rgba(176,143,255,.12);color:#b08fff">科目二 · L123</div><h3>3.7 生成式AI導入評估與風險管理</h3></div>
+  <div class="study-section-title"><span class="sst-icon">🗺️</span>AI導入正確順序</div>
+  <table class="kv-table">
+    <tr><th style="width:28%">步驟</th><th>核心任務</th></tr>
+    <tr><td class="kv-key">① 明確目標與KPI</td><td>設定可量化目標，識別高價值場景</td></tr>
+    <tr><td class="kv-key">② 蒐集清理資料</td><td>確保資料品質，完成資料準備</td></tr>
+    <tr><td class="kv-key">③ 評估選擇技術方案</td><td>比較供應商，選擇合適平台</td></tr>
+    <tr><td class="kv-key">④ 建立應用邏輯</td><td>設計對話邏輯、介面、流程</td></tr>
+  </table>
+</div>
+
+<div id="study-s38" class="study-chapter">
+  <div class="chapter-header" style="background:linear-gradient(135deg,rgba(240,192,64,.08),rgba(240,192,64,.03));border-color:rgba(240,192,64,.25)">
+    <div class="chapter-badge" style="background:rgba(240,192,64,.15);color:var(--gold)">⚡ 秒選速查</div>
+    <h3>機器學習 × 深度學習 × 生成式AI — 考試秒選關鍵字對照表</h3>
+    <p>看到題目關鍵字 → 立刻對應正確答案，涵蓋 iPAS 常見情境題型</p>
+  </div>
+
+  <!-- ① 機器學習 -->
+  <div class="study-section-title"><span class="sst-icon">🤖</span>一、機器學習（Machine Learning）</div>
+
+  <div style="font-size:11px;font-weight:700;color:var(--accent);margin:10px 0 6px;letter-spacing:.5px">▍1. 監督式學習 — 分類（Classification）</div>
+  <table class="cmp-table" style="margin-bottom:10px">
+    <tr><th>核心概念</th><th>常見演算法</th><th>實際應用案例</th><th style="text-align:left">🔑 秒選關鍵字（看到這些立刻選監督式分類）</th></tr>
+    <tr>
+      <td style="text-align:left">給模型帶有<strong>標籤/答案</strong>的資料，預測<strong>離散型類別</strong>（是/否、A/B/C類）</td>
+      <td style="text-align:left">SVM<br>決策樹<br>邏輯迴歸<br>隨機森林</td>
+      <td style="text-align:left">📧 垃圾郵件過濾<br>🏥 醫療診斷（腫瘤良性/惡性）<br>💳 金融風控（違約風險分類）</td>
+      <td>「預測分類」「辨識是否為垃圾郵件」「判斷良性或惡性」「有標準答案的歷史資料」</td>
+    </tr>
+  </table>
+
+  <div style="font-size:11px;font-weight:700;color:var(--accent);margin:10px 0 6px;letter-spacing:.5px">▍1. 監督式學習 — 迴歸（Regression）</div>
+  <table class="cmp-table" style="margin-bottom:10px">
+    <tr><th>核心概念</th><th>常見演算法</th><th>實際應用案例</th><th style="text-align:left">🔑 秒選關鍵字</th></tr>
+    <tr>
+      <td style="text-align:left">給帶有數值標籤的資料，學習特徵與<strong>連續數值</strong>之間的映射關係</td>
+      <td style="text-align:left">線性迴歸</td>
+      <td style="text-align:left">📈 銷售預測<br>🏠 房價預測</td>
+      <td>「連續數值預測」「預測下一季產品銷售數量」「預測具體金額/價格/時間長短」</td>
+    </tr>
+  </table>
+
+  <div style="font-size:11px;font-weight:700;color:var(--accent2);margin:10px 0 6px;letter-spacing:.5px">▍2. 非監督式學習 — 分群（Clustering）</div>
+  <table class="cmp-table" style="margin-bottom:10px">
+    <tr><th>核心概念</th><th>常見演算法</th><th>實際應用案例</th><th style="text-align:left">🔑 秒選關鍵字</th></tr>
+    <tr>
+      <td style="text-align:left">輸入<strong>無標籤</strong>資料，模型自動從數據找出隱含結構、規律與相似性</td>
+      <td style="text-align:left">K-Means<br>DBSCAN</td>
+      <td style="text-align:left">👥 客戶分群（找潛在客群）<br>🛡️ 異常偵測（信用卡盜刷）</td>
+      <td>「事前未定義類型」「找出潛在客群」「無標籤資料」「自動從數據找出相似性/異常」</td>
+    </tr>
+  </table>
+
+  <div style="font-size:11px;font-weight:700;color:var(--accent2);margin:10px 0 6px;letter-spacing:.5px">▍2. 非監督式學習 — 降維（Dimensionality Reduction）</div>
+  <table class="cmp-table" style="margin-bottom:10px">
+    <tr><th>核心概念</th><th>常見演算法</th><th>實際應用案例</th><th style="text-align:left">🔑 秒選關鍵字</th></tr>
+    <tr>
+      <td style="text-align:left">減少資料的<strong>特徵數量（維度）</strong>，保留最重要資訊，去除雜訊</td>
+      <td style="text-align:left">PCA<br>主成分分析</td>
+      <td style="text-align:left">🗜️ 數據壓縮<br>📊 資料視覺化</td>
+      <td>「減少特徵數量」「去除雜訊」「多維特徵降至2D/3D視覺化」</td>
+    </tr>
+  </table>
+
+  <div style="font-size:11px;font-weight:700;color:#f87171;margin:10px 0 6px;letter-spacing:.5px">▍3. 強化學習（Reinforcement Learning）</div>
+  <table class="cmp-table" style="margin-bottom:20px">
+    <tr><th>核心概念</th><th>常見演算法</th><th>實際應用案例</th><th style="text-align:left">🔑 秒選關鍵字</th></tr>
+    <tr>
+      <td style="text-align:left">透過與環境持續互動，以<strong>獎勵/懲罰</strong>引導模型優化最佳策略</td>
+      <td style="text-align:left">Q-Learning<br>深度Q學習（DQL）</td>
+      <td style="text-align:left">♟️ 遊戲AI（下圍棋）<br>🚗 自動駕駛<br>🤖 機器人控制</td>
+      <td>「動態重複互動問題」「訓練電腦下圍棋」「自動駕駛路徑規劃」「持續與環境互動並優化策略」</td>
+    </tr>
+  </table>
+
+  <!-- ② 深度學習 -->
+  <div class="study-section-title"><span class="sst-icon">🧠</span>二、深度學習（Deep Learning）</div>
+
+  <table class="cmp-table" style="margin-bottom:20px">
+    <tr><th style="width:18%">模型</th><th>核心機制</th><th>實際應用案例</th><th style="text-align:left">🔑 秒選關鍵字 ＋ 特殊考點</th></tr>
+    <tr>
+      <td><strong>CNN</strong><br>卷積神經網路</td>
+      <td style="text-align:left">利用「卷積核」自動提取邊緣、紋理等局部特徵，專精<strong>網格狀結構數據</strong>（圖像）</td>
+      <td style="text-align:left">👁️ 電腦視覺（障礙物檢測）<br>📸 影像辨識（人臉/X光）</td>
+      <td>「影像辨識」「圖片特徵」「處理網格狀結構」<br><div class="note">⚠️ 特考題：Inception（GoogLeNet）特點是卷積層<strong>加寬而非加深</strong></div></td>
+    </tr>
+    <tr>
+      <td><strong>RNN / LSTM</strong><br>遞迴神經網路</td>
+      <td style="text-align:left">具備「記憶」歷史資訊的能力，專注處理具<strong>序列相關</strong>特性的資料</td>
+      <td style="text-align:left">🗣️ 語音轉文字<br>📉 時間序列預測（股票/天氣）<br>💬 文本情緒分析</td>
+      <td>「時間序列」「接續的文本」「語音資料」「具備記憶歷史資訊的能力」<br><div class="note">⚠️ RNN 梯度消失 → LSTM（遺忘/輸入/輸出門）解決</div></td>
+    </tr>
+  </table>
+
+  <!-- ③ 生成式AI -->
+  <div class="study-section-title"><span class="sst-icon">✨</span>三、生成式AI（Generative AI）</div>
+
+  <table class="cmp-table" style="margin-bottom:14px">
+    <tr><th style="width:22%">模型/技術</th><th>核心機制</th><th>實際應用案例</th><th style="text-align:left">🔑 秒選關鍵字</th></tr>
+    <tr>
+      <td><strong>LLM / Transformer</strong><br>大型語言模型</td>
+      <td style="text-align:left">基於<strong>注意力機制（Attention）</strong>，平行處理大量文本，理解深層上下文與語義</td>
+      <td style="text-align:left">📝 內容生成與摘要<br>🤖 智慧客服（Agent）<br>💻 程式輔助開發</td>
+      <td>「文本生成」「長篇文件摘要」「注意力機制（Attention）」「NLP和生成式回應模組（改善客戶體驗）」</td>
+    </tr>
+    <tr>
+      <td><strong>多模態模型</strong><br>Multi-modal</td>
+      <td style="text-align:left">能同時理解與處理<strong>兩種以上的資料型態</strong>（文字＋圖像＋聲音）</td>
+      <td style="text-align:left">🎨 文字生圖/生影（DALL-E、Midjourney、Sora）<br>📞 次世代智慧客服</td>
+      <td>「同時理解文本、圖片和影片」「輸入文字產生對應圖像」「跨媒材」<br><div class="note">✔ A企業客服需理解文字並調用圖片影片 → 多模態模型（答案B）</div></td>
+    </tr>
+  </table>
+
+  <!-- ④ 綜合對照 -->
+  <div class="study-section-title"><span class="sst-icon">⚡</span>四、超快對照表 — 看題目選答案</div>
+  <table class="kv-table">
+    <tr><th style="width:50%">題目情境關鍵字</th><th>秒選答案</th></tr>
+    <tr><td>訓練電腦下圍棋、自動駕駛等<strong>動態重複互動問題</strong></td><td class="yes">→ 強化學習</td></tr>
+    <tr><td>辨識垃圾郵件、腫瘤良惡性、金融違約<strong>（有標籤分類）</strong></td><td class="yes">→ 監督式學習（分類）</td></tr>
+    <tr><td>預測銷售額、房價、連續數值<strong>（有標籤迴歸）</strong></td><td class="yes">→ 監督式學習（迴歸）/ 線性迴歸</td></tr>
+    <tr><td>找出潛在客群、異常偵測、<strong>無標籤資料</strong></td><td class="yes">→ 非監督式學習（分群）/ K-Means</td></tr>
+    <tr><td>影像辨識、X光片、<strong>圖片特徵</strong></td><td class="yes">→ CNN 卷積神經網路</td></tr>
+    <tr><td>時間序列預測、語音轉文字、<strong>序列相關資料</strong></td><td class="yes">→ RNN / LSTM</td></tr>
+    <tr><td>文本生成、摘要、<strong>注意力機制</strong></td><td class="yes">→ LLM / Transformer（如GPT）</td></tr>
+    <tr><td>同時理解<strong>文字＋圖片＋影片</strong>（跨媒材）</td><td class="yes">→ 多模態模型</td></tr>
+    <tr><td>高品質逼真圖像生成、<strong>DALL-E 2</strong> 核心技術</td><td class="yes">→ 擴散模型（Diffusion Model）</td></tr>
+    <tr><td>生成式AI基礎技術（考「哪個是基礎」）</td><td class="yes">→ GAN（生成對抗網路）</td></tr>
+    <tr><td><strong>VGG</strong> 是否為生成式AI核心技術？</td><td class="no">→ 不是（VGG是鑑別式CNN，用於圖像分類）</td></tr>
+    <tr><td>降低過擬合最直接方法</td><td class="yes">→ 增加正則化項（L1/L2）</td></tr>
+    <tr><td>交叉驗證主要目的</td><td class="yes">→ 減少模型的過擬合風險</td></tr>
+    <tr><td>K-means 不正確的敘述</td><td class="no">→ 「可以處理類別型資料」（錯誤，只能數值型）</td></tr>
+    <tr><td>改善客戶體驗最適技術</td><td class="yes">→ NLP 和生成式回應模組</td></tr>
+    <tr><td>Low-Code 最大潛在風險</td><td class="no">→ Shadow IT（未經IT部門管理的應用擴散）</td></tr>
+    <tr><td>管理AI隱私風險，確保數據安全性</td><td class="yes">→ 零信任架構（Zero Trust Architecture）</td></tr>
+    <tr><td>POC 確保模型生成公平性</td><td class="yes">→ 偏差檢測（Bias Detection）</td></tr>
+    <tr><td>實施/營運階段正確排序 B.上線部署→C.監控優化→A.價值擴散</td><td class="yes">→ BCA（答案D）</td></tr>
+    <tr><td>EU AI Act 社會信用評分＋公眾場所生物辨識執法</td><td class="no">→ 不可接受風險（最高風險等級）</td></tr>
+    <tr><td>負責任的AI，誰對AI系統行為負責？</td><td class="yes">→ 開發者（答案A）</td></tr>
+    <tr><td>企業外包資料安全管理給第三方</td><td class="yes">→ 風險轉移（答案B）</td></tr>
+  </table>
+</div>
+
+<div id="study-s39" class="study-chapter">
+  <div class="chapter-header" style="background:linear-gradient(135deg,rgba(240,192,64,.08),rgba(240,192,64,.03));border-color:rgba(240,192,64,.25)">
+    <div class="chapter-badge" style="background:rgba(240,192,64,.15);color:var(--gold)">🔬 深度解析</div>
+    <h3>模型訓練流程 × 神經網路架構 — Drill-down 展開</h3>
+    <p>涵蓋 AI 從資料中「學習」的完整生命週期＋各模型架構的長處與適用場景，含實戰題庫對照</p>
+  </div>
+
+  <!-- 表一 -->
+  <div class="study-section-title"><span class="sst-icon">⚙️</span>表一：模型訓練流程底層機制</div>
+
+  <div style="font-size:11px;font-weight:700;color:var(--accent);margin:12px 0 6px;letter-spacing:.5px">▍一、資料輸入與前向傳播</div>
+  <table class="kv-table">
+    <tr><th style="width:22%">核心技術</th><th>運作機制 / 考點</th><th style="width:36%">📝 iPAS 實戰題庫對照</th></tr>
+    <tr>
+      <td class="kv-key">特徵工程與處理</td>
+      <td>將真實世界數據轉為神經網路能懂的格式。<br>例：文字→向量、資料標準化/正規化、類別→One-hot encoding</td>
+      <td><strong>【114 第四梯次】</strong><br>Q：最適合將「星期幾」和「24小時制時間」結合以預測通勤時間的特徵工程？<br>→ <strong>(C) 特徵交叉（Feature Cross）</strong></td>
+    </tr>
+    <tr>
+      <td class="kv-key">前向傳播 <span class="hot">★★</span><br><span class="kv-en">Forward Propagation</span></td>
+      <td>數據從輸入層進入，經各層神經元的<strong>「矩陣乘法與向量內積」</strong>運算，得出初步預測結果</td>
+      <td><strong>Q：神經網路前向傳播主要依賴哪種數學操作？</strong><br>→ <strong>(B) 矩陣乘法與向量內積</strong></td>
+    </tr>
+  </table>
+
+  <div style="font-size:11px;font-weight:700;color:var(--accent);margin:12px 0 6px;letter-spacing:.5px">▍二、激勵函數與誤差計算</div>
+  <table class="kv-table">
+    <tr><th style="width:22%">核心技術</th><th>運作機制 / 考點</th><th style="width:36%">📝 iPAS 實戰題庫對照</th></tr>
+    <tr>
+      <td class="kv-key">激勵函數 <span class="hot">★★★</span><br><span class="kv-en">Activation Function</span></td>
+      <td>引入「非線性」特徵，讓神經網路能解決複雜問題：<br>
+        <strong>ReLU</strong>：小於0變0，大於0通過 → 解決梯度消失<br>
+        <strong>Sigmoid</strong>：壓縮至0~1，適合二元分類輸出<br>
+        <strong>Softmax</strong>：壓縮至0~1（多類別機率分佈），用於多類別分類輸出
+      </td>
+      <td><strong>Q：分類任務中通常搭配哪種輸出函數？</strong><br>→ <strong>(C) Sigmoid 或 Softmax</strong><br><br><strong>Q：關於深度學習何者不正確？</strong><br>→ 「ReLU 可減緩梯度問題」為<strong>正確敘述</strong>（此為陷阱題）</td>
+    </tr>
+    <tr>
+      <td class="kv-key">損失函數 <span class="hot">★★★</span><br><span class="kv-en">Loss Function</span></td>
+      <td>衡量「預測結果」與「真實標籤」之間的誤差距離：<br>
+        <strong>MSE（均方誤差）</strong>：專用於<strong>迴歸問題</strong>（預測連續數值）<br>
+        <strong>Cross-Entropy（交叉熵）</strong>：專用於<strong>分類問題</strong>
+      </td>
+      <td><strong>【114 第四梯次】</strong><br>Q：預測房價應選用哪種損失函數？<br>→ <strong>(A) 均方誤差（MSE）</strong></td>
+    </tr>
+  </table>
+
+  <div style="font-size:11px;font-weight:700;color:var(--accent);margin:12px 0 6px;letter-spacing:.5px">▍三、權重更新與過擬合防治</div>
+  <table class="kv-table">
+    <tr><th style="width:22%">核心技術</th><th>運作機制 / 考點</th><th style="width:36%">📝 iPAS 實戰題庫對照</th></tr>
+    <tr>
+      <td class="kv-key">反向傳播 <span class="hot">★★</span><br><span class="kv-en">Backpropagation</span></td>
+      <td>透過微積分「連鎖律」計算梯度，從輸出層往回更新所有神經元的權重（讓Loss變小）<br>
+      挑戰：<strong>梯度消失（Vanishing）</strong>或<strong>梯度爆炸（Exploding）</strong></td>
+      <td>常結合 RNN 梯度消失一起考（見架構表 RNN 行）</td>
+    </tr>
+    <tr>
+      <td class="kv-key">過度擬合 <span class="hot">★★★</span><br><span class="kv-en">Overfitting</span></td>
+      <td>模型在<strong>訓練集</strong>表現極好，但在<strong>測試集</strong>表現極差<br>
+      代表模型<strong>變異（Variance）過高</strong>，把雜訊也學起來了</td>
+      <td><strong>Q：訓練誤差低、測試誤差高代表？</strong><br>→ <strong>(B) 過度擬合</strong></td>
+    </tr>
+    <tr>
+      <td class="kv-key">Bias-Variance Tradeoff <span class="hot">★★★</span></td>
+      <td>簡單模型→高偏差（Bias）→欠擬合<br>
+      複雜模型→高變異（Variance）→過擬合<br>
+      目標：找到兩者之間的最佳平衡點</td>
+      <td><strong>【114 第四梯次】</strong><br>Q：「偏差與變異權衡」主要用來解決什麼問題？<br>→ <strong>(D) 避免過度擬合或欠擬合</strong></td>
+    </tr>
+    <tr>
+      <td class="kv-key">正則化 <span class="hot">★★★</span><br><span class="kv-en">Regularization</span></td>
+      <td>對模型複雜度施加「懲罰」，防範過擬合：<br>
+        <strong>L1（Lasso）</strong>：懲罰|w|，迫使權重收斂為零 → <strong>具備特徵選擇功能（稀疏解）</strong><br>
+        <strong>L2（Ridge）</strong>：懲罰w²，使權重平滑接近零但不為零<br>
+        <strong>Dropout</strong>：訓練時隨機關閉神經元，防止神經元共同適應
+      </td>
+      <td><strong>【114 第四梯次】</strong><br>Q：L1 正則化導致參數收斂為零的原因？<br>→ <strong>(C) L1 對大係數懲罰較強，促使稀疏解</strong><br><br><strong>【114 年 4 月樣題】</strong><br>Q：用來降低過擬合問題？<br>→ <strong>(D) 增加正則化項</strong></td>
+    </tr>
+  </table>
+
+  <!-- 表二 -->
+  <div class="study-section-title"><span class="sst-icon">🧠</span>表二：神經網路架構與生成式模型</div>
+
+  <div style="font-size:11px;font-weight:700;color:var(--accent2);margin:12px 0 6px;letter-spacing:.5px">▍一、鑑別式網路（處理結構 / 序列 / 影像）</div>
+  <table class="kv-table">
+    <tr><th style="width:22%">架構</th><th>運作機制與特點</th><th style="width:36%">📝 iPAS 實戰題庫對照</th></tr>
+    <tr>
+      <td class="kv-key">CNN <span class="hot">★★★</span><br><span class="kv-en">卷積神經網路</span></td>
+      <td>利用「卷積層（Convolution）」提取局部特徵（邊緣、形狀），具備<strong>平移不變性</strong>，專精於<strong>影像辨識（網格狀資料）</strong><br>
+        經典架構：<br>
+        ・<strong>Inception（加寬而非加深）</strong>→ GoogLeNet<br>
+        ・<strong>ResNet（殘差網路，加深）</strong>→ 跳躍連接解決深層退化
+      </td>
+      <td><strong>Q：「加寬不加深」的CNN架構是？</strong><br>→ <strong>(B) Inception</strong><br><br><strong>Q：下列何者不正確？</strong><br>→ <strong>(D) Elman 網路適合影像</strong><br>（解析：Elman 是 RNN 變體，CNN 才適合影像）</td>
+    </tr>
+    <tr>
+      <td class="kv-key">RNN <span class="hot">★★★</span><br><span class="kv-en">循環神經網路</span></td>
+      <td>具備「記憶」能力，前一步輸出是下一步輸入，專治<strong>時間序列</strong>（氣候、股價）與自然語言<br>
+        <strong>痛點：長序列訓練時容易發生「梯度消失（Vanishing Gradient）」</strong>
+      </td>
+      <td><strong>【114 第四梯次】</strong><br>Q：RNN 建構長期氣候預測模型，最符合的挑戰？<br>→ <strong>(B) 長序列訓練中可能出現梯度消失，影響模型效果</strong></td>
+    </tr>
+    <tr>
+      <td class="kv-key">LSTM / GRU <span class="hot">★★★</span><br><span class="kv-en">長短期記憶網路</span></td>
+      <td>RNN 的改良版，引入<strong>「門控機制（Gated）」</strong>決定資訊去留：<br>
+        ・<strong>輸入門（Input Gate）</strong>：決定哪些新資訊寫入<br>
+        ・<strong>遺忘門（Forget Gate）</strong>：決定哪些舊資訊丟棄<br>
+        ・<strong>輸出門（Output Gate）</strong>：決定輸出哪些資訊<br>
+        → 成功解決傳統 RNN 的長序列梯度消失問題
+      </td>
+      <td>考法常與 RNN 缺點作對比<br><div class="note">✔ 記住：LSTM 的「門控機制（三個門）」是解決梯度消失的解藥</div></td>
+    </tr>
+  </table>
+
+  <div style="font-size:11px;font-weight:700;color:var(--accent2);margin:12px 0 6px;letter-spacing:.5px">▍二、生成式網路（創造與重建）</div>
+  <table class="kv-table">
+    <tr><th style="width:22%">架構</th><th>運作機制與特點</th><th style="width:36%">📝 iPAS 實戰題庫對照</th></tr>
+    <tr>
+      <td class="kv-key">GAN <span class="hot">★★★</span><br><span class="kv-en">生成對抗網路</span></td>
+      <td><strong>生成器（Generator，造假）</strong>VS<strong>鑑別器（Discriminator，辨真）</strong>互相對抗博弈，最終生成極度逼真的影像<br>
+        缺點：<strong>Mode Collapse（模式崩潰）</strong>；解法：WGAN</td>
+      <td><strong>【114 年 4 月樣題】</strong><br>Q：GAN 的描述正確的是哪一項？<br>→ <strong>(A) GAN 由生成器和鑑別器組成</strong></td>
+    </tr>
+    <tr>
+      <td class="kv-key">VAE <span class="hot">★★★</span><br><span class="kv-en">變分自編碼器</span></td>
+      <td><strong>編碼器（Encoder）</strong>：輸入資料→壓縮至潛在空間（機率分佈：均值＋方差）<br>
+        採樣：從潛在空間機率分佈中採樣<br>
+        <strong>解碼器（Decoder）</strong>：從採樣向量還原/生成新資料<br>
+        損失 = 重建損失 + KL 散度
+      </td>
+      <td><strong>【114 第四梯次】</strong><br>Q：VAE 運作流程敘述最正確者？<br>→ <strong>(C) 編碼器將資料轉換為潛在空間表示，解碼器再重建資料</strong></td>
+    </tr>
+  </table>
+
+  <div style="font-size:11px;font-weight:700;color:var(--gold);margin:12px 0 6px;letter-spacing:.5px">▍三、模型落地與優化工程</div>
+  <table class="kv-table">
+    <tr><th style="width:22%">技術</th><th>說明</th><th style="width:36%">📝 iPAS 實戰題庫對照</th></tr>
+    <tr>
+      <td class="kv-key">模型壓縮技術 <span class="hot">★★</span></td>
+      <td>為將龐大模型部署到硬體受限的<strong>邊緣裝置</strong>，需進行壓縮：<br>
+        <strong>剪枝（Pruning）</strong>：移除不重要的權重或神經元<br>
+        <strong>量化（Quantization）</strong>：降低數值精度（如32位→8位）<br>
+        <strong>知識蒸餾（Knowledge Distillation, KD）</strong>：大模型（教師）教小模型（學生）
+      </td>
+      <td><strong>Q：企業導入生成式AI，可選擇何種模型壓縮技術減少記憶體？</strong><br>→ <strong>(A) 參數剪枝（Parameter Pruning）</strong></td>
+    </tr>
+  </table>
+
+  <!-- 快速索引 -->
+  <div class="study-section-title"><span class="sst-icon">📌</span>本章快速索引 — 考題秒對</div>
+  <table class="kv-table">
+    <tr><th style="width:50%">考題情境</th><th>正確答案要點</th></tr>
+    <tr><td>預測<strong>連續數值（房價/銷售額）</strong>用哪種損失函數</td><td class="yes">→ MSE（均方誤差）</td></tr>
+    <tr><td>分類問題輸出層用哪種函數</td><td class="yes">→ Sigmoid（二元）/ Softmax（多類別）</td></tr>
+    <tr><td>緩解梯度消失最常用的激勵函數</td><td class="yes">→ ReLU</td></tr>
+    <tr><td>L1 正則化導致參數為零的原因</td><td class="yes">→ 對大係數懲罰較強，促使稀疏解</td></tr>
+    <tr><td>L1 vs L2：哪個可做特徵選擇（權重歸零）</td><td class="yes">→ L1（Lasso）</td></tr>
+    <tr><td>訓練誤差低、測試誤差高 = ?</td><td class="no">→ 過度擬合（Overfitting）</td></tr>
+    <tr><td>「加寬不加深」的 CNN 架構</td><td class="yes">→ Inception（GoogLeNet）</td></tr>
+    <tr><td>Elman 網路適合什麼？</td><td class="no">→ 時間序列（RNN 變體），<strong>不適合影像</strong></td></tr>
+    <tr><td>RNN 處理長序列的最大挑戰</td><td class="no">→ 梯度消失（Vanishing Gradient）</td></tr>
+    <tr><td>解決 RNN 梯度消失的架構</td><td class="yes">→ LSTM（三個門：輸入/遺忘/輸出）</td></tr>
+    <tr><td>VAE 運作流程</td><td class="yes">→ 編碼器→潛在空間（均值+方差）→採樣→解碼器重建</td></tr>
+    <tr><td>GAN 組成</td><td class="yes">→ 生成器（造假）＋ 鑑別器（辨真）</td></tr>
+    <tr><td>模型壓縮：大模型教小模型</td><td class="yes">→ 知識蒸餾（KD）</td></tr>
+    <tr><td>模型壓縮：移除不重要權重</td><td class="yes">→ 剪枝（Pruning）</td></tr>
+    <tr><td>Bias-Variance Tradeoff 解決的問題</td><td class="yes">→ 避免過度擬合或欠擬合</td></tr>
+  </table>
+</div>
+`;
+
+
+  document.querySelectorAll('.stab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.study-chapter').forEach(c=>c.classList.remove('active'));
+  const firstBtn=document.querySelector('.stab-btn');
+  const firstCh=document.getElementById('study-s115');
+  if(firstBtn)firstBtn.classList.add('active');
+  if(firstCh)firstCh.classList.add('active');
+}
+function switchTab(id,btn){
+  document.querySelectorAll('.stab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.study-chapter').forEach(c=>c.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  const ch=document.getElementById('study-'+id);
+  if(ch)ch.classList.add('active');
+}
+
+function clearAll(){if(!confirm('確認清除所有練習紀錄？'))return;S.totalDone=0;S.totalCorrect=0;S.wrongIds=[];save();alert('已清除！');}
+
+// Toggle button visual fix
+document.querySelectorAll('.tog').forEach(el=>{
+  el.addEventListener('click',function(){
+    const on=this.classList.contains('on');
+    this.style.background=on?'var(--surface3)':'var(--accent)';
+    this.style.borderColor=on?'var(--border)':'var(--accent)';
+  });
+});
+</script>
+</body>
+</html>
