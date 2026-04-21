@@ -1361,6 +1361,7 @@ function renderStudy(){
   <button class="stab-btn" onclick="switchTab('s37',this)" style="border-color:rgba(176,143,255,.3);color:#b08fff">3.7 AI導入評估</button>
   <button class="stab-btn" onclick="switchTab('s38',this)" style="border-color:rgba(240,192,64,.35);color:var(--gold)">⚡ 秒選速查</button>
   <button class="stab-btn" onclick="switchTab('s39',this)" style="border-color:rgba(240,192,64,.35);color:var(--gold)">🔬 訓練流程×架構深解</button>
+  <button class="stab-btn" onclick="switchTab('s40',this)" style="border-color:rgba(0,255,127,.35);color:#00ff7f">📇 快速複習卡</button>
 </div>
 
 <!-- 115年考點 -->
@@ -2228,6 +2229,593 @@ function renderStudy(){
     </tr>
   </table>
 </div>
+
+<!-- 📇 快速複習卡 -->
+<!-- 📇 快速複習卡（12大主題跨年度彙整版） -->
+<div id="study-s40" class="study-chapter">
+  <div class="chapter-header" style="background:linear-gradient(135deg,rgba(0,255,127,.08),rgba(0,255,127,.03));border-color:rgba(0,255,127,.25)">
+    <div class="chapter-badge" style="background:rgba(0,255,127,.15);color:#00ff7f">📇 全題庫彙整</div>
+    <h3>iPAS 全題庫 — 12大主題跨年度複習卡</h3>
+    <p>涵蓋 114年、115年官方題庫、樣題 ＋ <strong>參考指引精華</strong>，共 355 題考點彙整<br>
+    <span style="font-size:10px">🟡 <span style="color:#ffaa33">115年題號</span>　🔵 <span style="color:#4c8dff">114年題號</span>　⬜ 樣題/模擬　🟢 <span style="color:#00ff7f">參考指引(sci2)</span></span></p>
+  </div>
+
+  <div class="study-section-title"><span class="sst-icon">🃏</span>主題 1：XAI 可解釋AI <span class="sst-badge">跨年度 6 考點</span></div>
+  <table class="kv-table">
+    <tr><th style="width:28%">考點</th><th>秒答要點</th><th style="width:28%">出題記錄</th></tr>
+    <tr>
+      <td class="kv-key">LIME <span class="hot">★★★</span></td>
+      <td>post-hoc × 局部解釋 × 模型無關；回答「這筆為何被預測為此類？」</td>
+      <td><span style="color:#4c8dff">🔵 114(Q29/id129)</span><br><span style="color:#ffaa33">🟡 115(Q26/id526)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">XAI 核心價值 <span class="hot">★★</span></td>
+      <td>建立信任，提供<strong>可理解的決策依據</strong>；醫師需理解AI決策才能負責任採用</td>
+      <td><span style="color:#4c8dff">🔵 114(Q30/id130)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">反事實解釋 <span class="hot">★★★</span></td>
+      <td>「輸入如何改變則輸出不同」；需滿足<strong>特徵因果約束＋現實可操作性＋法規</strong></td>
+      <td><span style="color:#4c8dff">🔵 114(Q31/id131)</span><br><span style="color:#ffaa33">🟡 115(Q28/id528)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">SHAP 值 <span class="hot">★★★</span></td>
+      <td>量化<strong>每特徵對單一預測的貢獻分配</strong>；個案層級（instance-level）解釋</td>
+      <td><span style="color:#ffaa33">🟡 115(Q27/id527)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">Saliency Map <span class="hot">★★</span></td>
+      <td>梯度視覺化，<strong>標示對預測影響大的像素區域</strong></td>
+      <td><span style="color:#ffaa33">🟡 115(Q29/id529)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">VAE 異常偵測 <span class="hot">★★★</span></td>
+      <td>只用<strong>正常資料</strong>訓練；重建誤差大＝異常；適合<strong>缺乏標籤</strong>的偵測場景</td>
+      <td><span style="color:#ffaa33">🟡 115(Q22/id522)</span></td>
+    </tr>
+  </table>
+
+  <div class="study-section-title"><span class="sst-icon">🃏</span>主題 2：特徵工程進階 <span class="sst-badge">跨年度 9 考點</span></div>
+  <table class="kv-table">
+    <tr><th style="width:28%">考點</th><th>秒答要點</th><th style="width:28%">出題記錄</th></tr>
+    <tr>
+      <td class="kv-key">特徵交叉 <span class="hot">★★</span></td>
+      <td>將兩特徵組合→捕捉交互效果；例：星期+時段→預測通勤時間</td>
+      <td><span style="color:#4c8dff">🔵 114(Q2/id102)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">One-hot 編碼 <span class="hot">★★★</span></td>
+      <td>名義類別（無順序）→轉為獨立二元特徵；避免模型誤解大小關係</td>
+      <td><span style="color:#4c8dff">🔵 114(Q41/id141)</span><br><span style="color:#ffaa33">🟡 115(Q7/id507)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">數值標準化 <span class="hot">★★★</span></td>
+      <td>不同量級特徵縮放至一致範圍；使梯度下降在各維度均衡更新</td>
+      <td><span style="color:#4c8dff">🔵 114(Q43/id143)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">SMOTE <span class="hot">★★★</span></td>
+      <td>在<strong>少數類別特徵空間中插值</strong>合成新樣本；非刪除多數類別</td>
+      <td><span style="color:#ffaa33">🟡 115(Q5/id505)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">避免資料洩漏 <span class="hot">★★★</span></td>
+      <td>先分割→<strong>僅以訓練集算統計量</strong>→再套用至測試集</td>
+      <td><span style="color:#ffaa33">🟡 115(Q6/id506)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">對數轉換 <span class="hot">★★</span></td>
+      <td>高偏態/右偏分布數值特徵（如金額）；降低極端值影響</td>
+      <td><span style="color:#ffaa33">🟡 115(Q44/id544)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">資料去偏 <span class="hot">★★</span></td>
+      <td>重新採樣使各群體比例均衡；從資料源頭解決（非依賴模型）</td>
+      <td><span style="color:#4c8dff">🔵 114(Q25/id125)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">寬深模型（Wide &amp; Deep）<span class="hot">★★</span></td>
+      <td>同時有<strong>稀疏類別特徵＋數值特徵</strong>的推薦場景；Wide=記憶；Deep=泛化</td>
+      <td><span style="color:#ffaa33">🟡 115(Q8/id508)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">監督式特徵選擇 <span class="hot">★★</span></td>
+      <td>評估特徵與<strong>目標變數相關性</strong>；Filter/Wrapper/Embedded 三類方法</td>
+      <td><span style="color:#4c8dff">🔵 114(Q46/id146)</span></td>
+    </tr>
+  </table>
+
+  <div class="study-section-title"><span class="sst-icon">🃏</span>主題 3：機器學習類型判別 <span class="sst-badge hot">★最高頻 跨年度 8 考點</span></div>
+  <table class="kv-table">
+    <tr><th style="width:28%">類型</th><th>判定關鍵字</th><th style="width:28%">出題記錄</th></tr>
+    <tr>
+      <td class="kv-key">監督式（分類）<span class="hot">★★★</span></td>
+      <td><strong>有標籤＋預測類別</strong>；垃圾郵件、疾病診斷</td>
+      <td><span style="color:#4c8dff">🔵 114(id111)</span><br><span style="color:#ffaa33">🟡 115(id530)</span> ⬜樣(id405)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">監督式（迴歸）<span class="hot">★★</span></td>
+      <td><strong>有標籤＋預測連續數值</strong>；房價、銷售額</td>
+      <td>⬜ 樣題(id415)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">非監督式 <span class="hot">★★★</span></td>
+      <td><strong>無標籤</strong>，自動分群/降維；顧客分群</td>
+      <td><span style="color:#4c8dff">🔵 114(id111)</span><br><span style="color:#ffaa33">🟡 115(id539)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">半監督式 <span class="hot">★★★</span></td>
+      <td>30%有標籤＋70%無標籤 → 半監督；<strong>非</strong>強化/監督</td>
+      <td><span style="color:#ffaa33">🟡 115(id531)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">強化學習 <span class="hot">★★★</span></td>
+      <td>獎懲回饋＋與環境互動＋調整策略；自駕車、AlphaGo</td>
+      <td><span style="color:#4c8dff">🔵 114(id117)</span><br><span style="color:#ffaa33">🟡 115(id519)</span> ⬜樣(id402)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">遷移學習 <span class="hot">★★★</span></td>
+      <td>少量標籤＋<strong>既有預訓練模型</strong>；不大幅增加標註預算</td>
+      <td><span style="color:#ffaa33">🟡 115(id549)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">自監督學習 <span class="hot">★★</span></td>
+      <td>模型自動從大量未標註資料產生<strong>偽標籤</strong>；非人工標記</td>
+      <td><span style="color:#ffaa33">🟡 115(id543)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">學習模式常見錯誤 <span class="hot">★★★</span></td>
+      <td>錯誤：非監督需預先定義輸出❌；半監督只用未標註❌；自監督需人工標❌<br><strong>答案D：2、3、4均錯</strong></td>
+      <td><span style="color:#4c8dff">🔵 114(id140)</span><br><span style="color:#ffaa33">🟡 115(id543)</span></td>
+    </tr>
+  </table>
+
+  <div class="study-section-title"><span class="sst-icon">🃏</span>主題 4：模型評估指標 <span class="sst-badge">跨年度 4 考點</span></div>
+  <table class="kv-table">
+    <tr><th style="width:28%">指標</th><th>核心場景</th><th style="width:28%">出題記錄</th></tr>
+    <tr>
+      <td class="kv-key">Recall（召回率）<span class="hot">★★★</span></td>
+      <td>降低<strong>漏診/漏報</strong>（寧可誤報也不漏）；= TP/(TP+FN)；癌症篩查</td>
+      <td><span style="color:#ffaa33">🟡 115(Q50/id550)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">F1-score <span class="hot">★★★</span></td>
+      <td><strong>類別不平衡</strong>時的整體評估；兼顧 Precision 和 Recall</td>
+      <td><span style="color:#ffaa33">🟡 115(Q40/id540)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">Precision（精確率）<span class="hot">★★</span></td>
+      <td>降低<strong>誤報</strong>（寧可漏也不誤）；= TP/(TP+FP)</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td class="kv-key">類別不平衡效應 <span class="hot">★★</span></td>
+      <td>多數類別主導→少數類別<strong>召回率極低</strong>；高價商品難被推薦</td>
+      <td><span style="color:#4c8dff">🔵 114(Q35/id135)</span></td>
+    </tr>
+  </table>
+
+  <div class="study-section-title"><span class="sst-icon">🃏</span>主題 5：ML 演算法原理 <span class="sst-badge">跨年度 11 考點</span></div>
+  <table class="kv-table">
+    <tr><th style="width:28%">考點</th><th>秒答要點</th><th style="width:28%">出題記錄</th></tr>
+    <tr>
+      <td class="kv-key">L1(Lasso) vs L2(Ridge)<span class="hot">★★★</span></td>
+      <td>L1=稀疏解/特徵選擇（部分權重歸零）；L2=趨近但不為零</td>
+      <td><span style="color:#4c8dff">🔵 114(id104)(id106)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">Bias-Variance Tradeoff<span class="hot">★★</span></td>
+      <td>高偏差=欠擬合；高變異=過擬合；尋找兩者平衡點</td>
+      <td><span style="color:#4c8dff">🔵 114(id105)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">KNN（K=3）<span class="hot">★★</span></td>
+      <td>多數決：A2票 &gt; B1票 → 預測A；距離越近越相似</td>
+      <td><span style="color:#4c8dff">🔵 114(id115)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">RNN 梯度消失 <span class="hot">★★★</span></td>
+      <td>長序列反向傳播→梯度消失；解法：LSTM/GRU（記憶閘控）</td>
+      <td><span style="color:#4c8dff">🔵 114(id116)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">Q-Learning vs DQN<span class="hot">★★</span></td>
+      <td>DQN用<strong>神經網路近似Q值</strong>→解決高維空間Q表無法擴展；＋Experience Replay</td>
+      <td><span style="color:#4c8dff">🔵 114(id118)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">損失函數選擇 <span class="hot">★★★</span></td>
+      <td>回歸（連續值）→ MSE；分類（類別）→ Cross-Entropy</td>
+      <td><span style="color:#4c8dff">🔵 114(id119)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">邏輯迴歸 <span class="hot">★★</span></td>
+      <td>輸出<strong>0~1機率</strong>，二元分類；Sigmoid函數輸出</td>
+      <td><span style="color:#4c8dff">🔵 114(id120)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">隨機森林 <span class="hot">★★</span></td>
+      <td>集成學習：多棵決策樹投票；高維資料穩定性與泛化能力佳</td>
+      <td><span style="color:#4c8dff">🔵 114(id121)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">Clustering 分群 <span class="hot">★★</span></td>
+      <td>非監督式，自動發現資料中自然群組；顧客分群是最典型應用</td>
+      <td><span style="color:#4c8dff">🔵 114(id144)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">ReLU 啟動函數 <span class="hot">★★★</span></td>
+      <td>正值區域梯度=1，不飽和；解決 Sigmoid/Tanh 梯度消失問題</td>
+      <td><span style="color:#4c8dff">🔵 114(id147)</span><br><span style="color:#ffaa33">🟡 115(id545)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">過擬合改善方法 <span class="hot">★★</span></td>
+      <td>資料增強（旋轉/翻轉）、正則化（L1/L2）、Dropout、Early Stopping</td>
+      <td><span style="color:#ffaa33">🟡 115(id520)</span> ⬜樣(id403)</td>
+    </tr>
+  </table>
+
+  <div class="study-section-title"><span class="sst-icon">🃏</span>主題 6：生成式AI架構 <span class="sst-badge">跨年度 13 考點</span></div>
+  <table class="kv-table">
+    <tr><th style="width:28%">考點</th><th>秒答要點</th><th style="width:28%">出題記錄</th></tr>
+    <tr>
+      <td class="kv-key">VAE 運作流程 <span class="hot">★★★</span></td>
+      <td>編碼器→潛在空間（均值/方差採樣）→解碼器重建</td>
+      <td><span style="color:#4c8dff">🔵 114(id122)</span><br><span style="color:#ffaa33">🟡 115(id510)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">模型規模定律 <span class="hot">★★</span></td>
+      <td>參數越大通常效能越好；需足夠訓練資料支持；更多記憶體</td>
+      <td><span style="color:#4c8dff">🔵 114(id124)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">Pruning（剪枝）<span class="hot">★★</span></td>
+      <td>移除低影響/冗餘權重；縮小模型體積、加速推理</td>
+      <td><span style="color:#4c8dff">🔵 114(id127)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">自注意力 O(n²) <span class="hot">★★★</span></td>
+      <td>序列長度平方增長；長序列推理主要計算瓶頸；催生Flash Attention</td>
+      <td><span style="color:#4c8dff">🔵 114(id128)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">Flash Attention <span class="hot">★★★</span></td>
+      <td>IO感知優化：<strong>避免將注意力矩陣寫回高頻寬記憶體</strong>；減少中間結果儲存</td>
+      <td><span style="color:#ffaa33">🟡 115(Q41/id541)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">Softmax 輸出層 <span class="hot">★★★</span></td>
+      <td>多類別機率分佈輸出→Softmax；二元分類→Sigmoid；隱藏層激活→ReLU</td>
+      <td><span style="color:#ffaa33">🟡 115(Q9/id509)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">擴散模型 vs GAN <span class="hot">★★★</span></td>
+      <td>擴散：加噪→去噪，<strong>穩定/高品質/多樣性好</strong>；GAN：訓練不穩定，速度較快</td>
+      <td><span style="color:#ffaa33">🟡 115(id521)</span> ⬜樣(id459)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">LSTM <span class="hot">★★</span></td>
+      <td>記憶閘控機制解決RNN梯度消失；保留長期依賴關係</td>
+      <td><span style="color:#ffaa33">🟡 115(id533)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">Batching 機制 <span class="hot">★★★</span></td>
+      <td>提升<strong>GPU效率和吞吐量</strong>；但等待湊批可能<strong>增加單筆延遲</strong></td>
+      <td><span style="color:#ffaa33">🟡 115(Q25/id525)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">批次 vs 即時推論 <span class="hot">★★★</span></td>
+      <td>批次=<strong>高吞吐量優先</strong>（延遲可接受）；即時=<strong>低延遲穩定</strong>（即時互動）</td>
+      <td><span style="color:#ffaa33">🟡 115(Q23/id523)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">RLHF 三步驟 <span class="hot">★★★</span></td>
+      <td>①偏好資料→②獎勵模型→③PPO策略調整；<strong>不屬於RLHF</strong>：未標註語料預訓練</td>
+      <td><span style="color:#ffaa33">🟡 115(Q24/id524)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">災難性遺忘 <span class="hot">★★</span></td>
+      <td>微調過度更新權重→<strong>遺忘預訓練廣泛知識</strong>；在原有任務上表現退步</td>
+      <td><span style="color:#4c8dff">🔵 114(id126)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">批次推論注意事項 <span class="hot">★★</span></td>
+      <td>訓練語料品質是<strong>訓練階段</strong>的問題，非批次推論難題</td>
+      <td><span style="color:#4c8dff">🔵 114(id150)</span></td>
+    </tr>
+  </table>
+
+  <div class="study-section-title"><span class="sst-icon">🃏</span>主題 7：RAG 系統 &amp; 向量檢索 <span class="sst-badge">跨年度 8 考點</span></div>
+  <table class="kv-table">
+    <tr><th style="width:28%">考點</th><th>秒答要點</th><th style="width:28%">出題記錄</th></tr>
+    <tr>
+      <td class="kv-key">增量索引 <span class="hot">★★★</span></td>
+      <td>只處理新增/更新文件，<strong>不需全量重建</strong>；法規更新首選，避免服務中斷</td>
+      <td><span style="color:#4c8dff">🔵 114(id138)</span><br><span style="color:#ffaa33">🟡 115(id542)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">Chunking 文本切分 <span class="hot">★★★</span></td>
+      <td>將長文件分割為語意段落；提升向量檢索精確率，降低無關內容噪音</td>
+      <td>sci2(id247)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">RAG 品質根本原因 <span class="hot">★★★</span></td>
+      <td>GIGO原則：<strong>先修復資料源</strong>（確保內容正確最新）；再調Prompt或溫度</td>
+      <td>sci2(id218)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">FT vs RAG 分工 <span class="hot">★★★</span></td>
+      <td>FT=<strong>固化語氣/風格</strong>（低頻，一次性）；RAG=<strong>動態知識更新</strong>（高頻）</td>
+      <td>sci2(id217)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">知識蒸餾（KD）<span class="hot">★★★</span></td>
+      <td>大型教師模型的軟標籤訓練小型學生模型；<strong>降低運算成本同時維持品質</strong></td>
+      <td>sci2(id242)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">多向量檢索器 <span class="hot">★★</span></td>
+      <td>為同一文件建立多種向量表示（摘要/段落/關鍵句）；提升不同粒度召回率</td>
+      <td>sci2(id248)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">RAG + 即時行情 <span class="hot">★★</span></td>
+      <td>克服LLM訓練截止日期問題；即時API查詢最新金融數據</td>
+      <td>sci2(id229)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">MCP vs RAG 差異 <span class="hot">★★★</span></td>
+      <td>RAG=靜態知識文件補充；MCP=<strong>動態工具/API調用</strong>整合協議</td>
+      <td>sci2(id244)</td>
+    </tr>
+  </table>
+
+  <div class="study-section-title"><span class="sst-icon">🃏</span>主題 8：Prompt 工程 <span class="sst-badge">8 考點</span></div>
+  <table class="kv-table">
+    <tr><th style="width:28%">考點</th><th>秒答要點</th><th style="width:28%">出題記錄</th></tr>
+    <tr>
+      <td class="kv-key">Context Engineering <span class="hot">★★</span></td>
+      <td>設計最佳輸入上下文（系統提示/範例/背景）；非縮短訓練時間，非增加參數</td>
+      <td>sci2(id209)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">Zero-shot <span class="hot">★★</span></td>
+      <td>無範例；適合標準任務（情感分析/翻譯）；難以應付複雜結構化任務</td>
+      <td>sci2(id223)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">Few-shot <span class="hot">★★★</span></td>
+      <td>提供若干輸入-輸出<strong>範例</strong>；讓模型從示範學習格式和風格</td>
+      <td>sci2(id228)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">CoT vs ToT <span class="hot">★★★</span></td>
+      <td>CoT=逐步推理（線性單一流程，如退款）；ToT=多路徑樹狀探索（複雜方案比較）</td>
+      <td>sci2(id239)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">Graph Prompting <span class="hot">★★</span></td>
+      <td>捕捉非線性節點關係；適合社交網路、知識圖譜等複雜關係</td>
+      <td>sci2(id240)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">Few-shot + 領域偏移 <span class="hot">★★</span></td>
+      <td>1-2範例無法涵蓋新領域多樣性；泛化不足是核心挑戰</td>
+      <td>sci2(id241)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">APE + 長上下文挑戰 <span class="hot">★★</span></td>
+      <td>局部評估難以捕捉全局效果；回饋信號不足導致優化困難</td>
+      <td>sci2(id205)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">LLM 矛盾資訊 <span class="hot">★★</span></td>
+      <td>LLM面對矛盾輸入→可能<strong>隨機採信其中一方或生成幻覺</strong>，無法自動判斷</td>
+      <td>sci2(id210)</td>
+    </tr>
+  </table>
+
+  <div class="study-section-title"><span class="sst-icon">🃏</span>主題 9：AI Agent &amp; MCP <span class="sst-badge">6 考點</span></div>
+  <table class="kv-table">
+    <tr><th style="width:28%">考點</th><th>秒答要點</th><th style="width:28%">出題記錄</th></tr>
+    <tr>
+      <td class="kv-key">MCP 流程 <span class="hot">★★★</span></td>
+      <td>AI Host → MCP Client → MCP Server → 資料查詢 → 回傳AI Host；AI Host是起點也是終點</td>
+      <td>sci2(id207)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">A2A 架構 <span class="hot">★★</span></td>
+      <td>Client Agent<strong>發起</strong>任務 → Remote Agent<strong>執行回傳</strong>；類似Client-Server</td>
+      <td>sci2(id208)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">Solution Graph <span class="hot">★★★</span></td>
+      <td>任務分解的<strong>結構化框架</strong>；路徑規劃/步驟追蹤/決策支援；非取代LLM推理</td>
+      <td>sci2(id211)(id249)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">Agentic AI 客服缺失 <span class="hot">★★★</span></td>
+      <td>FAQ出錯→缺<strong>向量資料庫檢索</strong>（RAG）；無法改訂單→缺<strong>API調用</strong></td>
+      <td>sci2(id214)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">多代理未定義角色 <span class="hot">★★</span></td>
+      <td>缺乏角色分工→多個Agent<strong>重複執行相同任務</strong>；浪費資源且產生衝突</td>
+      <td>sci2(id216)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">Agentic AI 搜尋策略 <span class="hot">★★</span></td>
+      <td>採BFS/DFS/A*等演算法系統性探索；非隨機嘗試也非一次性推斷</td>
+      <td>sci2(id211)</td>
+    </tr>
+  </table>
+
+  <div class="study-section-title"><span class="sst-icon">🃏</span>主題 10：No-code / Low-code <span class="sst-badge">5 考點</span></div>
+  <table class="kv-table">
+    <tr><th style="width:28%">考點</th><th>秒答要點</th><th style="width:28%">出題記錄</th></tr>
+    <tr>
+      <td class="kv-key">NC vs LC 差異 <span class="hot">★★</span></td>
+      <td>No Code=完全無程式碼；Low Code=少量程式碼可客製；LC適複雜邏輯整合</td>
+      <td>⬜ 樣題(id453)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">LC 最大風險 <span class="hot">★★★</span></td>
+      <td><strong>Shadow IT</strong>：業務人員未獲IT授權自行建立應用；管理漏洞</td>
+      <td>⬜ 樣題(id456)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">No Code 最大優勢 <span class="hot">★★</span></td>
+      <td>視覺化建模介面，<strong>降低技術門檻</strong>；促進跨部門協作</td>
+      <td>sci2(id233)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">NC + 生成式AI 整合 <span class="hot">★★</span></td>
+      <td>最佳策略：NC提供框架；AI負責動態內容生成；非完全自動化（有風險）</td>
+      <td>sci2(id206)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">LC 整合測試策略 <span class="hot">★★</span></td>
+      <td>自動化測試流程＋<strong>API/服務虛擬化</strong>進行模組化驗證；優於只依賴即時預覽</td>
+      <td>sci2(id203)</td>
+    </tr>
+  </table>
+
+  <div class="study-section-title"><span class="sst-icon">🃏</span>主題 11：AI 治理、法規與隱私 <span class="sst-badge">跨年度 12 考點</span></div>
+  <table class="kv-table">
+    <tr><th style="width:28%">考點</th><th>秒答要點</th><th style="width:28%">出題記錄</th></tr>
+    <tr>
+      <td class="kv-key">人在迴圈三模式 <span class="hot">★★★</span></td>
+      <td>In=<strong>每步審核</strong>；Over=日常監控<strong>可隨時介入</strong>；Out=<strong>完全自動</strong></td>
+      <td><span style="color:#4c8dff">🔵 114(id101)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">監理沙盒 <span class="hot">★★</span></td>
+      <td>歐盟AI Act機制；我國《人工智慧基本法》草案參考此概念</td>
+      <td><span style="color:#4c8dff">🔵 114(id109)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">金融機構AI規範 <span class="hot">★★</span></td>
+      <td>明訂：人才培育、了解AI運作、指派高階主管監督；<strong>不包含</strong>：每日公布運作狀況</td>
+      <td><span style="color:#4c8dff">🔵 114(id110)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">聯邦學習 <span class="hot">★★★</span></td>
+      <td>資料不動模型動；<strong>只上傳梯度</strong>（不上傳原始資料）；跨機構協同且資料不外流</td>
+      <td><span style="color:#4c8dff">🔵 114(id142)</span> sci2(id202)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">AI無需揭露事項 <span class="hot">★★</span></td>
+      <td><strong>不需揭露模型原始程式碼</strong>；須揭露：AI身份、資料使用等</td>
+      <td><span style="color:#ffaa33">🟡 115(id513)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">個資去識別化 <span class="hot">★★</span></td>
+      <td>對具識別風險欄位<strong>轉換處理（假名化/概化）</strong>；移除直接識別資訊，保留分析價值</td>
+      <td><span style="color:#ffaa33">🟡 115(id535)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">弱AI (Narrow AI) <span class="hot">★★★</span></td>
+      <td><strong>只能執行特定任務</strong>，無法遷移至其他決策；目前所有商用AI均屬此類</td>
+      <td><span style="color:#ffaa33">🟡 115(id536)</span></td>
+    </tr>
+    <tr>
+      <td class="kv-key">演算法公平性 <span class="hot">★★★</span></td>
+      <td>導入<strong>公平性檢測流程</strong>；量化各群體核准率差異；僅刪敏感屬性不足（代理變數）</td>
+      <td>sci2(id238)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">Prompt Injection 防禦 <span class="hot">★★★</span></td>
+      <td>輸入驗證（過濾惡意指令）＋回應審核（防洩露）＋最小權限原則</td>
+      <td>sci2(id236)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">Data Drift 資料漂移 <span class="hot">★★★</span></td>
+      <td>生產環境資料統計特性<strong>隨時間偏移</strong>訓練分布；導致模型效能衰退（MLOps核心）</td>
+      <td>sci2(id237)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">SynthID <span class="hot">★★</span></td>
+      <td>AI影片在<strong>每幀嵌入不可見數位浮水印</strong>；可追蹤AI生成來源</td>
+      <td>sci2(id648)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">同態加密 <span class="hot">★★</span></td>
+      <td><strong>加密狀態下</strong>仍能進行模型計算；無需解密即可分析敏感資料</td>
+      <td>sci2(id642)</td>
+    </tr>
+  </table>
+
+  <div class="study-section-title"><span class="sst-icon">🃏</span>主題 12：AI 規劃、成本與部署 <span class="sst-badge">10 考點</span></div>
+  <table class="kv-table">
+    <tr><th style="width:28%">考點</th><th>秒答要點</th><th style="width:28%">出題記錄</th></tr>
+    <tr>
+      <td class="kv-key">AI 導入正確順序 <span class="hot">★★★</span></td>
+      <td>①明確目標KPI → ②蒐集清理資料 → ③評估選擇技術方案 → ④建立應用邏輯；<strong>需求導向、資料先行</strong></td>
+      <td>sci2(id230)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">本地部署核心優勢 <span class="hot">★★★</span></td>
+      <td><strong>敏感資料不傳第三方</strong>，資料主權；滿足金融/醫療/政府高隱私合規需求</td>
+      <td>sci2(id212)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">醫療AI首要測試指標 <span class="hot">★★★</span></td>
+      <td><strong>醫療準確性＋臨床一致性</strong>（Do No Harm）；並非系統速度或泛化能力</td>
+      <td>sci2(id234)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">即時客服延遲指標 <span class="hot">★★</span></td>
+      <td><strong>端到端延遲</strong>（問題發出→收到第一個完整回應）；非吞吐量也非可用性</td>
+      <td>sci2(id235)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">TCO 完整計算 <span class="hot">★★</span></td>
+      <td>直接費（GPU/授權）＋整合/資安/訓練等<strong>間接費</strong></td>
+      <td>sci2(id624)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">ROI 計算公式 <span class="hot">★★★</span></td>
+      <td>每月節省 = 人工費 - API費；回收期 = 導入費用 / 每月節省</td>
+      <td>sci2(id625)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">PoC 公平性評估 <span class="hot">★★</span></td>
+      <td>驗證公平性→<strong>偏差檢測（Bias Detection）</strong>；壓力測試=負載；對抗測試=安全</td>
+      <td>⬜ 樣題(id475)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">跨國合規知識庫 <span class="hot">★★</span></td>
+      <td>核心能力：<strong>跨語言法律術語語意對齊</strong>；識別不同國家規範的對應與差異</td>
+      <td>sci2(id232)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">風險應對策略 <span class="hot">★★</span></td>
+      <td>外包資安管理→<strong>風險轉移</strong>；緩解/接受/規避為其他策略</td>
+      <td>⬜ 樣題(id471)</td>
+    </tr>
+    <tr>
+      <td class="kv-key">MLOps 導入實施階段 <span class="hot">★★</span></td>
+      <td>部署→<strong>模型監控與優化</strong>→AI價值擴散；三步驟須依序完成</td>
+      <td>⬜ 樣題(id473)</td>
+    </tr>
+  </table>
+
+  <div class="study-section-title"><span class="sst-icon">📌</span>臨考前 2 分鐘速查：最常搞混 10 組對比</div>
+  <table class="kv-table" style="background:rgba(255,255,255,.02)">
+    <tr><th style="width:28%">對比項</th><th>選 [左] 情境</th><th>選 [右] 情境</th></tr>
+    <tr><td class="kv-key">LIME vs SHAP</td><td>局部解釋，模型無關</td><td>個案層級特徵貢獻分配</td></tr>
+    <tr><td class="kv-key">Recall vs F1</td><td>降低漏診/漏報</td><td>類別不平衡整體評估</td></tr>
+    <tr><td class="kv-key">FT vs RAG</td><td>固化語氣/風格（低頻）</td><td>動態知識更新（高頻）</td></tr>
+    <tr><td class="kv-key">同態加密 vs 聯邦學習</td><td>密文可直接運算</td><td>資料不離開本地節點</td></tr>
+    <tr><td class="kv-key">Bias Detection vs Mitigation</td><td>量化/發現偏差</td><td>修正/過濾偏差</td></tr>
+    <tr><td class="kv-key">CoT vs ToT</td><td>線性逐步推理（單流程）</td><td>多路徑樹狀探索（複雜方案）</td></tr>
+    <tr><td class="kv-key">MCP vs RAG</td><td>動態工具/API調用</td><td>靜態知識文件補充</td></tr>
+    <tr><td class="kv-key">L1 vs L2</td><td>稀疏解/特徵選擇（歸零）</td><td>趨近零但不歸零（Ridge）</td></tr>
+    <tr><td class="kv-key">批次推論 vs 即時推論</td><td>高吞吐量優先（延遲可接受）</td><td>低延遲穩定（即時互動）</td></tr>
+    <tr><td class="kv-key">擴散模型 vs GAN</td><td>穩定/高品質/多樣性好</td><td>訓練不穩定但速度較快</td></tr>
+  </table>
+</div>
+
 `;
 
 
