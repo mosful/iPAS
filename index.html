@@ -197,6 +197,25 @@ nav{flex:1;padding:14px 10px;overflow-y:auto;}
   .result-stats{grid-template-columns:1fr 1fr;}
   #topbar{padding:0 14px 0 56px;}
 }
+@media print {
+  #sidebar, #topbar, .hbg, #overlay, .study-tab-nav { display: none !important; }
+  #app { display: block !important; }
+  #main { margin-left: 0 !important; width: 100% !important; }
+  #content { padding: 0 !important; max-width: none !important; }
+  .page { display: none !important; }
+  #page-study { display: block !important; }
+  .study-chapter { display: block !important; page-break-after: always; }
+  .kv-table, .cmp-table, .chapter-header, .study-section-title { page-break-inside: avoid; }
+  .study-section-title { page-break-after: avoid; }
+  body { background: white !important; color: black !important; }
+  .kv-table .kv-key, .cmp-table td:first-child, .study-section-title, .chapter-header h3 { color: black !important; }
+  .kv-table td, .cmp-table td, .chapter-header p, .kv-table th, .cmp-table th { color: #333 !important; }
+  .kv-table td, .cmp-table td { border-bottom: 1px solid #ccc !important; }
+  .kv-table th, .cmp-table th { background: #f0f0f0 !important; border-bottom: 2px solid #aaa !important; }
+  .chapter-header { border: 1px solid #ccc !important; }
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .btn-print { display: none !important; }
+}
 </style>
 </head>
 <body>
@@ -366,7 +385,15 @@ nav{flex:1;padding:14px 10px;overflow-y:auto;}
 
     <!-- STUDY -->
     <div id="page-study" class="page">
-      <div style="margin-bottom:20px"><h2 style="font-size:18px;margin-bottom:6px">考試重點整理</h2><p style="color:var(--text-dim);font-size:13px">依官方評鑑範圍 ＋ 114年第四梯次 ＋ 115年第一次真題歸納彙整</p></div>
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px">
+        <div>
+          <h2 style="font-size:18px;margin-bottom:6px">考試重點整理</h2>
+          <p style="color:var(--text-dim);font-size:13px">依官方評鑑範圍 ＋ 114年第四梯次 ＋ 115年第一次真題歸納彙整</p>
+        </div>
+        <button class="btn btn-ghost btn-sm btn-print" onclick="window.print()" style="color:var(--text); border-color:var(--border2); display:flex; gap:6px; align-items:center;">
+          <span style="font-size:14px">🖨️</span> 列印 A4 紙本
+        </button>
+      </div>
       <div id="study-con"></div>
     </div>
 
