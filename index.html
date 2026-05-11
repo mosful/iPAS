@@ -216,9 +216,39 @@ nav{flex:1;padding:14px 10px;overflow-y:auto;}
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
   .btn-print { display: none !important; }
 }
+/* 回到頂端浮動按鈕 */
+#scroll-top-btn {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #4c8dff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 22px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  box-shadow: 0 4px 20px rgba(76,141,255,.5);
+  line-height: 1;
+  padding: 0;
+  transition: background .2s, transform .2s, box-shadow .2s;
+}
+#scroll-top-btn:hover {
+  background: #6aa3ff;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 24px rgba(76,141,255,.65);
+}
+@media print { #scroll-top-btn { display: none !important; } }
 </style>
 </head>
 <body>
+<div id="scroll-sentinel" style="position:absolute;top:0;left:0;height:1px;width:1px;pointer-events:none;"></div>
 <button class="hbg" onclick="toggleSB()">☰</button>
 <div id="overlay" onclick="closeSB()"></div>
 <div id="app">
@@ -1379,6 +1409,7 @@ function renderStudy(){
   con.innerHTML=`
 <div class="study-tab-nav">
   <button class="stab-btn active" onclick="switchTab('s115',this)" style="border-color:rgba(255,170,51,.4);color:#ffaa33">🆕 115年第一次考點</button>
+  <button class="stab-btn" onclick="switchTab('s114q4',this)" style="border-color:rgba(76,141,255,.35);color:#4c8dff">🔵 114年第四梯次考點</button>
   <button class="stab-btn" onclick="switchTab('s31',this)">3.1 人工智慧概念</button>
   <button class="stab-btn" onclick="switchTab('s32',this)">3.2 資料處理與分析</button>
   <button class="stab-btn" onclick="switchTab('s33',this)">3.3 機器學習概念</button>
@@ -1447,6 +1478,95 @@ function renderStudy(){
     <tr><td>電腦視覺</td><td>（未直接考）</td><td>影像分割 vs 物件偵測 vs 影像分類（新增）</td></tr>
     <tr><td>LLM推論</td><td>Transformer O(n²)瓶頸</td><td>Batching機制 + Flash Attention（更深入）</td></tr>
     <tr><td>學習模式</td><td>Q-Learning · 強化學習</td><td>學習模式多選辨析（半監督/自監督更細分）</td></tr>
+  </table>
+</div>
+
+<!-- 114年第四梯次考點 -->
+<div id="study-s114q4" class="study-chapter">
+  <div class="chapter-header" style="background:linear-gradient(135deg,rgba(76,141,255,.08),rgba(76,141,255,.03));border-color:rgba(76,141,255,.3)">
+    <div class="chapter-badge" style="background:rgba(76,141,255,.15);color:#4c8dff">🔵 114年第四梯次 · 科目一＋科目二</div>
+    <h3>114年第四梯次考試重點整理</h3>
+    <p>來源：114年第四梯次初級AI應用規劃師公告試題（114年11月20日公告）<br>科目一：人工智慧基礎概論（50題）　科目二：生成式AI應用與規劃（50題）</p>
+  </div>
+
+  <div class="study-section-title"><span class="sst-icon">📊</span>114年第四梯次考題分類統計 <span class="sst-badge">100題全解析</span></div>
+  <table class="kv-table">
+    <tr><th style="width:30%">類別</th><th style="width:10%">題數</th><th>代表題目 / 考點</th></tr>
+    <tr><td class="kv-key">【科目一】機器學習（ml）</td><td>16</td><td>L1/L2正則化、Bias-Variance Tradeoff、KNN多數決、RNN梯度消失、強化學習/Q-Learning/DQN、損失函數選擇、邏輯迴歸、隨機森林、非監督/半監督判別、Clustering、ReLU啟動函數、災難性遺忘、邏輯迴歸機率輸出</td></tr>
+    <tr><td class="kv-key">【科目一】資料處理（data-eng）</td><td>11</td><td>ETL、特徵交叉、預測性分析、資料去偏、工業IoT不平衡自編碼器、語義冗餘欄位、EDA探索性分析、RAG增量索引、One-hot編碼、數值標準化、監督式特徵選擇</td></tr>
+    <tr><td class="kv-key">【科目一】生成式AI（gen-ai）</td><td>8</td><td>條件語言模型、VAE運作流程、模型規模定律（Scaling Law）、剪枝Pruning、自注意力O(n²)瓶頸、批次推論難題、Transformer計算瓶頸、災難性遺忘</td></tr>
+    <tr><td class="kv-key">【科目一】AI治理（ai-gov）</td><td>6</td><td>人在迴圈三模式、監理沙盒（Regulatory Sandbox）、金融機構AI規範、數位部評測中心、聯邦學習、AI安全評測指標</td></tr>
+    <tr><td class="kv-key">【科目一】可解釋AI（xai）</td><td>3</td><td>LIME局部解釋、XAI核心價值（建立信任）、反事實解釋的核心挑戰</td></tr>
+    <tr><td class="kv-key">【科目一】統計（stats）</td><td>4</td><td>偏態分布母體估計、時序資料敏感抽樣、MAE+重症子群雙指標、Z-score離群值偵測</td></tr>
+    <tr><td class="kv-key">【科目一】資料視覺化（data-viz）</td><td>2</td><td>散佈圖（兩變數關係）、直方圖（連續分布形態）</td></tr>
+    <tr><td class="kv-key">【科目二】生成式AI（gen-ai）</td><td>10</td><td>多模態AI客服、Chat系統CoT、GitHub Copilot原理、LLM自迴歸生成、Encoder-Decoder vs Decoder-only、圖像描述生成、電商商品描述風格一致、AGI定義、Temperature參數、GPT-Realtime</td></tr>
+    <tr><td class="kv-key">【科目二】RAG系統（rag）</td><td>8</td><td>FT+RAG職責分離、RAG品質根本原因(GIGO)、RAG增量索引、Chunking文本切分、多向量檢索器、即時行情RAG、知識蒸餾×RAG、洗錢案例RAG</td></tr>
+    <tr><td class="kv-key">【科目二】AI治理（ai-gov）</td><td>8</td><td>聯邦學習隱私、演算法偏見公平性、Prompt Injection防禦、Data Drift資料漂移、GDPR個資、去識別化最小化、Bias Detection vs Mitigation、同態加密</td></tr>
+    <tr><td class="kv-key">【科目二】AI規劃（ai-plan）</td><td>8</td><td>AI導入順序、私有部署優勢、醫療AI測試指標、即時客服延遲、TCO完整計算、ROI計算、PoC公平性評估、跨國合規知識庫</td></tr>
+    <tr><td class="kv-key">【科目二】提示工程（prompt-eng）</td><td>6</td><td>CoT vs ToT應用場景、Graph Prompting非線性關係、Few-shot學習設計、Zero-shot限制、APE長上下文挑戰、LLM矛盾資訊處理</td></tr>
+    <tr><td class="kv-key">【科目二】AI Agent（ai-system）</td><td>6</td><td>MCP協議流程、A2A架構、Solution Graph任務框架、Agentic AI客服缺失工具、多代理未定義角色、搜尋策略BFS/DFS</td></tr>
+    <tr><td class="kv-key">【科目二】No-code/Low-code（nocode）</td><td>4</td><td>NC/LC整合生成式AI策略、LC整合測試自動化、MLOps No-code優勢、Shadow IT風險</td></tr>
+  </table>
+
+  <div class="study-section-title"><span class="sst-icon">🔑</span>114年第四梯次 科目一 — 重點考點精析</div>
+  <table class="kv-table">
+    <tr><th style="width:30%">考點</th><th>答案要點</th><th style="width:22%">題號</th></tr>
+    <tr><td class="kv-key">人在迴圈三模式 <span class="hot">★★★</span></td><td>Human-over-the-loop = 日常監控、<strong>可隨時介入修正</strong>（≠每步審核；≠只在異常時）</td><td>Q1（id101）</td></tr>
+    <tr><td class="kv-key">特徵交叉 Feature Cross <span class="hot">★★</span></td><td>將「星期幾」+「24小時時間」組合→捕捉<strong>交互效果</strong>，預測通勤時間（答案C）</td><td>Q2（id102）</td></tr>
+    <tr><td class="kv-key">ETL「T」包含內容 <span class="hot">★★★</span></td><td>T（Transform）= <strong>清理、格式轉換、排序、彙總</strong>；順序固定不可調換（答案D）</td><td>Q3（id103）</td></tr>
+    <tr><td class="kv-key">L1 vs L2 正則化 <span class="hot">★★★</span></td><td>L1（Lasso）= 稀疏解/特徵選擇（歸零）；L2（Ridge）= 趨近但不為零<br><strong>L1 使參數歸零的原因：對大係數懲罰較強，促使稀疏解（答案C）</strong></td><td>Q4(id104) Q6(id106)</td></tr>
+    <tr><td class="kv-key">Bias-Variance Tradeoff <span class="hot">★★</span></td><td>高偏差=欠擬合；高變異=過擬合；目標：<strong>找到兩者平衡點</strong>，避免過擬合或欠擬合（答案D）</td><td>Q5（id105）</td></tr>
+    <tr><td class="kv-key">散佈圖應用場景 <span class="hot">★★</span></td><td>呈現<strong>兩個連續數值變數</strong>之間的關係與相關性（答案A）；時序→折線；分布→直方圖</td><td>Q12（id112）</td></tr>
+    <tr><td class="kv-key">預測性分析 <span class="hot">★★</span></td><td>使用模型<strong>推算未來</strong>（下季銷量→備貨）；描述性=過去現象；診斷性=原因；探索性=關聯</td><td>Q14（id114）</td></tr>
+    <tr><td class="kv-key">KNN（K=3）多數決 <span class="hot">★★</span></td><td>A=2票 &gt; B=1票 → <strong>預測類別A</strong>（答案A）</td><td>Q15（id115）</td></tr>
+    <tr><td class="kv-key">RNN 梯度消失 <span class="hot">★★★</span></td><td>長序列反向傳播→梯度指數縮小→<strong>梯度消失</strong>；解法：LSTM/GRU（答案B）</td><td>Q16（id116）</td></tr>
+    <tr><td class="kv-key">強化學習 vs 其他 <span class="hot">★★★</span></td><td>「自動決定買進/持有/賣出，根據盈虧結果逐步優化策略，不依賴標記資料」→ <strong>強化學習（答案A）</strong></td><td>Q17（id117）</td></tr>
+    <tr><td class="kv-key">Q-Learning vs DQN <span class="hot">★★</span></td><td>DQN=神經網路近似Q值，解決<strong>高維空間Q表無法擴展</strong>；搭配Experience Replay（答案C）</td><td>Q18（id118）</td></tr>
+    <tr><td class="kv-key">損失函數選擇 <span class="hot">★★★</span></td><td>預測房價（連續值）→ <strong>MSE（均方誤差）（答案A）</strong>；分類→Cross-Entropy；SVM→Hinge</td><td>Q19（id119）</td></tr>
+    <tr><td class="kv-key">邏輯迴歸特性 <span class="hot">★★</span></td><td>輸出0~1機率，<strong>二元分類</strong>且需要機率輸出；非K-means（非監督）、非SVM（答案A）</td><td>Q20（id120）</td></tr>
+    <tr><td class="kv-key">VAE 運作流程 <span class="hot">★★★</span></td><td>編碼器→潛在空間（均值/方差）→採樣→<strong>解碼器重建資料</strong>；損失=重建損失+KL散度（答案C）</td><td>Q22（id122）</td></tr>
+    <tr><td class="kv-key">LIME 核心目的 <span class="hot">★★★</span></td><td>解釋<strong>單一樣本（局部）</strong>的黑箱決策；post-hoc × model-agnostic × 局部解釋（答案A）</td><td>Q29（id129）</td></tr>
+    <tr><td class="kv-key">反事實解釋核心挑戰 <span class="hot">★★</span></td><td>需滿足<strong>特徵因果約束＋現實可操作性＋公平放貸法規</strong>，三者同時兼顧（答案D）</td><td>Q31（id131）</td></tr>
+    <tr><td class="kv-key">聯邦學習 <span class="hot">★★★</span></td><td>「資料不外流」+「跨院學習」→ <strong>聯邦學習</strong>；只上傳梯度，不上傳原始資料（答案C）</td><td>Q42（id142）</td></tr>
+    <tr><td class="kv-key">RAG 增量索引 <span class="hot">★★★</span></td><td>文件更新→<strong>增量更新索引</strong>，不需全量重建，避免服務中斷（答案C）</td><td>Q38（id138）</td></tr>
+    <tr><td class="kv-key">自注意力 O(n²) <span class="hot">★★★</span></td><td>注意力矩陣大小隨序列長度<strong>平方增長</strong>；是長序列推理主要瓶頸（答案D）；催生Flash Attention</td><td>Q28（id128）</td></tr>
+    <tr><td class="kv-key">剪枝 Pruning <span class="hot">★★</span></td><td>移除<strong>影響較小/冗餘的權重參數</strong>；縮小模型、提升推理效率（答案B）</td><td>Q27（id127）</td></tr>
+    <tr><td class="kv-key">災難性遺忘 <span class="hot">★★</span></td><td>微調後過度更新權重→<strong>遺忘預訓練所獲廣泛知識</strong>，在原有任務上退步（答案D）</td><td>Q26（id126）</td></tr>
+  </table>
+
+  <div class="study-section-title"><span class="sst-icon">🆕</span>114年第四梯次 科目二 — 新增考點精析 <span class="sst-badge" style="background:rgba(0,229,176,.12);color:var(--accent2)">生成式AI</span></div>
+  <table class="kv-table">
+    <tr><th style="width:30%">考點</th><th>答案要點</th><th style="width:22%">題號</th></tr>
+    <tr><td class="kv-key">CoT（思維鏈提示）<span class="hot">★★★</span></td><td>引導模型<strong>逐步展示推理過程</strong>；退款查詢=線性單一流程選CoT；多方案比較選ToT</td><td>sci2考點</td></tr>
+    <tr><td class="kv-key">MCP 協議流程 <span class="hot">★★★</span></td><td>AI Host → MCP Client → MCP Server → 資料查詢 → <strong>結果回傳 AI Host</strong>；AI Host是起點也是終點（答案C）</td><td>sci2(id207)</td></tr>
+    <tr><td class="kv-key">FT + RAG 職責分離 <span class="hot">★★★</span></td><td><strong>Fine-tuning = 固化語氣/風格（低頻）；RAG = 動態知識更新（高頻）</strong>；避免頻繁重訓（答案D）</td><td>sci2(id217)</td></tr>
+    <tr><td class="kv-key">RAG品質根本原因 <span class="hot">★★★</span></td><td>GIGO原則：<strong>先修復資料源</strong>（確保內容正確最新）；再調溫度或Prompt（答案D）</td><td>sci2(id218)</td></tr>
+    <tr><td class="kv-key">Data Drift 資料漂移 <span class="hot">★★★</span></td><td>生產環境輸入資料統計特性<strong>隨時間偏離訓練分布</strong>→模型效能衰退（MLOps核心指標）（答案A）</td><td>sci2(id237)</td></tr>
+    <tr><td class="kv-key">演算法偏見防治 <span class="hot">★★★</span></td><td>導入<strong>公平性檢測流程</strong>，量化群體核准率差異；僅刪除敏感屬性不足（代理變數問題）（答案C）</td><td>sci2(id238)</td></tr>
+    <tr><td class="kv-key">Prompt Injection 防禦 <span class="hot">★★★</span></td><td><strong>輸入驗證（過濾惡意指令）＋回應審核（防洩露）</strong>；僅限制主題不足（答案A）</td><td>sci2(id236)</td></tr>
+    <tr><td class="kv-key">同態加密 <span class="hot">★★</span></td><td>允許在<strong>資料保持加密狀態下</strong>直接進行模型計算，無需解密（答案B）</td><td>sci2(id642)</td></tr>
+    <tr><td class="kv-key">Chunking 文本切分 <span class="hot">★★★</span></td><td>將長文件分割為語意片段；<strong>提升向量檢索精確率，降低無關內容噪音</strong>（答案B）</td><td>sci2(id247)</td></tr>
+    <tr><td class="kv-key">Knowledge Distillation × RAG <span class="hot">★★</span></td><td>大模型（教師）訓練小模型（學生）；<strong>降低推論成本同時維持RAG品質</strong>（答案A）</td><td>sci2(id242)</td></tr>
+    <tr><td class="kv-key">Solution Graph 功能 <span class="hot">★★</span></td><td>為Agentic AI提供<strong>任務分解結構化框架</strong>；路徑規劃、步驟追蹤；非取代LLM推理（答案D）</td><td>sci2(id249)</td></tr>
+    <tr><td class="kv-key">Agentic AI 客服缺失工具 <span class="hot">★★★</span></td><td>FAQ出錯→缺<strong>向量資料庫檢索</strong>；無法改訂單→缺<strong>API調用</strong>（答案B）</td><td>sci2(id214)</td></tr>
+    <tr><td class="kv-key">多代理角色未定義 <span class="hot">★★</span></td><td>缺乏角色分工→多個Agent<strong>重複執行相同任務</strong>；浪費資源且產生衝突（答案D）</td><td>sci2(id216)</td></tr>
+    <tr><td class="kv-key">AI導入正確順序 <span class="hot">★★★</span></td><td>① 明確目標KPI → ② 蒐集清理資料 → ③ 評估選擇技術方案 → ④ 建立應用邏輯（答案A）</td><td>sci2(id230)</td></tr>
+    <tr><td class="kv-key">TCO 完整計算 <span class="hot">★★</span></td><td>直接費用（API/維護/基礎設施）＋<strong>訓練、整合、資安合規等間接費用</strong>（答案D）</td><td>sci2(id624)</td></tr>
+  </table>
+
+  <div class="study-section-title"><span class="sst-icon">⚖️</span>114年第四梯次 vs 115年第一次 考試重點對比</div>
+  <table class="cmp-table">
+    <tr><th>考點</th><th>114年第四梯次</th><th>115年第一次</th></tr>
+    <tr><td>XAI 技術</td><td>LIME + XAI核心價值 + 反事實解釋</td><td>LIME + SHAP + Saliency Map + 反事實（更全面）</td></tr>
+    <tr><td>聯邦學習</td><td>跨機構資料不外流（科目一Q42）</td><td>聯邦學習在科目二治理考點（再次出現）</td></tr>
+    <tr><td>RAG系統</td><td>增量索引（科目一Q38）+ 科目二多考點</td><td>增量索引再次強調（★★★）</td></tr>
+    <tr><td>生成式AI架構</td><td>VAE、Pruning、自注意力O(n²)、批次推論</td><td>+擴散模型、Flash Attention、RLHF、Batching</td></tr>
+    <tr><td>AI Agent</td><td>MCP協議、A2A架構、Solution Graph（科目二新考點）</td><td>AgentKit（OpenAI 2025）、Context-aware Agent</td></tr>
+    <tr><td>資料處理</td><td>特徵交叉、ETL、One-hot、標準化、去偏</td><td>+SMOTE、對數轉換、標準化防洩漏（更深入）</td></tr>
+    <tr><td>AI治理</td><td>人在迴圈三模式、監理沙盒、金融機構規範</td><td>+資料去識別化、弱AI定義、金融機構規範延伸</td></tr>
+    <tr><td>提示工程</td><td>CoT、Zero-shot、Few-shot、Graph Prompting</td><td>+ToT、APE長上下文、Context Engineering</td></tr>
+    <tr><td>資料漂移</td><td>Data Drift（科目二新增，★★★）</td><td>Data Drift 再次確認為高頻考點</td></tr>
+    <tr><td>ML演算法</td><td>L1/L2、KNN、Q-Learning/DQN、隨機森林</td><td>+半監督學習、自監督學習、學習模式辨析</td></tr>
   </table>
 </div>
 
@@ -1696,6 +1816,22 @@ function renderStudy(){
     <tr><td>EU AI Act 社會信用評分＋公眾場所生物辨識執法</td><td class="no">→ 不可接受風險（最高風險等級）</td></tr>
     <tr><td>負責任的AI，誰對AI系統行為負責？</td><td class="yes">→ 開發者（答案A）</td></tr>
     <tr><td>企業外包資料安全管理給第三方</td><td class="yes">→ 風險轉移（答案B）</td></tr>
+    <tr><td colspan="2" style="background:rgba(76,141,255,.04);color:#4c8dff;font-size:10px;font-weight:700;letter-spacing:.5px;padding:6px 12px">🔵 114年第四梯次 特色高頻考點</td></tr>
+    <tr><td>預測性分析特性（建構模型推算<strong>下季銷量→備貨規劃</strong>）</td><td class="yes">→ 預測性分析（Predictive Analysis）</td></tr>
+    <tr><td>「星期幾」+「24小時時間」預測通勤，特徵工程技巧</td><td class="yes">→ 特徵交叉（Feature Cross）</td></tr>
+    <tr><td>ETL 的 T（Transform）包含哪些？</td><td class="yes">→ 清理、格式轉換、排序、彙總（順序固定）</td></tr>
+    <tr><td>L1 使參數收斂為零的<strong>原因</strong></td><td class="yes">→ 對大係數懲罰較強，促使稀疏解</td></tr>
+    <tr><td>KNN（K=3），鄰居類別 A/B/A → 預測結果</td><td class="yes">→ 類別 A（A=2票 &gt; B=1票，多數決）</td></tr>
+    <tr><td>智慧投資系統自動決定買賣，根據盈虧逐步優化，<strong>不依賴標記資料</strong></td><td class="yes">→ 強化學習</td></tr>
+    <tr><td>DQN vs Q-Learning，DQN 的核心改進是？</td><td class="yes">→ 神經網路近似 Q 值，解決高維空間 Q 表問題</td></tr>
+    <tr><td>探索性資料分析（EDA）最符合的做法</td><td class="yes">→ 繪製各來源對轉換率的關聯圖，尋找潛在關係</td></tr>
+    <tr><td>類別不平衡 → 少數類別的<strong>哪個指標</strong>極低？</td><td class="no">→ 召回率（Recall）極低（如高價商品難被推薦）</td></tr>
+    <tr><td>RAG 系統每次更新需重建索引 → 最適解法</td><td class="yes">→ 採用增量/分段更新索引，不需全量重建</td></tr>
+    <tr><td>批次推論（Batch Inference）不是難題的項目</td><td class="no">→ 訓練語料品質（屬訓練階段，非推論難題）</td></tr>
+    <tr><td>Data Drift 資料漂移主要指什麼？</td><td class="no">→ 生產資料統計特性隨時間偏離訓練分布（答案A）</td></tr>
+    <tr><td>演算法偏見：僅刪除敏感屬性（如種族欄位）是否足夠？</td><td class="no">→ 不足（代理變數仍造成間接歧視）→ 需公平性檢測流程</td></tr>
+    <tr><td>跨機構醫療資料「資料不外流」+「跨院學習」</td><td class="yes">→ 聯邦學習（Federated Learning）</td></tr>
+    <tr><td>Prompt Injection 最有效防禦策略</td><td class="yes">→ 輸入驗證＋回應審核（雙重機制）</td></tr>
   </table>
 
   <!-- ⑤ 115年科目二官方—秒選補充 -->
@@ -2255,6 +2391,88 @@ function renderStudy(){
       <td><strong>Q：市民用電資料開放研究，符合個資規範的最適處理？（第535題）</strong><br>→ <strong>(C) 對具識別風險欄位進行轉換並移除直接識別資訊</strong></td>
     </tr>
   </table>
+
+  <!-- 114年科目二深度架構 -->
+  <div class="study-section-title"><span class="sst-icon">🆕</span>表五：114年第四梯次科目二 — 生成式AI深度架構 <span class="sst-badge" style="background:rgba(76,141,255,.12);color:#4c8dff">114年官方試題</span></div>
+
+  <div style="font-size:11px;font-weight:700;color:#4c8dff;margin:12px 0 6px;letter-spacing:.5px">▍一、提示工程進階 — CoT / ToT / Graph Prompting</div>
+  <table class="kv-table">
+    <tr><th style="width:22%">核心技術</th><th>考點精析</th><th style="width:36%">📝 114年科目二考題對照</th></tr>
+    <tr>
+      <td class="kv-key">CoT（思維鏈）<span class="hot">★★★</span><br><span class="kv-en">Chain-of-Thought</span></td>
+      <td>引導模型<strong>逐步展示推理過程</strong>，適合線性、單一流程任務（如退款查詢逐步確認）。<br>關鍵字：<strong>逐步推理、單一決策流程</strong></td>
+      <td><strong>Q：客服退款查詢需逐步確認，最適提示策略？</strong><br>→ <strong>(A) CoT（鏈式思考）</strong><div class="note">⚠️ 易混：ToT=多路徑樹狀探索（複雜方案比較）；CoT=線性逐步（單一流程）</div></td>
+    </tr>
+    <tr>
+      <td class="kv-key">ToT（思維樹）<span class="hot">★★</span><br><span class="kv-en">Tree-of-Thought</span></td>
+      <td>多路徑樹狀探索，讓模型<strong>同時考慮多種可能方案並比較</strong>，適合複雜決策場景（如跨部門戰略規劃）。</td>
+      <td><strong>Q：產品定位需評估多種市場策略與反應，最適？</strong><br>→ <strong>(C) ToT（樹狀思維）</strong></td>
+    </tr>
+    <tr>
+      <td class="kv-key">Graph Prompting <span class="hot">★★</span></td>
+      <td>捕捉<strong>非線性節點關係</strong>；適合社交網路、知識圖譜等複雜關係結構的推理。<br>關鍵字：<strong>節點關係、圖結構</strong></td>
+      <td><strong>Q：分析社群網路中不同群體的影響力？</strong><br>→ <strong>(B) Graph Prompting</strong></td>
+    </tr>
+  </table>
+
+  <div style="font-size:11px;font-weight:700;color:#4c8dff;margin:12px 0 6px;letter-spacing:.5px">▍二、MCP 協議 × AI Agent 架構</div>
+  <table class="kv-table">
+    <tr><th style="width:22%">核心技術</th><th>考點精析</th><th style="width:36%">📝 114年科目二考題對照</th></tr>
+    <tr>
+      <td class="kv-key">MCP 完整流程 <span class="hot">★★★</span><br><span class="kv-en">Model Context Protocol</span></td>
+      <td>標準化 AI 與外部工具的互動協議：<br><strong>AI Host（起點）→ MCP Client → MCP Server → 資料查詢 → 結果回傳 AI Host（終點）</strong><br>AI Host 既是請求發起端也是結果接收端。</td>
+      <td><strong>Q：MCP 協議請求發起後，最終將結果回傳給哪個元件？（id207）</strong><br>→ <strong>(C) AI Host</strong></td>
+    </tr>
+    <tr>
+      <td class="kv-key">A2A 架構 <span class="hot">★★</span><br><span class="kv-en">Agent-to-Agent</span></td>
+      <td>Client Agent <strong>發起任務</strong> → Remote Agent <strong>執行並回傳</strong>；<br>類似 Client-Server 架構，但雙方均為 AI Agent。</td>
+      <td><strong>Q：A2A 協議中，誰負責發起任務？（id208）</strong><br>→ <strong>(B) Client Agent</strong></td>
+    </tr>
+    <tr>
+      <td class="kv-key">Agentic AI 缺失診斷 <span class="hot">★★★</span></td>
+      <td>FAQ 回答不準確 → 缺<strong>向量資料庫檢索（RAG）</strong><br>無法執行修改訂單 → 缺<strong>API 調用工具</strong><br>→ 兩者問題對應不同缺失工具，須分開診斷</td>
+      <td><strong>Q：Agentic AI客服兩大問題的根本缺失？（id214）</strong><br>→ <strong>(B) FAQ缺RAG + 訂單缺API</strong></td>
+    </tr>
+  </table>
+
+  <div style="font-size:11px;font-weight:700;color:#4c8dff;margin:12px 0 6px;letter-spacing:.5px">▍三、MLOps 關鍵指標 — Data Drift 與 Bias Detection</div>
+  <table class="kv-table">
+    <tr><th style="width:22%">核心技術</th><th>考點精析</th><th style="width:36%">📝 114年科目二考題對照</th></tr>
+    <tr>
+      <td class="kv-key">Data Drift（資料漂移）<span class="hot">★★★</span></td>
+      <td>生產環境中，輸入資料的統計特性<strong>隨時間逐漸偏離</strong>訓練時的分布，導致模型效能持續衰退。<br>→ MLOps 核心監控指標之一<div class="note">⚠️ 易混：模型漂移（Concept Drift）=目標函數關係改變；資料漂移=輸入資料分布改變</div></td>
+      <td><strong>Q：模型部署後效能持續下降，最可能的原因？（id237）</strong><br>→ <strong>(A) Data Drift — 生產資料統計特性偏離訓練分布</strong></td>
+    </tr>
+    <tr>
+      <td class="kv-key">Bias Detection vs Mitigation <span class="hot">★★★</span></td>
+      <td><strong>偏見檢測（Detection）</strong>：發現/量化偏差 → 比較不同群體的預測差異與錯誤率<br><strong>偏見緩解（Mitigation）</strong>：修正偏差 → 重新加權樣本、輸出過濾、調整決策閾值<br>→ 僅刪除敏感屬性欄位<strong>不足以</strong>緩解偏見（代理變數問題）</td>
+      <td><strong>Q：最有效降低貸款審核模型性別偏見的策略？（id238）</strong><br>→ <strong>(C) 導入公平性檢測流程，量化群體核准率差異</strong></td>
+    </tr>
+    <tr>
+      <td class="kv-key">Prompt Injection 防禦 <span class="hot">★★★</span></td>
+      <td>惡意攻擊：構造特殊輸入讓模型執行未授權指令/洩露系統提示<br>防禦策略：<strong>輸入驗證（過濾惡意指令）＋回應審核（防洩露）＋最小權限原則</strong><br>僅限制主題範圍<strong>不足</strong>（攻擊仍可繞過）</td>
+      <td><strong>Q：Prompt Injection 攻擊，最有效的防禦組合？（id236）</strong><br>→ <strong>(A) 輸入驗證 ＋ 回應審核</strong></td>
+    </tr>
+  </table>
+
+  <!-- 表五快速索引 -->
+  <div class="study-section-title"><span class="sst-icon">📌</span>表五快速索引 — 114Q4 科目二秒對</div>
+  <table class="kv-table">
+    <tr><th style="width:50%">考題情境</th><th>正確答案要點</th></tr>
+    <tr><td>退款查詢需<strong>逐步</strong>確認資格與流程</td><td class="yes">→ CoT（思維鏈，線性推理）</td></tr>
+    <tr><td>產品定位評估<strong>多種市場策略</strong></td><td class="yes">→ ToT（思維樹，多路徑）</td></tr>
+    <tr><td>分析社群<strong>節點關係/圖結構</strong></td><td class="yes">→ Graph Prompting</td></tr>
+    <tr><td>MCP 中，結果最終回傳給誰？</td><td class="yes">→ AI Host（起點也是終點）</td></tr>
+    <tr><td>Agentic AI FAQ 不準 → 缺什麼？</td><td class="yes">→ 向量資料庫（RAG）</td></tr>
+    <tr><td>Agentic AI 無法改訂單 → 缺什麼？</td><td class="yes">→ API 調用能力</td></tr>
+    <tr><td>模型部署後效能持續下降</td><td class="no">→ Data Drift（資料漂移）</td></tr>
+    <tr><td>降低偏見：僅刪除性別欄位是否足夠？</td><td class="no">→ 不足（代理變數問題）→ 需公平性檢測流程</td></tr>
+    <tr><td>防禦 Prompt Injection 最有效組合</td><td class="yes">→ 輸入驗證 ＋ 回應審核</td></tr>
+    <tr><td>FT vs RAG：哪個處理即時資訊更新？</td><td class="yes">→ RAG（動態更新）；FT 負責固化語氣</td></tr>
+    <tr><td>RAG 品質差的根本原因</td><td class="no">→ 資料源問題（GIGO）→ 先修復資料</td></tr>
+    <tr><td>RAG + KD（知識蒸餾）最大效益</td><td class="yes">→ 小模型學大模型，降低推論成本</td></tr>
+  </table>
+
 </div>
 
 <!-- 📇 快速複習卡 -->
@@ -2871,6 +3089,19 @@ document.querySelectorAll('.tog').forEach(el=>{
     this.style.borderColor=on?'var(--border)':'var(--accent)';
   });
 });
+// 回到頂端按鈕（等 DOM 完整後再綁定）
+window.addEventListener('DOMContentLoaded', function(){
+  var btn = document.getElementById('scroll-top-btn');
+  if(!btn) return;
+  btn.addEventListener('click', function(){
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+    try{ document.getElementById('main').scrollTop = 0; }catch(e){}
+    try{ document.getElementById('content').scrollTop = 0; }catch(e){}
+    window.scrollTo(0, 0);
+  });
+});
 </script>
+<button id="scroll-top-btn" title="回到頂端">↑</button>
 </body>
 </html>
