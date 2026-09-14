@@ -1730,9 +1730,9 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
           <div class="giscus"></div>
           <script src="https://giscus.app/client.js"
               data-repo="mosful/iPAS"
-              data-repo-id="R_kgDOOGj_xw"
+              data-repo-id="R_kgDOSFrsvw"
               data-category="General"
-              data-category-id="DIC_kwDOOGj_x84CeI3A"
+              data-category-id="DIC_kwDOSFrsv84DFkAT"
               data-mapping="pathname"
               data-strict="0"
               data-reactions-enabled="1"
@@ -2555,7 +2555,16 @@ function applyTheme(theme){
   const t = (theme === 'light') ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', t);
   if(document.body) document.body.setAttribute('data-theme', t);
-  try { localStorage.setItem('ipas_theme', t); } catch(e){}
+  try { localStorage.setItem('ipas_theme', t);
+  // 同步 Giscus 留言板色彩主題
+  try {
+    const iframe = document.querySelector('iframe.giscus-frame');
+    if(iframe){
+      const gTheme = (t === 'light') ? 'light' : 'dark';
+      iframe.contentWindow.postMessage({ giscus: { setConfig: { theme: gTheme } } }, 'https://giscus.app');
+    }
+  } catch(e){}
+ } catch(e){}
 
   const btnDark = document.getElementById('theme-btn-dark');
   const btnLight = document.getElementById('theme-btn-light');
