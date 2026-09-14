@@ -1,290 +1,961 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
+<script>
+(function(){
+  var theme = localStorage.getItem('ipas_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', theme);
+})();
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>iPAS AI 應用規劃師 ─ 智慧練習系統 v12（555題完整版）</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#07090f;--surface:#0d1120;--surface2:#131929;--surface3:#1a2236;
-  --border:#1e2d47;--border2:#253450;
-  --accent:#4c8dff;--accent2:#00e5b0;--warn:#ff5f5f;--gold:#f0c040;
-  --text:#dde4f0;--text-dim:#8fa8cc;--text-muted:#3d5278;
-  --r:10px;
+/* ── AITerms.tw 頂級人文科技調色盤 ── */
+:root, [data-theme="dark"], html[data-theme="dark"], body[data-theme="dark"] {
+  --bg: #10100f;              /* 沉穩墨黑底色 */
+  --surface: #171614;         /* 主要卡片背景 */
+  --surface2: #1f1e1b;        /* 次層背景、按鈕、輸入框 */
+  --surface3: #2a2926;        /* 懸停底色、進度條軌道 */
+  --surface4: #34322d;        /* 強調表面 */
+  
+  --border: #2a2926;          /* 柔和微弱邊框 */
+  --border2: #383530;         /* 結構性分割邊框 */
+  --border-soft: rgba(244, 241, 234, 0.08);
+
+  /* AITerms 招牌品牌色：暖陶土橘 (Terracotta Clay) & 雅緻青灰藍 (Slate Teal) */
+  --accent: #d97757;          /* 主色：溫潤陶土橘 */
+  --accent-hover: #e89373;
+  --accent-soft: rgba(217, 119, 87, 0.14);
+  --accent-border: rgba(217, 119, 87, 0.35);
+
+  --accent2: #5d7a92;         /* 輔助：雅緻青嵐藍 */
+  --accent2-bright: #7ea4c2;
+  --accent2-soft: rgba(93, 122, 146, 0.16);
+
+  --warn: #ef4444;            /* 錯誤警示紅 */
+  --warn-soft: rgba(239, 68, 68, 0.14);
+
+  --gold: #f59e0b;            /* 琥珀金 (Amber) */
+  --gold-soft: rgba(245, 158, 11, 0.14);
+
+  --green: #22c55e;           /* 正確／成功翠綠 */
+  --green-soft: rgba(34, 197, 94, 0.14);
+
+  /* 溫潤米白階層文字 */
+  --text: #f4f1ea;            /* 主要閱讀文字：象牙暖米白 */
+  --text-dim: #a8a196;        /* 次要文字：優雅暖灰 */
+  --text-muted: #6f6a61;      /* 輔助與弱化文字 */
+
+  --r: 14px;                  /* 現代卡片圓角 */
+  --pill: 999px;              /* 膠囊按鈕與標籤圓角 */
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.25);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.35);
+  --shadow-warm: 0 6px 20px rgba(217,119,87,0.2);
 }
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-#app{display:flex;min-height:100vh;}
-#sidebar{width:232px;min-width:232px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;transition:transform .28s cubic-bezier(.4,0,.2,1);}
-.logo{padding:22px 18px 18px;border-bottom:1px solid var(--border);}
-.logo-tag{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:var(--accent);background:rgba(76,141,255,.1);border:1px solid rgba(76,141,255,.25);border-radius:4px;padding:3px 8px;letter-spacing:2px;display:inline-block;margin-bottom:8px;}
-.logo h1{font-size:14px;font-weight:700;line-height:1.45;color:var(--text);}
-.logo h1 em{color:var(--accent2);font-style:normal;}
-nav{flex:1;padding:14px 10px;overflow-y:auto;}
-.nav-section{margin-bottom:18px;}
-.nav-label{font-size:9px;font-weight:700;color:var(--text-muted);letter-spacing:2.5px;text-transform:uppercase;padding:0 8px 6px;}
-.nav-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:7px;cursor:pointer;font-size:13px;color:var(--text-dim);transition:all .18s;margin-bottom:1px;border:1px solid transparent;}
-.nav-item:hover{background:var(--surface2);color:var(--text);}
-.nav-item.active{background:rgba(76,141,255,.1);color:var(--accent);border-color:rgba(76,141,255,.2);}
-.nav-icon{font-size:15px;width:18px;text-align:center;}
-.nav-badge{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:9px;background:rgba(0,229,176,.1);color:var(--accent2);border:1px solid rgba(0,229,176,.2);border-radius:3px;padding:1px 5px;}
-.sidebar-stats{padding:14px;border-top:1px solid var(--border);}
-.stats-row{display:flex;gap:6px;}
-.stat-box{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:9px 8px;text-align:center;}
-.stat-box .v{font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600;color:var(--accent2);}
-.stat-box .l{font-size:9px;color:var(--text-muted);margin-top:1px;}
-#main{margin-left:232px;flex:1;display:flex;flex-direction:column;min-height:100vh;}
-#topbar{position:sticky;top:0;z-index:50;background:rgba(7,9,15,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;}
-.page-title{font-size:14px;font-weight:600;}
-.page-title span{color:var(--text-dim);font-weight:400;margin-left:8px;font-size:12px;}
-.top-btns{display:flex;gap:7px;align-items:center;}
-.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;border:none;transition:all .18s;font-family:inherit;}
-.btn-ghost{background:transparent;color:var(--text-dim);border:1px solid var(--border);}
-.btn-ghost:hover{background:var(--surface2);color:var(--text);}
-.btn-primary{background:var(--accent);color:#fff;}
-.btn-primary:hover{background:#6aa3ff;transform:translateY(-1px);}
-.btn-sm{padding:5px 10px;font-size:11px;}
-#content{flex:1;padding:28px;max-width:920px;}
-.page{display:none;}
-.page.active{display:block;}
-.hero{border-radius:var(--r);padding:32px;margin-bottom:24px;background:linear-gradient(135deg,rgba(76,141,255,.07),rgba(0,229,176,.04));border:1px solid var(--border2);position:relative;overflow:hidden;}
-.hero::after{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(76,141,255,.06),transparent 70%);}
-.hero h2{font-size:24px;font-weight:700;margin-bottom:6px;}
-.hero h2 em{color:var(--accent);font-style:normal;}
-.hero p{color:var(--text-dim);font-size:13px;line-height:1.7;max-width:480px;}
-.hero-actions{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;}
-.btn-hero{padding:10px 22px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .2s;display:inline-flex;align-items:center;gap:7px;}
-.btn-hero-p{background:var(--accent);color:#fff;}
-.btn-hero-p:hover{background:#6aa3ff;transform:translateY(-1px);}
-.btn-hero-s{background:var(--surface2);color:var(--text-dim);border:1px solid var(--border2);}
-.btn-hero-s:hover{color:var(--text);border-color:var(--accent);}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px;}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px;}
-.card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-.card-title{font-size:11px;font-weight:700;color:var(--text-dim);letter-spacing:.5px;text-transform:uppercase;}
-.subj-list{display:flex;flex-direction:column;gap:6px;}
-.subj-item{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--surface2);border-radius:7px;cursor:pointer;border:1px solid transparent;transition:all .18s;}
-.subj-item:hover{border-color:var(--accent);background:rgba(76,141,255,.04);}
-.subj-name{font-size:13px;font-weight:500;}
-.subj-cnt{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);margin-top:3px;}
-.tag{font-size:9px;padding:2px 7px;border-radius:20px;font-weight:700;letter-spacing:.5px;}
-.t1{background:rgba(76,141,255,.14);color:var(--accent);}
-.t2{background:rgba(0,229,176,.12);color:var(--accent2);}
-.tg{background:rgba(240,192,64,.12);color:var(--gold);}
-.prog-list{display:flex;flex-direction:column;gap:10px;}
-.prog-item .prog-lbl{display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px;color:var(--text-dim);}
-.prog-bar{height:5px;background:var(--surface3);border-radius:3px;overflow:hidden;}
-.prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .9s ease;}
-.source-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:24px;}
-.source-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:10px;}
-.source-card-top{display:flex;align-items:flex-start;gap:12px;}
-.source-icon{width:38px;height:38px;min-width:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;}
-.si-pdf{background:rgba(255,95,95,.12);}
-.si-q{background:rgba(76,141,255,.12);}
-.si-ref{background:rgba(0,229,176,.1);}
-.source-info{flex:1;min-width:0;}
-.source-name{font-size:13px;font-weight:600;line-height:1.4;word-break:break-all;}
-.source-meta{font-size:11px;color:var(--text-muted);margin-top:3px;}
-.source-tags{display:flex;gap:6px;flex-wrap:wrap;}
-.source-tag{font-size:10px;padding:2px 8px;border-radius:4px;font-weight:600;}
-.source-btn{font-size:11px;padding:5px 10px;border-radius:6px;cursor:pointer;border:none;font-family:inherit;background:var(--surface2);color:var(--text-dim);border:1px solid var(--border);transition:all .15s;text-align:center;}
-.source-btn:hover{color:var(--accent);border-color:var(--accent);}
-.exam-hd{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;}
-.exam-meta{display:flex;align-items:center;gap:16px;}
-.em-item{text-align:center;}
-.em-v{font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:700;}
-.em-v.a{color:var(--accent);}
-.em-l{font-size:10px;color:var(--text-muted);margin-top:1px;}
-.em-sep{width:1px;height:34px;background:var(--border);}
-#timer{font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:700;color:var(--accent2);}
-#timer.urgent{color:var(--warn);animation:pulse 1s infinite;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
-.q-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:24px;margin-bottom:14px;animation:fadeUp .25s ease;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
-.q-meta{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
-.q-num{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:2px;}
-.q-source-tag{font-size:9px;padding:2px 7px;border-radius:3px;font-weight:700;letter-spacing:.5px;}
-.q-text{font-size:15px;line-height:1.75;font-weight:500;margin-bottom:20px;}
-.opts{display:flex;flex-direction:column;gap:8px;}
-.opt{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-radius:8px;border:1px solid var(--border);cursor:pointer;transition:all .18s;background:var(--surface2);font-size:13px;line-height:1.55;}
-.opt:hover{border-color:var(--accent);background:rgba(76,141,255,.05);}
-.opt.sel{border-color:var(--accent);background:rgba(76,141,255,.1);}
-.opt.ok{border-color:var(--accent2);background:rgba(0,229,176,.08);}
-.opt.no{border-color:var(--warn);background:rgba(255,95,95,.08);}
-.opt-k{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;width:26px;height:26px;min-width:26px;display:flex;align-items:center;justify-content:center;border-radius:5px;background:var(--border);color:var(--text-dim);transition:all .18s;}
-.opt.sel .opt-k{background:var(--accent);color:#fff;}
-.opt.ok .opt-k{background:var(--accent2);color:#fff;}
-.opt.no .opt-k{background:var(--warn);color:#fff;}
-.exp-box{margin-top:14px;padding:14px;background:rgba(0,229,176,.04);border:1px solid rgba(0,229,176,.18);border-radius:8px;font-size:12px;line-height:1.7;color:var(--text-dim);display:none;}
-.exp-box.show{display:block;animation:fadeUp .2s ease;}
-.exp-box strong{color:var(--accent2);}
-.exam-nav{display:flex;align-items:center;justify-content:space-between;margin-top:20px;}
-.result-hero{text-align:center;padding:44px 28px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:20px;}
-.ring-wrap{width:130px;height:130px;margin:0 auto 20px;position:relative;}
-.ring-wrap svg{transform:rotate(-90deg);}
-.ring-bg{fill:none;stroke:var(--surface3);stroke-width:7;}
-.ring-fill{fill:none;stroke-width:7;stroke-linecap:round;transition:stroke-dashoffset 1.1s ease;}
-.ring-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
-.ring-num{font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:700;}
-.ring-sub{font-size:10px;color:var(--text-muted);}
-.result-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
-.rs{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;text-align:center;}
-.rs .v{font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:700;margin-bottom:3px;}
-.rs .l{font-size:11px;color:var(--text-muted);}
-.rev-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:10px;}
-.rev-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;margin-bottom:10px;}
-.rb-ok{background:rgba(0,229,176,.12);color:var(--accent2);}
-.rb-no{background:rgba(255,95,95,.12);color:var(--warn);}
-.study-tab-nav{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap;}
-.stab-btn{padding:7px 14px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--text-dim);transition:all .18s;font-family:inherit;}
-.stab-btn:hover{color:var(--text);border-color:var(--accent);}
-.stab-btn.active{background:rgba(76,141,255,.12);color:var(--accent);border-color:var(--accent);}
-.study-chapter{display:none;}
-.study-chapter.active{display:block;}
-.chapter-header{background:linear-gradient(135deg,rgba(76,141,255,.08),rgba(0,229,176,.05));border:1px solid var(--border2);border-radius:var(--r);padding:20px 22px;margin-bottom:18px;}
-.chapter-header h3{font-size:16px;font-weight:700;margin-bottom:4px;}
-.chapter-header p{font-size:13px;color:#b0c8e8;line-height:1.6;}
-.chapter-badge{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:2px;padding:2px 8px;border-radius:3px;margin-bottom:8px;}
-.cb-sci1{background:rgba(76,141,255,.12);color:var(--accent);}
-.cb-ref{background:rgba(0,229,176,.1);color:var(--accent2);}
-.study-section-title{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--text);margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border2);}
-.sst-icon{font-size:16px;}
-.sst-badge{font-family:'IBM Plex Mono',monospace;font-size:9px;padding:1px 6px;border-radius:3px;background:rgba(76,141,255,.1);color:var(--accent);}
-.kv-table{width:100%;border-collapse:collapse;margin-bottom:16px;font-size:13px;}
-.kv-table th{background:var(--surface2);color:#b0c8e8;font-weight:600;padding:8px 12px;text-align:left;font-size:11px;letter-spacing:.5px;border-bottom:2px solid var(--border2);}
-.kv-table td{padding:9px 12px;vertical-align:top;line-height:1.6;border-bottom:1px solid var(--border);color:#b0c8e8;}
-.kv-table tr:last-child td{border-bottom:none;}
-.kv-table tr:hover td{background:rgba(76,141,255,.03);}
-.kv-table .kv-key{font-weight:600;color:var(--text);white-space:nowrap;width:28%;min-width:120px;}
-.kv-table .kv-en{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted);display:block;margin-top:2px;}
-.kv-table .hot{color:var(--warn);font-size:10px;margin-left:4px;}
-.kv-table .note{background:rgba(0,229,176,.05);border-left:2px solid rgba(0,229,176,.3);padding:6px 10px;border-radius:0 4px 4px 0;margin-top:4px;font-size:11px;color:var(--accent2);}
-.cmp-table{width:100%;border-collapse:collapse;margin-bottom:16px;font-size:13px;}
-.cmp-table th{background:var(--surface2);color:#b0c8e8;font-weight:600;padding:8px 12px;text-align:center;font-size:11px;letter-spacing:.5px;border-bottom:2px solid var(--border2);}
-.cmp-table th:first-child{text-align:left;}
-.cmp-table td{padding:9px 12px;vertical-align:top;line-height:1.6;border-bottom:1px solid var(--border);color:#b0c8e8;text-align:center;}
-.cmp-table td:first-child{font-weight:600;color:var(--text);text-align:left;}
-.cmp-table tr:last-child td{border-bottom:none;}
-.cmp-table tr:hover td{background:rgba(76,141,255,.03);}
-.cmp-table .yes{color:var(--accent2);}
-.cmp-table .no{color:var(--warn);}
-.formula-box{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:12px 16px;margin-bottom:12px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--accent);text-align:center;}
-.formula-label{font-size:10px;color:var(--text-muted);font-family:'Noto Sans TC',sans-serif;margin-top:4px;text-align:center;}
-.src-ref{display:inline-flex;align-items:center;gap:4px;font-size:9px;padding:1px 6px;border-radius:3px;background:rgba(0,229,176,.1);color:var(--accent2);border:1px solid rgba(0,229,176,.2);vertical-align:middle;}
-.stag{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px;letter-spacing:.5px;}
-.stag-official{background:rgba(76,141,255,.15);color:#7ab4ff;border:1px solid rgba(76,141,255,.3);}
-.stag-mock{background:rgba(240,192,64,.14);color:#f0c040;border:1px solid rgba(240,192,64,.3);}
-.stag-sci1{background:rgba(76,141,255,.1);color:var(--accent);}
-.stag-sci2{background:rgba(0,229,176,.1);color:var(--accent2);}
-.stag-both{background:rgba(160,120,255,.1);color:#b08fff;border:1px solid rgba(160,120,255,.25);}
-.stag-115{background:rgba(255,165,0,.12);color:#ffaa33;border:1px solid rgba(255,165,0,.3);}
-.scard-official{border-left:3px solid var(--accent);}
-.scard-mock{border-left:3px solid var(--gold);}
-.legend{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--text-dim);padding:4px 10px;border-radius:5px;background:var(--surface2);border:1px solid var(--border);}
-.legend-dot{width:8px;height:8px;border-radius:50%;display:inline-block;}
-.hbg{display:none;position:fixed;top:14px;left:14px;z-index:200;background:var(--surface);border:1px solid var(--border);border-radius:7px;width:38px;height:38px;align-items:center;justify-content:center;cursor:pointer;font-size:16px;}
-#overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:90;}
-#overlay.show{display:block;}
-@media(max-width:768px){
-  #sidebar{transform:translateX(-100%);}
-  #sidebar.open{transform:none;}
-  #main{margin-left:0;}
-  #content{padding:14px;}
-  .grid2{grid-template-columns:1fr;}
-  .hbg{display:flex;}
-  .result-stats{grid-template-columns:1fr 1fr;}
-  #topbar{padding:0 14px 0 56px;}
+
+/* ── AITerms 淺色奶油暖白主題 (Light Cream Theme) ── */
+[data-theme="light"], html[data-theme="light"], body[data-theme="light"] {
+  --bg: #faf9f5 !important;
+  --surface: #ffffff !important;
+  --surface2: #f4f1ea !important;
+  --surface3: #e9e5db !important;
+  --surface4: #dedad0 !important;
+  
+  --border: #dedcd1 !important;
+  --border2: #cfcbbe !important;
+  --border-soft: rgba(20, 20, 19, 0.08) !important;
+
+  --accent: #d97757 !important;
+  --accent-hover: #c4623f !important;
+  --accent-soft: rgba(217, 119, 87, 0.12) !important;
+  --accent-border: rgba(217, 119, 87, 0.32) !important;
+
+  --accent2: #45657f !important;
+  --accent2-bright: #2d4f6a !important;
+  --accent2-soft: rgba(69, 101, 127, 0.12) !important;
+
+  --warn: #dc2626 !important;
+  --warn-soft: rgba(220, 38, 38, 0.1) !important;
+
+  --gold: #d97706 !important;
+  --gold-soft: rgba(217, 119, 6, 0.12) !important;
+
+  --green: #16a34a !important;
+  --green-soft: rgba(22, 163, 74, 0.12) !important;
+
+  --text: #141413 !important;
+  --text-dim: #5c5850 !important;
+  --text-muted: #8c867a !important;
+
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06) !important;
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.09) !important;
+  --shadow-warm: 0 6px 20px rgba(217,119,87,0.18) !important;
 }
-@media print {
-  #sidebar, #topbar, .hbg, #overlay, .study-tab-nav { display: none !important; }
-  #app { display: block !important; }
-  #main { margin-left: 0 !important; width: 100% !important; }
-  #content { padding: 0 !important; max-width: none !important; }
-  .page { display: none !important; }
-  #page-study { display: block !important; }
-  .study-chapter { display: block !important; page-break-after: always; }
-  .kv-table, .cmp-table, .chapter-header, .study-section-title { page-break-inside: avoid; }
-  .study-section-title { page-break-after: avoid; }
-  body { background: white !important; color: black !important; }
-  .kv-table .kv-key, .cmp-table td:first-child, .study-section-title, .chapter-header h3 { color: black !important; }
-  .kv-table td, .cmp-table td, .chapter-header p, .kv-table th, .cmp-table th { color: #333 !important; }
-  .kv-table td, .cmp-table td { border-bottom: 1px solid #ccc !important; }
-  .kv-table th, .cmp-table th { background: #f0f0f0 !important; border-bottom: 2px solid #aaa !important; }
-  .chapter-header { border: 1px solid #ccc !important; }
-  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-  .btn-print { display: none !important; }
+
+[data-theme="light"] body {
+  background: var(--bg) !important;
+  color: var(--text) !important;
 }
-/* 回到頂端浮動按鈕 */
-#scroll-top-btn {
-  position: fixed;
-  bottom: 32px;
-  right: 32px;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: #4c8dff;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  font-size: 22px;
-  font-weight: 700;
-  display: flex;
+[data-theme="light"] #sidebar {
+  background: #f8f6f0 !important;
+  border-right-color: var(--border) !important;
+}
+[data-theme="light"] #topbar {
+  background: rgba(250, 249, 245, 0.94) !important;
+  border-bottom-color: var(--border) !important;
+}
+[data-theme="light"] .card,
+[data-theme="light"] .q-card,
+[data-theme="light"] .source-card,
+[data-theme="light"] .level-compare-card,
+[data-theme="light"] .step-card,
+[data-theme="light"] .faq-item,
+[data-theme="light"] .modal-card,
+[data-theme="light"] .exam-hd {
+  background: #ffffff !important;
+  border-color: var(--border) !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04) !important;
+}
+[data-theme="light"] .subj-item,
+[data-theme="light"] .opt,
+[data-theme="light"] .stat-box,
+[data-theme="light"] .fb-input,
+[data-theme="light"] .fb-select,
+[data-theme="light"] .fb-textarea,
+[data-theme="light"] .btn-ghost,
+[data-theme="light"] .btn-hero-s {
+  background: var(--surface2) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+}
+[data-theme="light"] .level-table th,
+[data-theme="light"] .kv-table th {
+  background: var(--surface2) !important;
+  color: var(--text) !important;
+  border-bottom-color: var(--border2) !important;
+}
+[data-theme="light"] .hero {
+  background: linear-gradient(145deg, rgba(217, 119, 87, 0.08) 0%, rgba(69, 101, 127, 0.05) 100%), #ffffff !important;
+  border-color: var(--border) !important;
+}
+[data-theme="light"] .hero::after {
+  background: radial-gradient(circle, rgba(217, 119, 87, 0.12), transparent 70%) !important;
+}
+[data-theme="light"] .chapter-header {
+  background: linear-gradient(135deg, rgba(217, 119, 87, 0.06), rgba(69, 101, 127, 0.04)), #ffffff !important;
+}
+[data-theme="light"] .opt:hover {
+  background: rgba(217, 119, 87, 0.04) !important;
+}
+[data-theme="light"] .modal-overlay {
+  background: rgba(20, 20, 19, 0.5) !important;
+}
+[data-theme="light"] .sidebar-stats {
+  background: rgba(0,0,0,0.025) !important;
+}
+
+/* ── Segmented Switcher 開關樣式（純圖示） ── */
+.theme-switch-group {
+  display: inline-flex;
+  align-items: center;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--pill);
+  padding: 3px;
+  gap: 2px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+.theme-opt {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
-  box-shadow: 0 4px 20px rgba(76,141,255,.5);
+  width: 32px;
+  height: 28px;
+  border-radius: var(--pill);
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all .18s ease;
+  font-family: inherit;
+  font-size: 13.5px;
   line-height: 1;
   padding: 0;
-  transition: background .2s, transform .2s, box-shadow .2s;
+}
+.theme-opt:hover {
+  color: var(--text);
+  background: var(--surface3);
+}
+.theme-opt.active {
+  background: var(--accent) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(217, 119, 87, 0.35);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border2); }
+
+#app { display: flex; min-height: 100vh; }
+
+/* ── 側邊欄 Sidebar ── */
+#sidebar {
+  width: 240px; min-width: 240px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  position: fixed; top: 0; left: 0; height: 100vh;
+  z-index: 100;
+  transition: transform .28s cubic-bezier(.4, 0, .2, 1);
+}
+
+.logo {
+  padding: 22px 18px 18px;
+  border-bottom: 1px solid var(--border);
+}
+.logo-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--pill);
+  padding: 3px 10px;
+  letter-spacing: 1.5px;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+.logo h1 {
+  font-size: 14px; font-weight: 700; line-height: 1.45;
+  color: var(--text);
+}
+.logo h1 em {
+  color: var(--accent);
+  font-style: normal;
+}
+
+nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
+.nav-section { margin-bottom: 22px; }
+.nav-label {
+  font-size: 10px; font-weight: 700; color: var(--text-muted);
+  letter-spacing: 2px; text-transform: uppercase;
+  padding: 0 8px 8px;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: 10px;
+  cursor: pointer; font-size: 13px; font-weight: 500;
+  color: var(--text-dim);
+  transition: all .18s ease;
+  margin-bottom: 2px;
+  border: 1px solid transparent;
+}
+.nav-item:hover {
+  background: var(--surface2);
+  color: var(--text);
+}
+.nav-item.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: var(--accent-border);
+  font-weight: 600;
+}
+.nav-icon { font-size: 15px; width: 18px; text-align: center; }
+.nav-badge {
+  margin-left: auto; font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; font-weight: 600;
+  background: var(--accent2-soft);
+  color: var(--accent2-bright);
+  border: 1px solid rgba(93, 122, 146, 0.35);
+  border-radius: var(--pill);
+  padding: 1px 7px;
+}
+
+.sidebar-stats {
+  padding: 14px;
+  border-top: 1px solid var(--border);
+  background: rgba(0,0,0,.15);
+}
+.stats-row { display: flex; gap: 6px; }
+.stat-box {
+  flex: 1; background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px; padding: 9px 8px;
+  text-align: center;
+}
+.stat-box .v {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 16px; font-weight: 700; color: var(--accent);
+}
+.stat-box .l { font-size: 9px; color: var(--text-muted); margin-top: 2px; }
+
+/* ── 主要工作區 Main ── */
+#main {
+  margin-left: 240px; flex: 1;
+  display: flex; flex-direction: column;
+  min-height: 100vh;
+}
+
+#topbar {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(16, 16, 15, 0.85);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px; height: 58px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.page-title { font-size: 14px; font-weight: 700; color: var(--text); }
+.page-title span {
+  color: var(--text-dim); font-weight: 400;
+  margin-left: 10px; font-size: 12px;
+}
+.top-btns { display: flex; gap: 8px; align-items: center; }
+
+/* ── 通用按鈕 ── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 8px 16px; border-radius: var(--pill);
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  border: none; transition: all .18s ease;
+  font-family: inherit;
+}
+.btn-ghost {
+  background: var(--surface2); color: var(--text-dim);
+  border: 1px solid var(--border2);
+}
+.btn-ghost:hover {
+  background: var(--surface3); color: var(--text);
+  border-color: var(--accent-border);
+}
+.btn-primary {
+  background: var(--accent); color: #ffffff;
+  box-shadow: 0 2px 10px rgba(217, 119, 87, 0.3);
+}
+.btn-primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(217, 119, 87, 0.45);
+}
+.btn-sm { padding: 5px 12px; font-size: 11px; }
+
+#content { flex: 1; padding: 32px; max-width: 960px; margin: 0 auto; width: 100%; }
+.page { display: none; }
+.page.active { display: block; }
+
+/* ── Hero 區塊（AITerms 頂級大卡片風） ── */
+.hero {
+  border-radius: var(--r);
+  padding: 36px 32px;
+  margin-bottom: 28px;
+  background: linear-gradient(145deg, rgba(217, 119, 87, 0.09) 0%, rgba(93, 122, 146, 0.06) 100%), var(--surface);
+  border: 1px solid var(--border2);
+  position: relative; overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.hero::after {
+  content: ''; position: absolute; top: -60px; right: -60px;
+  width: 240px; height: 240px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(217, 119, 87, 0.12), transparent 70%);
+  pointer-events: none;
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 700;
+  color: var(--accent); background: var(--accent-soft);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--pill); padding: 4px 12px;
+  margin-bottom: 14px;
+}
+.hero h2 {
+  font-size: 26px; font-weight: 700; line-height: 1.35;
+  margin-bottom: 12px; color: var(--text);
+}
+.hero h2 em {
+  color: var(--accent); font-style: normal;
+  border-bottom: 2px solid rgba(217, 119, 87, 0.4);
+  padding-bottom: 2px;
+}
+.hero p {
+  color: var(--text-dim); font-size: 13.5px;
+  line-height: 1.75; max-width: 680px;
+}
+.hero-actions {
+  display: flex; gap: 10px; margin-top: 24px; flex-wrap: wrap;
+}
+.btn-hero {
+  padding: 10px 22px; border-radius: var(--pill);
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  border: none; font-family: inherit; transition: all .2s ease;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-hero-p {
+  background: var(--accent); color: #ffffff;
+  box-shadow: 0 4px 16px rgba(217, 119, 87, 0.35);
+}
+.btn-hero-p:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 22px rgba(217, 119, 87, 0.5);
+}
+.btn-hero-s {
+  background: var(--surface2); color: var(--text);
+  border: 1px solid var(--border2);
+}
+.btn-hero-s:hover {
+  background: var(--surface3); border-color: var(--accent-border);
+}
+.btn-hero-outline {
+  background: transparent; color: var(--accent2-bright);
+  border: 1px solid rgba(93, 122, 146, 0.4);
+}
+.btn-hero-outline:hover {
+  background: var(--accent2-soft); color: var(--text);
+}
+
+/* ── AITerms 資訊增補板塊樣式 ── */
+.info-section {
+  margin-bottom: 28px;
+}
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.section-title {
+  font-size: 15px; font-weight: 700; color: var(--text);
+  display: flex; align-items: center; gap: 8px;
+}
+.section-desc {
+  font-size: 12px; color: var(--text-dim); margin-top: 2px;
+}
+
+/* 備考4步卡片格線 */
+.steps-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 12px; margin-bottom: 24px;
+}
+.step-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 18px 16px;
+  position: relative; transition: all .2s ease;
+}
+.step-card:hover {
+  border-color: var(--accent-border);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+.step-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; font-weight: 700;
+  color: var(--accent); background: var(--accent-soft);
+  border-radius: var(--pill); padding: 2px 8px;
+  display: inline-block; margin-bottom: 10px;
+}
+.step-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+.step-text { font-size: 11.5px; color: var(--text-dim); line-height: 1.6; }
+
+/* 初級 vs 中級 對照表格卡片 */
+.level-compare-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 20px; margin-bottom: 26px;
+}
+.level-table {
+  width: 100%; border-collapse: collapse; font-size: 12.5px;
+  margin-top: 10px;
+}
+.level-table th {
+  background: var(--surface2); color: var(--text);
+  font-weight: 700; padding: 10px 14px; text-align: left;
+  border-bottom: 2px solid var(--border2);
+}
+.level-table td {
+  padding: 11px 14px; vertical-align: top; line-height: 1.6;
+  border-bottom: 1px solid var(--border); color: var(--text-dim);
+}
+.level-table tr:hover td { background: rgba(255,255,255,0.02); }
+.level-table .td-feat { font-weight: 600; color: var(--text); width: 18%; }
+.level-table .td-l1 { width: 41%; color: var(--text); }
+.level-table .td-l2 { width: 41%; color: var(--text); }
+
+/* 常見問題 FAQ 手風琴 */
+.faq-grid {
+  display: flex; flex-direction: column; gap: 10px;
+  margin-bottom: 26px;
+}
+.faq-item {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; overflow: hidden; transition: all .2s;
+}
+.faq-item:hover { border-color: var(--border2); }
+.faq-q {
+  padding: 14px 18px; font-size: 13.5px; font-weight: 600;
+  cursor: pointer; display: flex; align-items: center; justify-content: space-between;
+  color: var(--text); user-select: none;
+}
+.faq-q::after { content: '+'; font-size: 16px; color: var(--accent); transition: transform .2s; }
+.faq-item.open .faq-q::after { content: '−'; }
+.faq-a {
+  padding: 0 18px 14px; font-size: 12.5px; color: var(--text-dim);
+  line-height: 1.7; display: none; border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+.faq-item.open .faq-a { display: block; }
+
+/* ── 題庫卡片與格線 ── */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 26px; }
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 20px;
+  transition: all .2s cubic-bezier(.16, 1, .3, 1);
+}
+.card-hd {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.card-title {
+  font-size: 11px; font-weight: 700; color: var(--text-dim);
+  letter-spacing: .8px; text-transform: uppercase;
+}
+
+.subj-list { display: flex; flex-direction: column; gap: 7px; }
+.subj-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 11px 14px; background: var(--surface2);
+  border-radius: 10px; cursor: pointer;
+  border: 1px solid var(--border);
+  transition: all .18s ease;
+}
+.subj-item:hover {
+  border-color: var(--accent-border);
+  background: var(--surface3);
+  transform: translateX(2px);
+}
+.subj-name { font-size: 13px; font-weight: 600; color: var(--text); }
+.subj-cnt {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; color: var(--text-muted); margin-top: 3px;
+}
+
+/* 膠囊標籤 */
+.tag {
+  font-size: 9.5px; padding: 2px 8px; border-radius: var(--pill);
+  font-weight: 700; letter-spacing: .3px;
+}
+.t1 { background: rgba(217, 119, 87, 0.15); color: var(--accent); }
+.t2 { background: rgba(93, 122, 146, 0.2); color: var(--accent2-bright); }
+.tg { background: rgba(245, 158, 11, 0.14); color: var(--gold); }
+
+.stag {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 9.5px; font-weight: 700; padding: 2px 8px;
+  border-radius: var(--pill); letter-spacing: .3px;
+}
+.stag-official {
+  background: rgba(93, 122, 146, 0.18); color: #94b5cd;
+  border: 1px solid rgba(93, 122, 146, 0.35);
+}
+.stag-mock {
+  background: rgba(245, 158, 11, 0.14); color: var(--gold);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+.stag-sci1 { background: var(--accent-soft); color: var(--accent); }
+.stag-sci2 { background: var(--accent2-soft); color: var(--accent2-bright); }
+.stag-both {
+  background: rgba(160, 120, 255, .12); color: #c4a7ff;
+  border: 1px solid rgba(160, 120, 255, .3);
+}
+.stag-115 {
+  background: rgba(217, 119, 87, 0.16); color: #f09575;
+  border: 1px solid rgba(217, 119, 87, 0.35);
+}
+
+/* ── 考試作答介面 ── */
+.exam-hd {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 16px 22px; margin-bottom: 20px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.exam-meta { display: flex; align-items: center; gap: 18px; }
+.em-item { text-align: center; }
+.em-v {
+  font-family: 'IBM Plex Mono', monospace; font-size: 20px; font-weight: 700;
+}
+.em-v.a { color: var(--accent); }
+.em-l { font-size: 10px; color: var(--text-muted); margin-top: 1px; }
+.em-sep { width: 1px; height: 34px; background: var(--border); }
+#timer {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 19px; font-weight: 700; color: var(--accent);
+}
+#timer.urgent { color: var(--warn); animation: pulse 1s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
+
+.q-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 26px; margin-bottom: 16px;
+  box-shadow: var(--shadow-sm); animation: fadeUp .22s ease;
+}
+@keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.q-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.q-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; font-weight: 700; color: var(--accent);
+  letter-spacing: 1.5px;
+}
+.q-source-tag {
+  font-size: 10px; padding: 2px 8px; border-radius: var(--pill);
+  font-weight: 700;
+}
+.q-text {
+  font-size: 15.5px; line-height: 1.8; font-weight: 500;
+  margin-bottom: 22px; color: var(--text);
+}
+.opts { display: flex; flex-direction: column; gap: 9px; }
+.opt {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 13px 16px; border-radius: 10px;
+  border: 1px solid var(--border); cursor: pointer;
+  transition: all .16s ease; background: var(--surface2);
+  font-size: 13.5px; line-height: 1.6; color: var(--text);
+}
+.opt:hover {
+  border-color: var(--accent-border);
+  background: rgba(217, 119, 87, 0.05);
+}
+.opt.sel {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.opt.ok {
+  border-color: var(--green);
+  background: var(--green-soft);
+}
+.opt.no {
+  border-color: var(--warn);
+  background: var(--warn-soft);
+}
+.opt-k {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11.5px; font-weight: 700; width: 28px; height: 28px; min-width: 28px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 6px; background: var(--surface3); color: var(--text-dim);
+  transition: all .16s ease;
+}
+.opt.sel .opt-k { background: var(--accent); color: #fff; }
+.opt.ok .opt-k { background: var(--green); color: #fff; }
+.opt.no .opt-k { background: var(--warn); color: #fff; }
+
+/* 題目解析盒子（AITerms 深度結構化風格） */
+.exp-box {
+  margin-top: 16px; padding: 16px 18px;
+  background: rgba(34, 197, 94, 0.05);
+  border: 1px solid rgba(34, 197, 94, 0.22);
+  border-radius: 10px; font-size: 12.5px; line-height: 1.75;
+  color: var(--text); display: none;
+}
+.exp-box.show { display: block; animation: fadeUp .2s ease; }
+.exp-box strong { color: #4ade80; font-weight: 600; }
+
+.exam-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 22px;
+}
+
+/* ── 資源庫與表格 ── */
+.source-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px; margin-bottom: 26px;
+}
+.source-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 18px;
+  display: flex; flex-direction: column; gap: 12px;
+  transition: all .2s;
+}
+.source-card:hover {
+  border-color: var(--border2);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+.source-card-top { display: flex; align-items: flex-start; gap: 12px; }
+.source-icon {
+  width: 40px; height: 40px; min-width: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+}
+.si-pdf { background: rgba(239, 68, 68, 0.12); }
+.si-q { background: var(--accent-soft); }
+.si-ref { background: var(--accent2-soft); }
+.source-info { flex: 1; min-width: 0; }
+.source-name { font-size: 13.5px; font-weight: 600; line-height: 1.45; }
+.source-meta { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+.source-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.source-tag { font-size: 10px; padding: 2px 8px; border-radius: var(--pill); font-weight: 600; }
+.source-btn {
+  font-size: 11.5px; padding: 7px 12px; border-radius: 8px;
+  cursor: pointer; border: none; font-family: inherit;
+  background: var(--surface2); color: var(--text-dim);
+  border: 1px solid var(--border); transition: all .15s; text-align: center;
+  font-weight: 500;
+}
+.source-btn:hover { color: var(--accent); border-color: var(--accent-border); }
+
+/* ── 考試重點樣式 ── */
+.study-tab-nav { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
+.stab-btn {
+  padding: 8px 16px; border-radius: var(--pill);
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  border: 1px solid var(--border); background: var(--surface2);
+  color: var(--text-dim); transition: all .18s; font-family: inherit;
+}
+.stab-btn:hover { color: var(--text); border-color: var(--accent-border); }
+.stab-btn.active {
+  background: var(--accent-soft); color: var(--accent);
+  border-color: var(--accent); font-weight: 700;
+}
+.study-chapter { display: none; }
+.study-chapter.active { display: block; }
+
+.chapter-header {
+  background: linear-gradient(135deg, rgba(217, 119, 87, 0.08), rgba(93, 122, 146, 0.05)), var(--surface);
+  border: 1px solid var(--border2); border-radius: var(--r);
+  padding: 22px 24px; margin-bottom: 20px;
+}
+.chapter-header h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+.chapter-header p { font-size: 13px; color: var(--text-dim); line-height: 1.65; }
+
+.study-section-title {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13.5px; font-weight: 700; color: var(--text);
+  margin: 22px 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border2);
+}
+
+.kv-table { width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 13px; }
+.kv-table th {
+  background: var(--surface2); color: var(--text-dim);
+  font-weight: 600; padding: 10px 14px; text-align: left;
+  font-size: 11px; letter-spacing: .5px; border-bottom: 2px solid var(--border2);
+}
+.kv-table td {
+  padding: 10px 14px; vertical-align: top; line-height: 1.65;
+  border-bottom: 1px solid var(--border); color: var(--text-dim);
+}
+.kv-table tr:hover td { background: rgba(255,255,255,0.02); }
+.kv-table .kv-key { font-weight: 600; color: var(--text); white-space: nowrap; width: 28%; min-width: 120px; }
+
+/* ── 響應式佈局 ── */
+.hbg {
+  display: none; position: fixed; top: 14px; left: 14px; z-index: 200;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; width: 38px; height: 38px;
+  align-items: center; justify-content: center; cursor: pointer; font-size: 16px;
+  color: var(--text);
+}
+#overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 90;
+  backdrop-filter: blur(4px);
+}
+#overlay.show { display: block; }
+
+@media(max-width: 860px) {
+  .steps-grid { grid-template-columns: 1fr 1fr; }
+}
+@media(max-width: 768px) {
+  #sidebar { transform: translateX(-100%); }
+  #sidebar.open { transform: none; }
+  #main { margin-left: 0; }
+  #content { padding: 16px; }
+  .grid2 { grid-template-columns: 1fr; }
+  .steps-grid { grid-template-columns: 1fr; }
+  .hbg { display: flex; }
+  #topbar { padding: 0 16px 0 60px; }
+  .level-table th, .level-table td { padding: 8px; font-size: 11px; }
+}
+
+/* 回到頂端浮動按鈕 */
+#scroll-top-btn {
+  position: fixed; bottom: 32px; right: 32px;
+  width: 46px; height: 46px; border-radius: 50%;
+  background: var(--accent); color: #fff; border: none;
+  cursor: pointer; font-size: 20px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9999; box-shadow: var(--shadow-warm);
+  transition: all .2s;
 }
 #scroll-top-btn:hover {
-  background: #6aa3ff;
-  transform: translateY(-3px);
-  box-shadow: 0 6px 24px rgba(76,141,255,.65);
+  background: var(--accent-hover); transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(217, 119, 87, 0.45);
 }
-@media print { #scroll-top-btn { display: none !important; } }
 
-/* ── 不蒜子與留言回饋樣式 ── */
-.feedback-fab{
-  position:fixed;bottom:24px;right:75px;z-index:990;
-  background:linear-gradient(135deg,rgba(76,141,255,.9),rgba(0,229,176,.85));
-  color:#fff;border:none;border-radius:30px;padding:9px 18px;font-size:12px;font-weight:700;
-  display:flex;align-items:center;gap:7px;box-shadow:0 6px 20px rgba(0,229,176,.25);
-  cursor:pointer;transition:all .22s cubic-bezier(.175,.885,.32,1.275);backdrop-filter:blur(10px);
-  font-family:inherit;
+/* 留言回饋按鈕 */
+.feedback-fab {
+  position: fixed; bottom: 26px; right: 88px; z-index: 990;
+  background: var(--surface2); color: var(--text);
+  border: 1px solid var(--border2); border-radius: var(--pill);
+  padding: 9px 18px; font-size: 12px; font-weight: 600;
+  display: flex; align-items: center; gap: 7px;
+  box-shadow: var(--shadow-sm); cursor: pointer;
+  transition: all .2s cubic-bezier(.175, .885, .32, 1.275);
+  backdrop-filter: blur(10px); font-family: inherit;
 }
-.feedback-fab:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 10px 25px rgba(76,141,255,.35);}
-.modal-overlay{
-  position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(7,9,15,.75);
-  backdrop-filter:blur(8px);z-index:1000;display:none;align-items:center;justify-content:center;
-  padding:20px;
+.feedback-fab:hover {
+  background: var(--surface3); border-color: var(--accent-border);
+  color: var(--accent); transform: translateY(-2px);
 }
-.modal-overlay.active{display:flex;animation:fadeUp .2s ease;}
-.modal-card{
-  background:var(--surface);border:1px solid var(--border2);border-radius:14px;
-  width:100%;max-width:520px;padding:26px;box-shadow:0 20px 40px rgba(0,0,0,.6);position:relative;
-}
-.fb-group{margin-bottom:14px;text-align:left;}
-.fb-group label{display:block;font-size:11px;font-weight:600;color:var(--text-dim);margin-bottom:5px;letter-spacing:.3px;}
-.fb-input,.fb-select,.fb-textarea{
-  width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;
-  padding:10px 12px;color:var(--text);font-size:13px;font-family:inherit;outline:none;
-  transition:border-color .18s;
-}
-.fb-input:focus,.fb-select:focus,.fb-textarea:focus{border-color:var(--accent);}
-.fb-actions{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap;}
-.giscus-wrap{
-  background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
-  padding:24px;margin-top:20px;
-}
-.fb-method-card{
-  background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:18px;
-  transition:all .2s;flex:1;min-width:260px;
-}
-.fb-method-card:hover{border-color:var(--accent);}
 
+.modal-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(16, 16, 15, 0.85); backdrop-filter: blur(10px);
+  z-index: 1000; display: none; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.active { display: flex; animation: fadeUp .2s ease; }
+.modal-card {
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: var(--r); width: 100%; max-width: 520px;
+  padding: 28px; box-shadow: 0 25px 50px rgba(0,0,0,.7); position: relative;
+}
+.fb-group { margin-bottom: 14px; text-align: left; }
+.fb-group label {
+  display: block; font-size: 11px; font-weight: 600;
+  color: var(--text-dim); margin-bottom: 6px;
+}
+.fb-input, .fb-select, .fb-textarea {
+  width: 100%; background: var(--surface2);
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 12px; color: var(--text); font-size: 13px;
+  font-family: inherit; outline: none; transition: border-color .18s;
+}
+.fb-input:focus, .fb-select:focus, .fb-textarea:focus {
+  border-color: var(--accent);
+}
+.fb-actions { display: flex; gap: 8px; margin-top: 18px; flex-wrap: wrap; }
+
+/* ── AITerms 淺色奶油暖白主題 (Light Cream Theme) ── */
+[data-theme="light"] {
+  --bg: #faf9f5;
+  --surface: #ffffff;
+  --surface2: #f4f1ea;
+  --surface3: #e9e5db;
+  --surface4: #dedad0;
+  
+  --border: #dedcd1;
+  --border2: #cfcbbe;
+  --border-soft: rgba(20, 20, 19, 0.08);
+
+  --accent: #d97757;
+  --accent-hover: #c4623f;
+  --accent-soft: rgba(217, 119, 87, 0.12);
+  --accent-border: rgba(217, 119, 87, 0.32);
+
+  --accent2: #45657f;
+  --accent2-bright: #2d4f6a;
+  --accent2-soft: rgba(69, 101, 127, 0.12);
+
+  --warn: #dc2626;
+  --warn-soft: rgba(220, 38, 38, 0.1);
+
+  --gold: #d97706;
+  --gold-soft: rgba(217, 119, 6, 0.12);
+
+  --green: #16a34a;
+  --green-soft: rgba(22, 163, 74, 0.12);
+
+  --text: #141413;
+  --text-dim: #5c5850;
+  --text-muted: #8c867a;
+
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.09);
+  --shadow-warm: 0 6px 20px rgba(217,119,87,0.18);
+}
+
+[data-theme="light"] #topbar {
+  background: rgba(250, 249, 245, 0.9);
+}
+[data-theme="light"] .hero {
+  background: linear-gradient(145deg, rgba(217, 119, 87, 0.08) 0%, rgba(69, 101, 127, 0.05) 100%), #ffffff;
+}
+[data-theme="light"] .hero::after {
+  background: radial-gradient(circle, rgba(217, 119, 87, 0.1), transparent 70%);
+}
+[data-theme="light"] .chapter-header {
+  background: linear-gradient(135deg, rgba(217, 119, 87, 0.06), rgba(69, 101, 127, 0.04)), #ffffff;
+}
+[data-theme="light"] .opt:hover {
+  background: rgba(217, 119, 87, 0.04);
+}
+[data-theme="light"] .modal-overlay {
+  background: rgba(20, 20, 19, 0.5);
+}
+[data-theme="light"] .sidebar-stats {
+  background: rgba(0,0,0,0.025);
+}
+
+/* ── 左上角 Logo 與回首頁按鈕微互動 ── */
+.logo {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color .18s;
+}
+.logo:hover {
+  background: var(--surface2);
+}
+.logo:hover .logo-tag {
+  border-color: var(--accent);
+  box-shadow: 0 0 10px rgba(217, 119, 87, 0.25);
+}
+
+.btn-home {
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  border-radius: var(--pill);
+  padding: 6px 14px;
+  transition: all .2s;
+}
+.btn-home:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: var(--accent-border);
+  transform: translateY(-1px);
+}
+
+.btn-theme {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: var(--pill);
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  cursor: pointer;
+  transition: all .2s;
+}
+.btn-theme:hover {
+  background: var(--surface3);
+  border-color: var(--accent-border);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
 </style>
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </head>
@@ -294,8 +965,8 @@ nav{flex:1;padding:14px 10px;overflow-y:auto;}
 <div id="overlay" onclick="closeSB()"></div>
 <div id="app">
 <aside id="sidebar">
-  <div class="logo">
-    <div class="logo-tag">iPAS · 初級</div>
+  <div class="logo" onclick="goHome()" title="點擊回到首頁總覽">
+    <div class="logo-tag">iPAS · 115 最新評鑑</div>
     <h1>AI 應用規劃師<br><em>智慧練習系統</em></h1>
   </div>
   <nav>
@@ -311,7 +982,7 @@ nav{flex:1;padding:14px 10px;overflow-y:auto;}
       <div class="nav-item" onclick="gp('study',this)"><span class="nav-icon">📖</span>考試重點</div>
       <div class="nav-item" onclick="gp('sources',this)">
         <span class="nav-icon">📁</span>學習資源庫
-        <span class="nav-badge">8</span>
+        <span class="nav-badge">10</span>
       </div>
       <div class="nav-item" onclick="gp('feedback',this)"><span class="nav-icon">💬</span>留言回饋</div>
       <div class="nav-item" onclick="gp('settings',this)"><span class="nav-icon">⚙️</span>個人設定</div>
@@ -330,8 +1001,23 @@ nav{flex:1;padding:14px 10px;overflow-y:auto;}
 </aside>
 <main id="main">
   <div id="topbar">
-    <div class="page-title" id="ptitle">首頁總覽 <span>官方題庫200題 ＋ 模擬55題 ＋ 樣題50題</span></div>
+    <div style="display:flex;align-items:center;gap:12px;min-width:0;">
+      <!-- 左上角專用回首頁按鈕 -->
+      <button class="btn-home" onclick="goHome()" title="點擊立即回到首頁總覽">
+        <span>🏠</span><span>首頁</span>
+      </button>
+      <div class="page-title" id="ptitle">首頁總覽 <span>450道官方真題（114Q4＋115三次真題）＋ 樣題與模擬105題 · 全庫共555題</span></div>
+    </div>
     <div class="top-btns">
+      <!-- 色彩模式切換按鈕（純圖示） -->
+      <div class="theme-switch-group" id="theme-switch-group" title="切換色彩模式：深色 / 淺色">
+        <button type="button" class="theme-opt active" id="theme-btn-dark" onclick="setTheme('dark')" title="深色墨黑模式">
+          <span>🌙</span>
+        </button>
+        <button type="button" class="theme-opt" id="theme-btn-light" onclick="setTheme('light')" title="淺色暖白模式">
+          <span>☀️</span>
+        </button>
+      </div>
       <button class="btn btn-ghost btn-sm" onclick="gp('sources',null)">📁 資源庫</button>
       <button class="btn btn-primary btn-sm" onclick="startExam('random')">⚡ 快速練習</button>
     </div>
@@ -341,11 +1027,47 @@ nav{flex:1;padding:14px 10px;overflow-y:auto;}
     <!-- HOME -->
     <div id="page-home" class="page active">
       <div class="hero">
-        <h2>備考 <em>iPAS</em> · 官方真題精練</h2>
-        <p>收錄 114年第四梯次官方試題 100 題 ＋ 115年第一次官方試題（科目一 50 題 ＋ 科目二公告試題 50 題）<br>＋ 模擬題庫 55 題 ＋ 114年4月版考試樣題 50 題，共 <strong style="color:var(--accent2)">355 題</strong><br>科目一：人工智慧基礎概論 ✕ 科目二：生成式AI應用與規劃</p>
+        <div class="hero-tag">✨ 115年2月最新官方評鑑架構 · 450道真題完整收錄</div>
+        <h2>備考 <em>iPAS AI 應用規劃師</em> · 官方全真題庫精練</h2>
+        <p>完整收錄 <strong>114年第四梯次 ＋ 115年第一次、第二次、第三次</strong> 共 4 梯次 <strong>450 道官方真題</strong><br>
+        ＋ 官方樣題 50 題 ＋ 實戰模擬題 55 題，全庫共 <strong style="color:var(--accent);font-family:'IBM Plex Mono',monospace;font-size:16px;">555 題</strong> 逐題白話概念、選項辨析與延伸考點！<br>
+        <span style="opacity:.85;font-size:12.5px;">考科對應：科目一 人工智慧基礎概論（L11） ✕ 科目二 生成式 AI 應用與規劃（L12）</span></p>
         <div class="hero-actions">
           <button class="btn-hero btn-hero-p" onclick="startExam('full50')">🚀 模擬完整考試（各科50題）</button>
           <button class="btn-hero btn-hero-s" onclick="gp('study',null)">📖 先看考試重點</button>
+          <button class="btn-hero btn-hero-outline" onclick="document.getElementById('level-guide').scrollIntoView({behavior:'smooth'})">🧭 初級 vs 中級對照指南</button>
+        </div>
+      </div>
+
+      <!-- 💡 AITerms 核心增補模組 1：備考 4 步黃金法 -->
+      <div class="info-section">
+        <div class="section-header">
+          <div>
+            <div class="section-title"><span>🎯</span> 科學備考 4 步黃金法</div>
+            <div class="section-desc">照著高效節奏走，把時間花在投報率最高的核心考點上</div>
+          </div>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card">
+            <span class="step-num">STEP 01</span>
+            <div class="step-title">診斷測驗找弱項</div>
+            <div class="step-text">以 20 題快速摸底測驗快速定位個人知識盲區，找出薄弱科目，不再浪費時間重複刷已熟題目。</div>
+          </div>
+          <div class="step-card">
+            <span class="step-num">STEP 02</span>
+            <div class="step-title">查術語、抓高頻</div>
+            <div class="step-text">對齊官方 115 最新 L-code 16 大能力指標，掌握投報率最高的關鍵術語（RAG、RLHF、MCP、Guardrails）。</div>
+          </div>
+          <div class="step-card">
+            <span class="step-num">STEP 03</span>
+            <div class="step-title">多維度深層理解</div>
+            <div class="step-text">透過白話比喻、新舊技術對比、因果推論三重解析，徹底搞懂原理與技術邊界，告別死記硬背。</div>
+          </div>
+          <div class="step-card">
+            <span class="step-num">STEP 04</span>
+            <div class="step-title">真題驗證與模擬考</div>
+            <div class="step-text">歷屆 450 道官方真題全真驗證，搭配每個錯誤選項詳細原因與錯題專區，考前穩拿 70+ 及格！</div>
+          </div>
         </div>
       </div>
       <div class="grid2">
@@ -446,6 +1168,181 @@ nav{flex:1;padding:14px 10px;overflow-y:auto;}
               </div>
             </div>
 </div>
+      <!-- ⚖️ AITerms 核心增補模組 2：初級 vs 中級 考試等級完整對照指南 -->
+      <div id="level-guide" class="info-section">
+        <div class="section-header">
+          <div>
+            <div class="section-title"><span>⚖️</span> iPAS AI 應用規劃師：初級 vs 中級 完整對照指南</div>
+            <div class="section-desc">經濟部能力鑑定分為非技術與技術兩大體系，選擇最適合你的報考策略</div>
+          </div>
+        </div>
+        <div class="level-compare-card">
+          <table class="level-table">
+            <thead>
+              <tr>
+                <th class="td-feat">評鑑面向</th>
+                <th class="td-l1">初級（非技術／跨領域背景）</th>
+                <th class="td-l2">中級（技術／工程開發背景）</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="td-feat">適合對象</td>
+                <td class="td-l1">商管、行銷、營運、PM、設計、文法商各領域或 AI 應用初學者</td>
+                <td class="td-l2">資工、電機、資管背景、軟體工程師、AI/ML 開發者、數據分析師</td>
+              </tr>
+              <tr>
+                <td class="td-feat">程式能力要求</td>
+                <td class="td-l1"><strong style="color:var(--green)">不需程式能力</strong>，無程式碼題，著重觀念理解與業務應用規劃</td>
+                <td class="td-l2"><strong style="color:var(--accent)">需要程式閱讀能力</strong>，約含 25% Python 程式碼閱讀與演算法分析題</td>
+              </tr>
+              <tr>
+                <td class="td-feat">考試科目與題型</td>
+                <td class="td-l1">
+                  <strong>2 科目・各 50 題單選（共 100 題）</strong><br>
+                  • L11 人工智慧基礎概論<br>
+                  • L12 生成式 AI 應用與規劃
+                </td>
+                <td class="td-l2">
+                  <strong>3 科目・L21必考 ＋ L22/L23擇一（考2科）</strong><br>
+                  • L21 AI 技術應用與規劃（必考）<br>
+                  • L22 大數據處理分析 或 L23 機器學習技術（擇一）
+                </td>
+              </tr>
+              <tr>
+                <td class="td-feat">及格標準</td>
+                <td class="td-l1">
+                  • 同時報考：平均達 70 分且單科不低於 60 分<br>
+                  • 分開報考：各科皆需達 70 分（單科成績保留 3 年）
+                </td>
+                <td class="td-l2">
+                  • 報考兩科皆需達 70 分<br>
+                  • 單科成績保留 3 年，合格率約 25%~35%
+                </td>
+              </tr>
+              <tr>
+                <td class="td-feat">報名費用</td>
+                <td class="td-l1">NT$ 400 元 / 科（兩科共 NT$ 800）</td>
+                <td class="td-l2">NT$ 500 元 / 科（115-116年早鳥推廣優惠，原價 1,500 元）</td>
+              </tr>
+              <tr>
+                <td class="td-feat">證書效期</td>
+                <td class="td-l1"><strong style="color:var(--green)">永久有效</strong>，經濟部發證，免換證免展延</td>
+                <td class="td-l2"><strong>5 年有效</strong>，需透過在職持續學習或換證展延</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 📊 AITerms 核心增補模組 3：115 年最新評鑑架構（L-code）出題權重統計 -->
+      <div class="info-section">
+        <div class="section-header">
+          <div>
+            <div class="section-title"><span>📊</span> 115 最新 L-code 官方評鑑架構 · 出題比重趨勢</div>
+            <div class="section-desc">統計 114Q4 ＋ 115年三次真題（450題官方試題）之重點出題領域傾向</div>
+          </div>
+        </div>
+        <div class="card" style="padding:18px 22px;margin-bottom:26px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+            <div>
+              <div style="font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:10px;">📌 科目一：L11 人工智慧基礎概論（115年出題比重）</div>
+              <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;">
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:3px;color:var(--text-dim);"><span>機器學習與深度學習核心原理 (CNN/RNN/Transformer)</span><span style="font-family:'IBM Plex Mono',monospace;color:var(--text);font-weight:600;">28%</span></div>
+                  <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;"><div style="width:28%;height:100%;background:var(--accent);"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:3px;color:var(--text-dim);"><span>資料處理、特徵工程與偏誤防範 (SMOTE/Scaling/Leakage)</span><span style="font-family:'IBM Plex Mono',monospace;color:var(--text);font-weight:600;">24%</span></div>
+                  <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;"><div style="width:24%;height:100%;background:var(--accent);"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:3px;color:var(--text-dim);"><span>模型評估指標與驗證 (F1-score/Recall/ROC-AUC)</span><span style="font-family:'IBM Plex Mono',monospace;color:var(--text);font-weight:600;">20%</span></div>
+                  <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;"><div style="width:20%;height:100%;background:var(--accent);"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:3px;color:var(--text-dim);"><span>可解釋 AI（SHAP/LIME/反事實解釋）與推論部署</span><span style="font-family:'IBM Plex Mono',monospace;color:var(--text);font-weight:600;">16%</span></div>
+                  <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;"><div style="width:16%;height:100%;background:var(--accent);"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:3px;color:var(--text-dim);"><span>AI 倫理治理、個資保護與合規標準</span><span style="font-family:'IBM Plex Mono',monospace;color:var(--text);font-weight:600;">12%</span></div>
+                  <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;"><div style="width:12%;height:100%;background:var(--accent);"></div></div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:12.5px;font-weight:700;color:var(--accent2-bright);margin-bottom:10px;">✨ 科目二：L12 生成式 AI 應用與規劃（115年出題比重）</div>
+              <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;">
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:3px;color:var(--text-dim);"><span>RAG 檢索增強生成架構（Chunking/增量索引/向量檢索）</span><span style="font-family:'IBM Plex Mono',monospace;color:var(--text);font-weight:600;">26%</span></div>
+                  <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;"><div style="width:26%;height:100%;background:var(--accent2-bright);"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:3px;color:var(--text-dim);"><span>提示工程設計（CoT/ToT/上下文工程/少樣本）</span><span style="font-family:'IBM Plex Mono',monospace;color:var(--text);font-weight:600;">22%</span></div>
+                  <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;"><div style="width:22%;height:100%;background:var(--accent2-bright);"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:3px;color:var(--text-dim);"><span>Agent 多代理系統、MCP協議與工作流程自動化</span><span style="font-family:'IBM Plex Mono',monospace;color:var(--text);font-weight:600;">20%</span></div>
+                  <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;"><div style="width:20%;height:100%;background:var(--accent2-bright);"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:3px;color:var(--text-dim);"><span>模型微調、知識蒸餾（KD）與量化壓縮</span><span style="font-family:'IBM Plex Mono',monospace;color:var(--text);font-weight:600;">18%</span></div>
+                  <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;"><div style="width:18%;height:100%;background:var(--accent2-bright);"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:3px;color:var(--text-dim);"><span>安全性防護（Guardrails/提示注入防禦/MMLU評測）</span><span style="font-family:'IBM Plex Mono',monospace;color:var(--text);font-weight:600;">14%</span></div>
+                  <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;"><div style="width:14%;height:100%;background:var(--accent2-bright);"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 🧭 AITerms 核心增補模組 4：考前叮嚀與常見 FAQ -->
+      <div class="info-section">
+        <div class="section-header">
+          <div>
+            <div class="section-title"><span>🧭</span> 考前必讀須知與常態 FAQ（高頻精選問答）</div>
+            <div class="section-desc">彙整官方考場規範與歷屆考生實戰上榜經驗</div>
+          </div>
+        </div>
+        <div class="faq-grid">
+          <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-q">Q1. 考試當天必須攜帶哪些物品？有計算機規定嗎？</div>
+            <div class="faq-a">
+              <strong>必帶證件：</strong>具照片之身分證、駕照或護照正本（健保卡需有照片），以及准考證列印紙本。<br>
+              <strong>文具配備：</strong>2B 鉛筆（劃卡用）、黑色或藍色原子筆、橡皮擦。<br>
+              <strong>計算機規定：</strong>初級考試若准考證未特別註明，原則上不需也不得使用計算機；試題中之統計與計算（如 F1-score、混淆矩陣）均為簡易整數比值運算。<br>
+              <strong>電子設備：</strong>手機、智慧手錶一律強制關機並置於考場臨時置物區，發出聲響視同違規。
+            </div>
+          </div>
+          <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-q">Q2. 初級通過率大約是多少？非技術背景真的能考過嗎？</div>
+            <div class="faq-a">
+              官方統計初級通過率約在 <strong>38% ~ 57%</strong> 之間。所有題目均為四選一單選題，<strong>答錯不倒扣</strong>。<br>
+              初級重點完全在於「概念理解與應用邏輯」，沒有任何程式碼撰寫題。文組、商管、設計背景考生，只要按本系統刷完 450 道官方真題並詳讀解析，通常 2~4 週即可順利通過。
+            </div>
+          </div>
+          <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-q">Q3. 考試時間如何分配？有什麼臨場應試技巧？</div>
+            <div class="faq-a">
+              每科考試時間為 <strong>80 分鐘，共 50 題</strong>，平均每題約有 1.6 分鐘。<br>
+              <strong>技巧一【先易後難】：</strong>一眼能確定答案的觀念題（如名詞定義）立即作答；計算題或長情境題目先做記號留待第二輪。<br>
+              <strong>技巧二【小心否定題】：</strong>題目常出現「何者『非』屬」、「何者『不正確』」，務必圈出關鍵字避免粗心。<br>
+              <strong>技巧三【絕不留白】：</strong>單選題不倒扣，最後 5 分鐘檢查劃卡，確保每一題都已填答。
+            </div>
+          </div>
+          <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-q">Q4. 如果只通過其中一科，成績可以保留嗎？</div>
+            <div class="faq-a">
+              <strong>可以！單科成績保留 3 年。</strong><br>
+              若同時報考兩科，及格標準為「兩科平均 70 分且單科不低於 60 分」；若分梯次單科報考，該科須達 70 分及格。在 3 年保留期內通過另一科，即可獲發經濟部 iPAS AI 應用規劃師證書。
+            </div>
+          </div>
+        </div>
+      </div>
+
         </div>
         <div class="card">
           <div class="card-hd"><div class="card-title">主題分類進度</div><div>📊</div></div>
@@ -517,7 +1414,7 @@ nav{flex:1;padding:14px 10px;overflow-y:auto;}
       <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px">
         <div>
           <h2 style="font-size:18px;margin-bottom:6px">考試重點整理</h2>
-          <p style="color:var(--text-dim);font-size:13px">依官方評鑑範圍 ＋ 114年第四梯次 ＋ 115年第一次真題歸納彙整</p>
+          <p style="color:var(--text-dim);font-size:13px">對齊 115 最新評鑑架構（初級 16 項能力指標）＋ 114Q4 與 115年三次真題（450題官方試題）全解析彙整</p>
         </div>
         <button class="btn btn-ghost btn-sm btn-print" onclick="window.print()" style="color:var(--text); border-color:var(--border2); display:flex; gap:6px; align-items:center;">
           <span style="font-size:14px">🖨️</span> 列印 A4 紙本
@@ -738,7 +1635,7 @@ nav{flex:1;padding:14px 10px;overflow-y:auto;}
 
       <!-- 題型分析 -->
       <div style="margin-top:28px;margin-bottom:12px">
-        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px">📊 題型主題分析（全庫 255 題）</div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px">📊 題型主題分析（全庫 555 題 · 114與115全真題＋樣題模擬）</div>
       </div>
       <div id="topic-analysis"></div>
     </div>
@@ -1602,7 +2499,9 @@ const QB_115_3_S2 = [
   {id:900,sub:'sci2',topic:'prompt-eng',src:'official_115_3',q:"某餐飲連鎖企業導入生成式 AI， 自動彙整各分店每日的營運日誌 ， 並生成摘要報告供總部主管閱讀。系統上線後，總部主管發現某分店日誌記載「冷凍庫溫度異常，已緊急處置」 ，但AI 生成的摘要卻漏掉此重要資訊，導致總部未能及時掌握重大異常。從 AI 導入規劃與風險管理的角度來看，專案團隊最可能遺漏了下列何項關鍵工作？",opts:["未能建立多語系的日誌，導致各分店日誌內容差異過大，影響摘要品質", "未建立足夠多樣化的測試資料集，導致部分日誌格式與內容情境未於開發階段充分驗證", "未定期更新 AI 使用的提示內容 （Prompt） ，使摘要內容逐漸無法符合主管需求", "未建立重大異常關鍵字的自動偵測與人工複核機制，降低重要資訊遺漏風險"],ans:3,exp:"正解為「未建立重大異常關鍵字的自動偵測與人工複核機制，降低重要資訊遺漏風險」。題目針對該情境之業務目標與技術邊界進行考核，此選項最符合工程實務規範與正確AI原理。"},
 ];
 
-const QB_OFFICIAL_ALL = [...QB1, ...QB2, ...QB_115_1_S1, ...QB_115_1_S2, ...QB_115_1_S2_OFFICIAL, ...QB_115_2_S1, ...QB_115_2_S2, ...QB_115_3_S1, ...QB_115_3_S2];
+const QB_114_ALL = [...QB1, ...QB2];
+const QB_115_ALL = [...QB_115_1_S1, ...QB_115_1_S2, ...QB_115_1_S2_OFFICIAL, ...QB_115_2_S1, ...QB_115_2_S2, ...QB_115_3_S1, ...QB_115_3_S2];
+const QB_OFFICIAL_ALL = [...QB_114_ALL, ...QB_115_ALL];
 const QB_ALL = [...QB_OFFICIAL_ALL, ...QB_MOCK, ...QB_SAMPLE];
 
 const TOPICS = [
@@ -1634,11 +2533,74 @@ function updateStats(){
 updateStats();
 
 const PAGE_TITLES={home:'首頁總覽',exam:'模擬考試',practice:'分科練習',review:'錯題複習',study:'考試重點',sources:'學習資源庫',settings:'個人設定',feedback:'考生交流與留言回饋',feedback:'考生交流與留言回饋'};
+
+
+// ── 色彩模式與回首頁功能 ──
+function initTheme(){
+  const saved = localStorage.getItem('ipas_theme') || 'dark';
+  applyTheme(saved);
+}
+
+function setTheme(theme){
+  applyTheme(theme);
+}
+
+function toggleTheme(){
+  const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = cur === 'dark' ? 'light' : 'dark';
+  applyTheme(next);
+}
+
+function applyTheme(theme){
+  const t = (theme === 'light') ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', t);
+  if(document.body) document.body.setAttribute('data-theme', t);
+  try { localStorage.setItem('ipas_theme', t); } catch(e){}
+
+  const btnDark = document.getElementById('theme-btn-dark');
+  const btnLight = document.getElementById('theme-btn-light');
+  if(btnDark && btnLight){
+    if(t === 'dark'){
+      btnDark.classList.add('active');
+      btnLight.classList.remove('active');
+    } else {
+      btnDark.classList.remove('active');
+      btnLight.classList.add('active');
+    }
+  }
+}
+
+function goHome(){
+  const navs = document.querySelectorAll('.nav-item');
+  let homeNavItem = null;
+  for(let i = 0; i < navs.length; i++){
+    if((navs[i].getAttribute('onclick')||'').includes('home')){
+      homeNavItem = navs[i];
+      break;
+    }
+  }
+  gp('home', homeNavItem);
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// 頁面切換更新標題強化（支援 innerHTML 保留精美副標）
+const PAGE_SUBTITLES = {
+  home: '450道官方真題（114Q4＋115三次真題）＋ 樣題與模擬105題 · 全庫共555題',
+  exam: '模擬全真測驗 · 倒數計時與即時評分',
+  practice: '依官方能力指標分科重點衝刺',
+  review: '歷次錯題深度彙整與弱點反覆精練',
+  study: '115 最新評鑑架構 · 官方考點重點精析',
+  sources: '官方試題 PDF、參考指引與題型分佈',
+  settings: '作答題數與個人練習設定',
+  feedback: '問題回饋與社群交流'
+};
+
 function gp(id,el){
+  const sub = PAGE_SUBTITLES[id] ? `<span style="color:var(--text-dim);font-weight:400;margin-left:10px;font-size:12px">${PAGE_SUBTITLES[id]}</span>` : '';
+  document.getElementById('ptitle').innerHTML = (PAGE_TITLES[id]||id) + ' ' + sub;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
   if(el){document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));el.classList.add('active');}
-  document.getElementById('ptitle').textContent=PAGE_TITLES[id]||id;
   if(id==='practice')renderTopics();
   if(id==='review')renderWrong();
   if(id==='study')renderStudy();
@@ -1793,22 +2755,22 @@ function showResult(correct,n,pct){
 
 function renderTopics(){
   const html=TOPICS.map(t=>{
-    const offCnt=QB_OFFICIAL_ALL.filter(q=>q.topic===t.id).length;
+    const cnt114=QB_114_ALL.filter(q=>q.topic===t.id).length;
+    const cnt115=QB_115_ALL.filter(q=>q.topic===t.id).length;
     const mockCnt=[...QB_MOCK,...QB_SAMPLE].filter(q=>q.topic===t.id).length;
-    const s115Cnt=QB_115_1_S1.filter(q=>q.topic===t.id).length;
-    const total=offCnt+mockCnt;
+    const total=cnt114+cnt115+mockCnt;
     if(!total)return '';
-    return `<div class="card" style="cursor:pointer;transition:border-color .18s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'" onclick="startTopicExam('${t.id}')">
-      <div style="font-size:26px;margin-bottom:10px">${t.icon}</div>
-      <div style="font-size:13px;font-weight:600;margin-bottom:8px;line-height:1.35">${t.name}</div>
-      <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
+    return `<div class="card" style="cursor:pointer;transition:border-color .18s;padding:18px" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'" onclick="startTopicExam('${t.id}')">
+      <div style="font-size:24px;margin-bottom:10px">${t.icon}</div>
+      <div style="font-size:13.5px;font-weight:600;margin-bottom:8px;line-height:1.35;color:var(--text)">${t.name}</div>
+      <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
         <span class="tag ${t.sub==='sci1'?'t1':'t2'}">${t.code}</span>
-        ${offCnt?`<span class="stag stag-official">${offCnt-s115Cnt} 114年</span>`:''}
-        ${s115Cnt?`<span class="stag stag-115">${s115Cnt} 115年</span>`:''}
-        ${mockCnt?`<span class="stag stag-mock">${mockCnt} 模擬</span>`:''}
+        ${cnt114?`<span class="stag stag-official">${cnt114} 題 114年</span>`:''}
+        ${cnt115?`<span class="stag stag-115">${cnt115} 題 115年</span>`:''}
+        ${mockCnt?`<span class="stag stag-mock">${mockCnt} 模擬/樣題</span>`:''}
       </div>
-      <div style="font-size:11px;color:var(--text-muted);display:flex;justify-content:space-between">
-        <span>共 ${total} 題</span><span>開始練習 →</span>
+      <div style="font-size:11px;color:var(--text-muted);display:flex;justify-content:space-between;border-top:1px solid var(--border);padding-top:10px">
+        <span>收錄 ${total} 題</span><span style="color:var(--accent);font-weight:600">進入練習 →</span>
       </div>
     </div>`;
   }).filter(Boolean).join('');
@@ -1863,8 +2825,8 @@ function renderTopicAnalysis(){
   const allIds=[...new Set(QB_ALL.map(q=>q.topic))];
   let html=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px">`;
   allIds.forEach(tid=>{
-    const off114=QB1.filter(q=>q.topic===tid).length+QB2.filter(q=>q.topic===tid).length;
-    const off115=QB_115_1_S1.filter(q=>q.topic===tid).length;
+    const off114=QB_114_ALL.filter(q=>q.topic===tid).length;
+    const off115=QB_115_ALL.filter(q=>q.topic===tid).length;
     const other=[...QB_MOCK,...QB_SAMPLE].filter(q=>q.topic===tid).length;
     const total=off114+off115+other;
     if(!total)return;
@@ -3815,6 +4777,15 @@ window.addEventListener('load',function(){
     }catch(e){}
   },2000);
 });
+
+
+
+// 立即執行主題初始化
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', initTheme);
+} else {
+  initTheme();
+}
 
 </script>
 <button id="scroll-top-btn" title="回到頂端">↑</button>
