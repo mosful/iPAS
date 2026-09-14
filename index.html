@@ -1726,6 +1726,27 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
           <div class="card-title">💬 即時討論交流串 (Giscus)</div>
           <span style="font-size:11px;color:var(--text-muted)">由 GitHub Discussions 驅動</span>
         </div>
+
+        <!-- 首次安裝 Giscus App 友善指引條 -->
+        <div id="giscus-setup-guide" style="background:rgba(217,119,87,0.08);border:1px solid var(--accent-border);border-radius:10px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;">
+          <div style="font-size:24px;line-height:1;">⚙️</div>
+          <div style="flex:1;min-width:240px;">
+            <div style="font-size:13.5px;font-weight:700;color:var(--text);margin-bottom:4px;">Giscus 留言區啟用提示</div>
+            <div style="font-size:12px;color:var(--text-dim);line-height:1.65;margin-bottom:10px;">
+              若下方顯示「<strong style="color:var(--accent);">giscus is not installed on this repository</strong>」，表示您的 GitHub 儲存庫尚未授權安裝 Giscus 官方 App。<br>
+              請點擊下方按鈕前往 GitHub 授權安裝（選擇 <code>mosful/iPAS</code>），完成後重新整理網頁即可直接在下方留言交流！
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <a href="https://github.com/apps/giscus" target="_blank" rel="noopener" class="btn btn-primary btn-sm" style="text-decoration:none;">
+                👉 一鍵前往安裝授權 Giscus App ↗
+              </a>
+              <a href="https://github.com/mosful/iPAS/discussions" target="_blank" rel="noopener" class="btn btn-ghost btn-sm" style="text-decoration:none;">
+                🐙 直接在 GitHub Discussions 頁面留言 ↗
+              </a>
+            </div>
+          </div>
+        </div>
+
         <div class="giscus-wrap" style="padding:10px 0;border:none;">
           <div class="giscus"></div>
           <script src="https://giscus.app/client.js"
