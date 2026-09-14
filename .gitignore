@@ -1,0 +1,35 @@
+# Python & Virtual Environments
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Scratch & Temporary Analysis Scripts
+scratch/
+scratch_*.txt
+temp_*.*
+tools_*.py
+inspect_*.py
+check_*.py
+find_*.py
+print_*.py
+fix_*.py
+add_*.py
+build_*.py
+do_*.py
+extract_*.py
+update_*.py
+verify_*.py
+study_chapters_data.py
+extracted_200_raw.json
+processed_200_questions.json
+
+# Documents & PDFs
+Document/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
