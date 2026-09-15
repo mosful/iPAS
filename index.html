@@ -4730,7 +4730,7 @@ function sendMailDirectly(formPrefix){
   }
 
   const subject=`[iPAS AI 題庫反饋] ${type} (${unit})`;
-  const body=`您好，管理團隊：\n\n我是：${name} (${email})\n反饋類型：${type}\n關聯題號/考科：${unit}\n\n【詳細內容】：\n${content}\n\n---\n發送來源：${window.location.href}\n系統時間：${new Date().toLocaleString('zh-TW')}`;
+  const body=`您好，iPAS 管理團隊：\n\n我是：${name} (${email})\n反饋類型：${type}\n關聯考科/題號：${unit}\n\n【詳細內容】：\n${content}\n\n---\n系統：iPAS AI 應用規劃師 智慧練習系統\n發送來源：${window.location.href}\n系統時間：${new Date().toLocaleString('zh-TW')}`;
   
   const mailtoUrl=`mailto:${ADMIN_CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   window.location.href=mailtoUrl;
@@ -4753,6 +4753,9 @@ async function handleFeedbackSubmit(e, formPrefix){
   submitBtn.innerHTML='🚀 傳送中...';
 
   const payload={
+    appName:'iPAS AI 應用規劃師 智慧練習系統',
+    subject:`🤖【iPAS AI 題庫】收到新的考生反饋：[${type}] 來自 ${email?`${name} (${email})`:name}`,
+    title:'🤖 iPAS AI 應用規劃師 ─ 收到新的考生反饋',
     time:new Date().toLocaleString('zh-TW'),
     type,
     unit,
