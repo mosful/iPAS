@@ -9,6 +9,10 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com https://fonts.gstatic.com https://busuanzi.ibruce.info https://giscus.app https://script.google.com https://script.googleusercontent.com data: blob:;">
+<meta name="theme-color" content="#d97757">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23d97757'/><text x='50' y='65' font-size='50' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>AI</text></svg>">
 <title>iPAS AI 應用規劃師 ─ 智慧練習系統 v12（555題完整版）</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
@@ -956,6 +960,165 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   color: var(--accent);
   transform: translateY(-1px);
 }
+
+/* ── 安全與功能升級專屬樣式 ── */
+.kbd-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  font-size: 11px;
+  font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+  font-weight: 600;
+  color: var(--text-dim);
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+.opt:hover .kbd-badge {
+  color: var(--accent);
+  border-color: var(--accent-border);
+}
+.timer-ctrl-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 3px 8px;
+  font-size: 11px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: all .2s ease;
+}
+.timer-ctrl-btn:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+.exam-pause-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(16, 16, 15, 0.92);
+  backdrop-filter: blur(6px);
+  z-index: 50;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r);
+}
+.exam-pause-overlay.active {
+  display: flex;
+}
+/* 題庫搜尋樣式 */
+.search-bar-wrap {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+  align-items: center;
+}
+.search-input {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.search-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.search-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.tag-pill {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: var(--pill);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all .2s ease;
+}
+.tag-pill:hover, .tag-pill.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: var(--accent-border);
+}
+.search-stats-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+.search-item-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 14px;
+  transition: transform .2s ease, border-color .2s ease;
+}
+.search-item-card:hover {
+  border-color: var(--border2);
+  transform: translateY(-2px);
+}
+.search-item-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+.search-mark {
+  background: rgba(217, 119, 87, 0.35);
+  color: #fff;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-weight: bold;
+}
+.star-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--text-muted);
+  transition: transform .2s ease, color .2s ease;
+}
+.star-btn:hover {
+  transform: scale(1.2);
+}
+.star-btn.active {
+  color: #f59e0b;
+}
+.backup-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
 </style>
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </head>
@@ -973,6 +1136,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
     <div class="nav-section">
       <div class="nav-label">主選單</div>
       <div class="nav-item active" onclick="gp('home',this)"><span class="nav-icon">🏠</span>首頁總覽</div>
+      <div class="nav-item" onclick="gp('search',this)"><span class="nav-icon">🔍</span>題庫搜尋</div>
       <div class="nav-item" onclick="gp('exam',this)"><span class="nav-icon">📝</span>模擬考試</div>
       <div class="nav-item" onclick="gp('practice',this)"><span class="nav-icon">🎯</span>分科練習</div>
       <div class="nav-item" onclick="gp('review',this)"><span class="nav-icon">🔁</span>錯題複習</div>
@@ -1373,6 +1537,51 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
       </div>
     </div>
 
+    
+    <!-- SEARCH -->
+    <div id="page-search" class="page">
+      <div style="margin-bottom:18px">
+        <h2 style="font-size:20px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px">
+          🔍 全題庫關鍵字檢索與解析查閱
+        </h2>
+        <p style="color:var(--text-dim);font-size:13px">
+          即時檢索 555 道全真題、官方公告樣題與模擬考題。支援題目、選項、解析與考點全文搜尋。
+        </p>
+      </div>
+
+      <div class="search-bar-wrap">
+        <input type="text" id="global-search-input" class="search-input" placeholder="請輸入關鍵字（例如：ReAct、同態加密、SMOTE、寬深模型、聯邦學習、MCP、資料漂移...）" oninput="debounceSearch()">
+        <button class="btn btn-ghost" onclick="clearSearch()">清除</button>
+      </div>
+
+      <div class="search-tags" id="search-quick-tags">
+        <span class="tag-pill active" onclick="filterSearchCategory('all', this)">全部 555 題</span>
+        <span class="tag-pill" onclick="filterSearchCategory('fav', this)">⭐ 我的收藏</span>
+        <span class="tag-pill" onclick="filterSearchCategory('wrong', this)">❌ 我的錯題</span>
+        <span class="tag-pill" onclick="filterSearchCategory('sci1', this)">📘 科目一</span>
+        <span class="tag-pill" onclick="filterSearchCategory('sci2', this)">📗 科目二</span>
+        <span class="tag-pill" onclick="setSearchKeyword('ReAct')">#ReAct</span>
+        <span class="tag-pill" onclick="setSearchKeyword('同態加密')">#同態加密</span>
+        <span class="tag-pill" onclick="setSearchKeyword('聯邦學習')">#聯邦學習</span>
+        <span class="tag-pill" onclick="setSearchKeyword('SMOTE')">#SMOTE</span>
+        <span class="tag-pill" onclick="setSearchKeyword('寬深模型')">#寬深模型</span>
+        <span class="tag-pill" onclick="setSearchKeyword('MCP')">#MCP</span>
+        <span class="tag-pill" onclick="setSearchKeyword('資料漂移')">#資料漂移</span>
+        <span class="tag-pill" onclick="setSearchKeyword('LoRA')">#LoRA</span>
+        <span class="tag-pill" onclick="setSearchKeyword('VAE')">#VAE</span>
+        <span class="tag-pill" onclick="setSearchKeyword('多模態')">#多模態</span>
+      </div>
+
+      <div class="search-stats-bar">
+        <div>共找到 <strong id="search-result-count" style="color:var(--accent)">0</strong> 道相符題目</div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-ghost btn-sm" onclick="exportSearchResultsTxt()">📄 匯出搜尋結果</button>
+        </div>
+      </div>
+
+      <div id="search-results-list"></div>
+    </div>
+
     <!-- EXAM -->
     <div id="page-exam" class="page">
       <div id="exam-area">
@@ -1384,8 +1593,18 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
             <div class="em-sep"></div>
             <div class="em-item"><div class="em-v a" id="eq-c">0</div><div class="em-l">答對</div></div>
           </div>
-          <div style="text-align:center"><div id="timer">─:──</div><div class="em-l">剩餘時間</div></div>
+                    <div style="text-align:center">
+            <div id="timer">─:──</div>
+            <div class="em-l">剩餘時間</div>
+            <button id="btn-timer-pause" class="timer-ctrl-btn" onclick="toggleTimerPause()">⏸️ 暫停</button>
+          </div>
           <button class="btn btn-ghost btn-sm" onclick="endExam()">交卷</button>
+        </div>
+        <div id="pause-mask" class="exam-pause-overlay">
+          <div style="font-size:36px;margin-bottom:12px">⏸️</div>
+          <h3 style="font-size:18px;margin-bottom:8px">測驗已暫停</h3>
+          <p style="font-size:13px;color:var(--text-dim);margin-bottom:18px">休息一下，準備好隨時繼續作答！</p>
+          <button class="btn btn-primary" onclick="toggleTimerPause()">▶️ 繼續作答</button>
         </div>
         <div id="qcon"></div>
         <div class="exam-nav">
@@ -1790,7 +2009,56 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
         </div>
       </div>
       <div>
-        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px">資料管理</div>
+        <div class="set-group" style="margin-bottom:20px">
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px">作答輔助設定</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:6px">
+          <div>
+            <div style="font-size:13px">鍵盤快捷鍵作答</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:1px">支援按鍵 1/2/3/4 或 A/B/C/D 作答，←/→ 切換題目，Enter 下一題</div>
+          </div>
+          <div class="tog on" id="tog-k" onclick="toggleShortcuts(this)" style="width:40px;height:22px;background:var(--accent);border-radius:11px;cursor:pointer;position:relative;border:1px solid var(--accent);transition:background .2s"></div>
+        </div>
+      </div>
+
+      <div class="set-group" style="margin-bottom:20px">
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px">進度備份與資料管理</div>
+        
+        <div class="backup-card">
+          <div>
+            <div style="font-size:13px;font-weight:600">📥 匯出個人刷題備份 (JSON)</div>
+            <div style="font-size:11px;color:var(--text-dim);margin-top:2px">包含總答題數、正確率、全部錯題紀錄與收藏題目</div>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="exportBackupData()">匯出備份</button>
+        </div>
+
+        <div class="backup-card">
+          <div>
+            <div style="font-size:13px;font-weight:600">📤 匯入刷題進度備份 (JSON)</div>
+            <div style="font-size:11px;color:var(--text-dim);margin-top:2px">跨裝置或更換瀏覽器時，可一鍵還原所有紀錄</div>
+          </div>
+          <label class="btn btn-ghost btn-sm" style="margin:0;cursor:pointer">
+            選擇檔案
+            <input type="file" id="backup-file-input" accept=".json" style="display:none" onchange="importBackupData(event)">
+          </label>
+        </div>
+
+        <div class="backup-card">
+          <div>
+            <div style="font-size:13px;font-weight:600">📄 匯出錯題精析筆記 (TXT)</div>
+            <div style="font-size:11px;color:var(--text-dim);margin-top:2px">將目前所有答錯題目整理為清晰考前衝刺講義</div>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="exportWrongNotes()">下載筆記</button>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px">
+          <div>
+            <div style="font-size:13px">重設所有練習紀錄</div>
+            <div style="font-size:11px;color:var(--text-muted)">清除已答題數、正確率、錯題清單與收藏</div>
+          </div>
+          <button class="btn btn-sm" style="background:rgba(255,95,95,.1);color:var(--warn);border:1px solid rgba(255,95,95,.25)" onclick="clearAll()">重設紀錄</button>
+        </div>
+      </div>
+<!-- orig -->
         <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px">
           <div><div style="font-size:13px">清除練習紀錄</div></div>
           <button class="btn btn-sm" style="background:rgba(255,95,95,.1);color:var(--warn);border:1px solid rgba(255,95,95,.25)" onclick="clearAll()">清除</button>
@@ -2543,17 +2811,62 @@ const TOPICS = [
   {id:'disc-ai',name:'鑑別式 AI 應用',icon:'🎯',sub:'sci1',code:'L114'},
 ];
 
-let S={qs:[],cur:0,ans:[],correct:0,timer:null,timeLeft:0,totalDone:0,totalCorrect:0,wrongIds:[]};
+
+// ═══════ 安全性防禦層：Safe Storage Proxy & HTML Escape ═══════
+const safeStorage = {
+  getItem: function(k){
+    try { return localStorage.getItem(k); } catch(e){ console.warn('Storage read blocked:', e); return null; }
+  },
+  setItem: function(k, v){
+    try { localStorage.setItem(k, v); } catch(e){ console.warn('Storage write blocked:', e); }
+  },
+  removeItem: function(k){
+    try { localStorage.removeItem(k); } catch(e){ console.warn('Storage remove blocked:', e); }
+  }
+};
+
+function escapeHtml(str){
+  if(str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+let S={qs:[],cur:0,ans:[],correct:0,timer:null,timeLeft:0,totalDone:0,totalCorrect:0,wrongIds:[],favIds:[],isPaused:false,shortcutsEnabled:true};
+
 let lastMode='random';
-try{const d=JSON.parse(localStorage.getItem('ipas_v7')||'{}');if(d.totalDone)Object.assign(S,{totalDone:d.totalDone,totalCorrect:d.totalCorrect,wrongIds:d.wrongIds||[]});}catch(e){}
-function save(){try{localStorage.setItem('ipas_v7',JSON.stringify({totalDone:S.totalDone,totalCorrect:S.totalCorrect,wrongIds:S.wrongIds}));}catch(e){}updateStats();}
+try {
+  const d = JSON.parse(safeStorage.getItem('ipas_v7') || '{}');
+  if(d && typeof d === 'object'){
+    if(typeof d.totalDone === 'number') S.totalDone = d.totalDone;
+    if(typeof d.totalCorrect === 'number') S.totalCorrect = d.totalCorrect;
+    if(Array.isArray(d.wrongIds)) S.wrongIds = d.wrongIds;
+    if(Array.isArray(d.favIds)) S.favIds = d.favIds;
+  }
+  const sc = safeStorage.getItem('ipas_shortcuts');
+  if(sc !== null) S.shortcutsEnabled = (sc === 'true');
+} catch(e){ console.warn('Load state error:', e); }
+function save(){
+  try {
+    safeStorage.setItem('ipas_v7', JSON.stringify({
+      totalDone: S.totalDone,
+      totalCorrect: S.totalCorrect,
+      wrongIds: S.wrongIds,
+      favIds: S.favIds
+    }));
+  } catch(e){ console.warn('Save state error:', e); }
+  updateStats();
+}
 function updateStats(){
   document.getElementById('s-done').textContent=S.totalDone;
   document.getElementById('s-acc').textContent=S.totalDone>0?Math.round(S.totalCorrect/S.totalDone*100)+'%':'─';
 }
 updateStats();
 
-const PAGE_TITLES={home:'首頁總覽',exam:'模擬考試',practice:'分科練習',review:'錯題複習',study:'考試重點',sources:'學習資源庫',settings:'個人設定',feedback:'考生交流與留言回饋',feedback:'考生交流與留言回饋'};
+const PAGE_TITLES={home:'首頁總覽',search:'題庫檢索',exam:'模擬考試',practice:'分科練習',review:'錯題複習',study:'考試重點',sources:'學習資源庫',settings:'個人設定',feedback:'考生交流與留言回饋',feedback:'考生交流與留言回饋'};
 
 
 // ── 色彩模式與回首頁功能 ──
@@ -2615,6 +2928,7 @@ function goHome(){
 
 // 頁面切換更新標題強化（支援 innerHTML 保留精美副標）
 const PAGE_SUBTITLES = {
+  search: '555道題庫全文檢索 · 關鍵字高亮與詳盡解析',
   home: '450道官方真題（114Q4＋115三次真題）＋ 樣題與模擬105題 · 全庫共555題',
   exam: '模擬全真測驗 · 倒數計時與即時評分',
   practice: '依官方能力指標分科重點衝刺',
@@ -2626,6 +2940,13 @@ const PAGE_SUBTITLES = {
 };
 
 function gp(id,el){
+  if(id !== 'exam' && S.qs && S.qs.length > 0 && S.ans.some(a => a === null)){
+    if(!confirm('⚠️ 測驗正在進行中且尚未交卷，確定要離開目前測驗嗎？（離開將結束本輪作答）')){
+      return;
+    }
+    clearInterval(S.timer);
+    S.qs = [];
+  }
   const sub = PAGE_SUBTITLES[id] ? `<span style="color:var(--text-dim);font-weight:400;margin-left:10px;font-size:12px">${PAGE_SUBTITLES[id]}</span>` : '';
   document.getElementById('ptitle').innerHTML = (PAGE_TITLES[id]||id) + ' ' + sub;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -2635,6 +2956,7 @@ function gp(id,el){
   if(id==='review')renderWrong();
   if(id==='study')renderStudy();
   if(id==='sources')renderTopicAnalysis();
+  if(id==='search')renderSearchDefault();
   closeSB();
 }
 function toggleSB(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('show');}
@@ -2714,7 +3036,8 @@ function renderQ(){
     let cls='opt';
     if(ua!==null){if(i===q.ans)cls+=' ok';else if(i===ua&&i!==q.ans)cls+=' no';}
     else if(i===ua)cls+=' sel';
-    html+=`<div class="${cls}" onclick="pick(${i})"><span class="opt-k">${keys[i]}</span><span>${o}</span></div>`;
+    const kbdBadge = S.shortcutsEnabled ? `<span class="kbd-badge">${keys[i]} · [${i+1}]</span>` : '';
+    html+=`<div class="${cls}" onclick="pick(${i})"><span class="opt-k">${keys[i]}</span><span style="flex:1">${escapeHtml(o)}</span>${kbdBadge}</div>`;
   });
   html+=`</div>`;
   if(ua!==null&&expOn)html+=`<div class="exp-box show"><strong>📌 解析：</strong>${q.exp}</div>`;
@@ -4806,12 +5129,368 @@ window.addEventListener('load',function(){
       const uv2=document.getElementById('busuanzi_value_site_uv_2');
       const pv2=document.getElementById('busuanzi_value_site_pv_2');
       if(uv && uv2 && uv.textContent && uv.textContent!=='...') uv2.textContent=uv.textContent;
+      // 容錯防護：若 3.5 秒後仍為 '...'，平滑替換為就緒狀態
+      if(uv && uv.textContent === '...') uv.textContent = '已連線';
+      if(pv && pv.textContent === '...') pv.textContent = '累計中';
+      if(uv2 && uv2.textContent === '...') uv2.textContent = '已連線';
+      if(pv2 && pv2.textContent === '...') pv2.textContent = '累計中';
       if(pv && pv2 && pv.textContent && pv.textContent!=='...') pv2.textContent=pv.textContent;
     }catch(e){}
   },2000);
 });
 
 
+
+
+// ═══════ 新增功能：題庫全文檢索系統 ═══════
+let currentSearchCategory = 'all';
+let searchDebounceTimer = null;
+
+function renderSearchDefault(){
+  const kw = document.getElementById('global-search-input') ? document.getElementById('global-search-input').value.trim() : '';
+  doSearch(kw);
+}
+
+function debounceSearch(){
+  clearTimeout(searchDebounceTimer);
+  searchDebounceTimer = setTimeout(()=>{
+    const kw = document.getElementById('global-search-input').value.trim();
+    doSearch(kw);
+  }, 250);
+}
+
+function clearSearch(){
+  const inp = document.getElementById('global-search-input');
+  if(inp) inp.value = '';
+  doSearch('');
+}
+
+function setSearchKeyword(kw){
+  const inp = document.getElementById('global-search-input');
+  if(inp){
+    inp.value = kw;
+    doSearch(kw);
+    inp.focus();
+  }
+}
+
+function filterSearchCategory(cat, el){
+  currentSearchCategory = cat;
+  if(el){
+    document.querySelectorAll('#search-quick-tags .tag-pill').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+  }
+  const kw = document.getElementById('global-search-input') ? document.getElementById('global-search-input').value.trim() : '';
+  doSearch(kw);
+}
+
+function doSearch(kw){
+  let pool = [...QB_ALL];
+  // 分類篩選
+  if(currentSearchCategory === 'fav'){
+    pool = pool.filter(q => (S.favIds || []).includes(q.id));
+  } else if(currentSearchCategory === 'wrong'){
+    pool = pool.filter(q => S.wrongIds.includes(q.id));
+  } else if(currentSearchCategory === 'sci1'){
+    pool = pool.filter(q => q.sub === 'sci1');
+  } else if(currentSearchCategory === 'sci2'){
+    pool = pool.filter(q => q.sub === 'sci2');
+  }
+
+  // 關鍵字檢索 (匹配題目內容、選項、解析、考點分類)
+  let results = pool;
+  if(kw){
+    const lowerKw = kw.toLowerCase();
+    results = pool.filter(q => {
+      const inQ = (q.q || '').toLowerCase().includes(lowerKw);
+      const inOpts = (q.opts || []).some(o => o.toLowerCase().includes(lowerKw));
+      const inExp = (q.exp || '').toLowerCase().includes(lowerKw);
+      const inTopic = (q.topic || '').toLowerCase().includes(lowerKw);
+      return inQ || inOpts || inExp || inTopic;
+    });
+  }
+
+  renderSearchResults(results, kw);
+}
+
+function highlightKeyword(text, kw){
+  if(!kw || !text) return escapeHtml(text);
+  const escapedText = escapeHtml(text);
+  const regex = new RegExp(`(${kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+  return escapedText.replace(regex, '<mark class="search-mark">$1</mark>');
+}
+
+function renderSearchResults(results, kw){
+  const countEl = document.getElementById('search-result-count');
+  if(countEl) countEl.textContent = results.length;
+
+  const container = document.getElementById('search-results-list');
+  if(!container) return;
+
+  if(results.length === 0){
+    container.innerHTML = `
+      <div style="text-align:center;padding:40px 20px;color:var(--text-dim)">
+        <div style="font-size:32px;margin-bottom:8px">🔍</div>
+        <div style="font-size:15px;font-weight:600">查無相符題目</div>
+        <div style="font-size:12px;margin-top:4px">請嘗試換個關鍵字搜尋，或切換上方篩選標籤。</div>
+      </div>`;
+    return;
+  }
+
+  const keys = ['A', 'B', 'C', 'D'];
+  let html = '';
+  // 最多同時渲染 60 筆以保證極致流暢度
+  const displayResults = results.slice(0, 60);
+
+  displayResults.forEach((q, idx) => {
+    const isFav = (S.favIds || []).includes(q.id);
+    const isWrong = S.wrongIds.includes(q.id);
+    const t = TOPICS.find(tp => tp.id === q.topic);
+
+    html += `<div class="search-item-card">
+      <div class="search-item-meta">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span style="font-family:var(--font-mono, monospace);font-weight:700;color:var(--text-muted)">#${q.id}</span>
+          ${srcLabel(q)}
+          ${t ? `<span class="stag" style="background:var(--surface3);color:var(--text-dim)">${t.icon} ${t.name}</span>` : ''}
+          ${isWrong ? `<span class="stag" style="background:var(--warn-soft);color:var(--warn)">歷次錯題</span>` : ''}
+        </div>
+        <button class="star-btn ${isFav ? 'active' : ''}" onclick="toggleBookmark(${q.id}, this)" title="${isFav?'取消收藏':'加入收藏'}">★</button>
+      </div>
+      <div style="font-size:14px;line-height:1.6;font-weight:600;margin-bottom:12px">
+        ${highlightKeyword(q.q, kw)}
+      </div>
+      <div style="display:grid;grid-template-columns:1fr;gap:6px;margin-bottom:12px">`;
+
+    q.opts.forEach((opt, optIdx) => {
+      const isAns = optIdx === q.ans;
+      html += `<div style="font-size:12px;padding:6px 10px;border-radius:6px;background:${isAns ? 'var(--green-soft)' : 'var(--surface2)'};border:1px solid ${isAns ? 'rgba(34,197,94,0.3)' : 'var(--border)'};display:flex;align-items:flex-start;gap:8px">
+        <span style="font-weight:700;color:${isAns ? 'var(--green)' : 'var(--text-muted)'}">${keys[optIdx]}.</span>
+        <span style="flex:1;color:${isAns ? 'var(--text)' : 'var(--text-dim)'}">${highlightKeyword(opt, kw)} ${isAns ? '✅ <strong style="color:var(--green)">[標準答案]</strong>' : ''}</span>
+      </div>`;
+    });
+
+    html += `</div>
+      <div style="background:var(--surface2);border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 8px 8px 0;font-size:12px;line-height:1.6;color:var(--text-dim)">
+        <strong style="color:var(--accent)">📌 深度解析：</strong>${highlightKeyword(q.exp, kw)}
+      </div>
+    </div>`;
+  });
+
+  if(results.length > 60){
+    html += `<div style="text-align:center;padding:16px;color:var(--text-muted);font-size:12px">已顯示前 60 筆結果（共有 ${results.length} 筆符合），請輸入更精確關鍵字篩選</div>`;
+  }
+
+  container.innerHTML = html;
+}
+
+function toggleBookmark(qId, btn){
+  if(!Array.isArray(S.favIds)) S.favIds = [];
+  const idx = S.favIds.indexOf(qId);
+  if(idx > -1){
+    S.favIds.splice(idx, 1);
+    if(btn) { btn.classList.remove('active'); btn.title = '加入收藏'; }
+  } else {
+    S.favIds.push(qId);
+    if(btn) { btn.classList.add('active'); btn.title = '取消收藏'; }
+  }
+  save();
+}
+
+function exportSearchResultsTxt(){
+  const kw = document.getElementById('global-search-input') ? document.getElementById('global-search-input').value.trim() : '';
+  let pool = [...QB_ALL];
+  if(kw){
+    const lk = kw.toLowerCase();
+    pool = pool.filter(q => (q.q||'').toLowerCase().includes(lk) || (q.exp||'').toLowerCase().includes(lk) || (q.opts||[]).some(o=>o.toLowerCase().includes(lk)));
+  }
+  if(pool.length === 0){ alert('查無符合內容可匯出！'); return; }
+
+  let txt = `iPAS AI 應用規劃師 ─ 題庫檢索結果清單\n`;
+  txt += `檢索關鍵字: ${kw || '全部'} | 總題數: ${pool.length} 題 | 產出時間: ${new Date().toLocaleString('zh-TW')}\n\n`;
+  const keys = ['A', 'B', 'C', 'D'];
+  pool.forEach((q, i) => {
+    txt += `Q${i+1}. [#${q.id}] ${q.q}\n`;
+    q.opts.forEach((o, oi) => {
+      txt += `   (${keys[oi]}) ${o} ${oi === q.ans ? ' [正解]' : ''}\n`;
+    });
+    txt += `   【正解】: (${keys[q.ans]})\n`;
+    txt += `   【解析】: ${q.exp}\n\n`;
+  });
+
+  downloadTextFile(txt, `iPAS_搜尋導出_${kw||'全庫'}_${Date.now()}.txt`);
+}
+
+// ═══════ 新增功能：鍵盤快捷鍵極速作答 ═══════
+function initKeyboardShortcuts(){
+  window.addEventListener('keydown', (e) => {
+    // 若在輸入框、文字區塊中打字，不觸發快捷鍵
+    const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : '';
+    if(tag === 'input' || tag === 'textarea' || tag === 'select') return;
+
+    // 僅在測驗頁面且測驗進行中生效
+    const examPage = document.getElementById('page-exam');
+    if(!examPage || !examPage.classList.contains('active')) return;
+    if(!S.qs || S.qs.length === 0 || S.isPaused) return;
+
+    const key = e.key;
+
+    // 數字 1-4 或 英文字母 A-D 選取答案
+    if(key === '1' || key === 'a' || key === 'A'){
+      pick(0);
+    } else if(key === '2' || key === 'b' || key === 'B'){
+      pick(1);
+    } else if(key === '3' || key === 'c' || key === 'C'){
+      pick(2);
+    } else if(key === '4' || key === 'd' || key === 'D'){
+      pick(3);
+    } else if(key === 'ArrowLeft'){
+      prevQ();
+    } else if(key === 'ArrowRight'){
+      nextQ();
+    } else if(key === 'Enter'){
+      // 若當前題目已作答，按 Enter 進入下一題或交卷
+      if(S.ans[S.cur] !== null){
+        nextQ();
+      }
+    } else if(key === 'p' || key === 'P'){
+      toggleTimerPause();
+    }
+  });
+}
+
+function toggleShortcuts(el){
+  S.shortcutsEnabled = !S.shortcutsEnabled;
+  if(el) el.classList.toggle('on', S.shortcutsEnabled);
+  safeStorage.setItem('ipas_shortcuts', String(S.shortcutsEnabled));
+  if(S.qs && S.qs.length > 0) renderQ();
+}
+
+// ═══════ 新增功能：測驗計時器暫停與繼續 ═══════
+function toggleTimerPause(){
+  if(!S.qs || S.qs.length === 0) return;
+  S.isPaused = !S.isPaused;
+  const btn = document.getElementById('btn-timer-pause');
+  const mask = document.getElementById('pause-mask');
+
+  if(S.isPaused){
+    clearInterval(S.timer);
+    if(btn) btn.textContent = '▶️ 繼續';
+    if(mask) mask.classList.add('active');
+  } else {
+    startTimer();
+    if(btn) btn.textContent = '⏸️ 暫停';
+    if(mask) mask.classList.remove('active');
+  }
+}
+
+// ═══════ 新增功能：資料管理、備份匯出與匯入 ═══════
+function exportBackupData(){
+  const backup = {
+    version: '1.2.0',
+    exportTime: new Date().toISOString(),
+    totalDone: S.totalDone,
+    totalCorrect: S.totalCorrect,
+    wrongIds: S.wrongIds || [],
+    favIds: S.favIds || [],
+    theme: safeStorage.getItem('ipas_theme') || 'dark'
+  };
+
+  const jsonStr = JSON.stringify(backup, null, 2);
+  const blob = new Blob([jsonStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `iPAS_AI規劃師_刷題備份_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importBackupData(event){
+  const file = event.target.files[0];
+  if(!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e){
+    try {
+      const data = JSON.parse(e.target.result);
+      if(typeof data !== 'object'){ throw new Error('無效的備份格式'); }
+
+      if(typeof data.totalDone === 'number') S.totalDone = data.totalDone;
+      if(typeof data.totalCorrect === 'number') S.totalCorrect = data.totalCorrect;
+      if(Array.isArray(data.wrongIds)) S.wrongIds = data.wrongIds;
+      if(Array.isArray(data.favIds)) S.favIds = data.favIds;
+
+      save();
+      updateStats();
+      if(data.theme) applyTheme(data.theme);
+
+      alert(`🎉 備份資料匯入成功！\n\n已答題數：${S.totalDone}\n錯題數量：${S.wrongIds.length} 題\n收藏題目：${S.favIds.length} 題`);
+    } catch(err){
+      alert('❌ 匯入失敗：檔案格式不正確或內容損毀！');
+      console.error(err);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function exportWrongNotes(){
+  const wrongs = QB_ALL.filter(q => S.wrongIds.includes(q.id));
+  if(wrongs.length === 0){
+    alert('目前沒有答錯的題目紀錄，繼續保持！✨');
+    return;
+  }
+
+  let txt = `=================================================\n`;
+  txt += `  iPAS AI 應用規劃師 ─ 錯題深度精析筆記 (考前必看)\n`;
+  txt += `  匯出日期: ${new Date().toLocaleString('zh-TW')} | 總錯題數: ${wrongs.length} 題\n`;
+  txt += `=================================================\n\n`;
+
+  const keys = ['A', 'B', 'C', 'D'];
+  wrongs.forEach((q, idx) => {
+    txt += `【錯題 ${idx+1}】(題號 #${q.id}) ${srcLabelText(q)}\n`;
+    txt += `題目：${q.q}\n`;
+    q.opts.forEach((o, oi) => {
+      txt += `  (${keys[oi]}) ${o} ${oi === q.ans ? ' <-- [標準答案]' : ''}\n`;
+    });
+    txt += `\n🎯 正確答案：(${keys[q.ans]})\n`;
+    txt += `💡 深度解析：${q.exp}\n`;
+    txt += `-------------------------------------------------\n\n`;
+  });
+
+  downloadTextFile(txt, `iPAS_錯題精析筆記_${new Date().toISOString().slice(0,10)}.txt`);
+}
+
+function srcLabelText(q){
+  if(q.src==='official_115_3') return '[115-3 官方真題]';
+  if(q.src==='official_115_2') return '[115-2 官方真題]';
+  if(q.src==='official_115_s2'||q.src==='official_115'||q.src==='official_115_1') return '[115-1 官方真題]';
+  if(q.src==='mock') return '[模擬題]';
+  if(q.src==='sample') return '[樣題]';
+  return '[114-4 官方真題]';
+}
+
+function downloadTextFile(content, filename){
+  const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ═══════ PWA Service Worker 註冊 ═══════
+if('serviceWorker' in navigator && window.location.protocol.startsWith('http')){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('Service Worker 註冊成功:', reg.scope))
+      .catch(err => console.warn('Service Worker 註冊略過:', err));
+  });
+}
+
+// 初始化快捷鍵監聽
+initKeyboardShortcuts();
 
 // 立即執行主題初始化
 if(document.readyState === 'loading'){
