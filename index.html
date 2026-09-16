@@ -1119,6 +1119,261 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   gap: 16px;
 }
 
+
+/* ── 現代極致靈敏 Switch 元件 ── */
+.setting-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  user-select: none;
+  transition: all .2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.setting-item-row:hover {
+  border-color: var(--border2);
+  background: var(--surface2);
+  transform: translateY(-1px);
+}
+.setting-item-row:active {
+  transform: scale(0.995);
+}
+.setting-info-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 3px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.setting-info-desc {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+.modern-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
+  flex-shrink: 0;
+  margin-left: 16px;
+}
+.modern-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+.modern-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--surface3);
+  border: 1px solid var(--border);
+  transition: all .25s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 28px;
+}
+.modern-slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #ffffff;
+  transition: all .25s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+.modern-switch input:checked + .modern-slider {
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
+.modern-switch input:checked + .modern-slider:before {
+  transform: translateX(22px);
+  background-color: #ffffff;
+}
+.modern-switch input:focus-visible + .modern-slider {
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* ── 旗艦級首頁排版現代樣式 ── */
+.home-hero-pro {
+  background: linear-gradient(135deg, rgba(217, 119, 87, 0.12) 0%, rgba(93, 122, 146, 0.1) 50%, rgba(23, 22, 20, 0.8) 100%);
+  border: 1px solid var(--border2);
+  border-radius: 18px;
+  padding: 32px 30px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+.home-hero-pro:before {
+  content: "";
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, rgba(217, 119, 87, 0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.hero-pro-title {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 10px;
+  line-height: 1.35;
+  color: var(--text);
+}
+.hero-pro-title em {
+  font-style: normal;
+  color: var(--accent);
+  text-shadow: 0 0 25px var(--accent-soft);
+}
+.hero-pro-subtitle {
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.6;
+  max-width: 780px;
+  margin-bottom: 22px;
+}
+.hero-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-bottom: 28px;
+}
+.quick-feature-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: all .25s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+.quick-feature-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent-border);
+  box-shadow: var(--shadow-warm);
+}
+.quick-feature-icon {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+.quick-feature-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.quick-feature-desc {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.45;
+}
+
+/* 題庫分類區塊大標與網格 */
+.qb-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 32px 0 16px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.qb-section-title {
+  font-size: 17px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+}
+.qb-section-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.qb-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 14px;
+}
+.qb-exam-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: all .2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.qb-exam-card:hover {
+  border-color: var(--border2);
+  transform: translateY(-2px);
+  background: var(--surface2);
+  box-shadow: var(--shadow-sm);
+}
+.qb-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.qb-card-subject {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+  line-height: 1.35;
+}
+.qb-card-meta {
+  font-size: 12px;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.qb-card-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+}
+.qb-exam-card:hover .qb-card-btn {
+  color: var(--accent-hover);
+}
+
 </style>
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </head>
@@ -1190,354 +1445,396 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
 
     <!-- HOME -->
     <div id="page-home" class="page active">
-      <div class="hero">
-        <div class="hero-tag">✨ 115年2月最新官方評鑑架構 · 450道真題完整收錄</div>
-        <h2>備考 <em>iPAS AI 應用規劃師</em> · 官方全真題庫精練</h2>
-        <p>完整收錄 <strong>114年第四梯次 ＋ 115年第一次、第二次、第三次</strong> 共 4 梯次 <strong>450 道官方真題</strong><br>
-        ＋ 官方樣題 50 題 ＋ 實戰模擬題 55 題，全庫共 <strong style="color:var(--accent);font-family:'IBM Plex Mono',monospace;font-size:16px;">555 題</strong> 逐題白話概念、選項辨析與延伸考點！<br>
-        <span style="opacity:.85;font-size:12.5px;">考科對應：科目一 人工智慧基礎概論（L11） ✕ 科目二 生成式 AI 應用與規劃（L12）</span></p>
-        <div class="hero-actions">
-          <button class="btn-hero btn-hero-p" onclick="startExam('full50')">🚀 模擬完整考試（各科50題）</button>
-          <button class="btn-hero btn-hero-s" onclick="gp('study',null)">📖 先看考試重點</button>
-          <button class="btn-hero btn-hero-outline" onclick="document.getElementById('level-guide').scrollIntoView({behavior:'smooth'})">🧭 初級 vs 中級對照指南</button>
+      <!-- 頂部旗艦 Hero 看板 -->
+      <div class="home-hero-pro">
+        <div class="hero-badge-row">
+          <span class="logo-tag">iPAS 官方初級全梯次評鑑題庫</span>
+          <span class="stag" style="background:rgba(180,100,255,.15);color:#b388ff;border:1px solid rgba(180,100,255,.35)">🟣 115年三次真題齊備</span>
+          <span class="stag stag-official">🔵 114Q4官方真題</span>
+          <span class="stag" style="background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.35)">📱 PWA 離線刷題支援</span>
+        </div>
+        <h2 class="hero-pro-title">
+          備考 <em>iPAS AI 應用規劃師</em> · 初級 555 題官方全真題庫精練
+        </h2>
+        <div class="hero-pro-subtitle">
+          完整收錄 450 道官方真題（115-3、115-2、115-1、114Q4）＋ 105 道精選樣題與模擬試題。具備逐題白話詳析、秒選速查、關鍵字全文搜尋與鍵盤極速作答，高效率穩拿 70+ 及格！
+        </div>
+
+        <!-- 頂部 4 大核心捷徑卡片 -->
+        <div class="hero-quick-grid">
+          <div class="quick-feature-card" onclick="startExam('sci1_115_3')">
+            <div>
+              <div class="quick-feature-icon">🔥</div>
+              <div class="quick-feature-title">115-3 最新真題 <span style="font-size:12px;color:var(--accent)">立即測驗 →</span></div>
+              <div class="quick-feature-desc">經濟部最新公告 115 年第三次初級完整 100 道試題專項精練。</div>
+            </div>
+          </div>
+
+          <div class="quick-feature-card" onclick="gp('search',document.querySelectorAll('.nav-item')[1])">
+            <div>
+              <div class="quick-feature-icon">🔍</div>
+              <div class="quick-feature-title">全庫關鍵字檢索 <span style="font-size:12px;color:var(--accent2)">查閱 →</span></div>
+              <div class="quick-feature-desc">555 題全文搜尋、高頻考點標籤、高亮匹配與詳盡解析速查。</div>
+            </div>
+          </div>
+
+          <div class="quick-feature-card" onclick="gp('practice',document.querySelectorAll('.nav-item')[2])">
+            <div>
+              <div class="quick-feature-icon">🎯</div>
+              <div class="quick-feature-title">分科主題精準衝刺 <span style="font-size:12px;color:var(--green)">練習 →</span></div>
+              <div class="quick-feature-desc">對齊官方 16 大能力指標，機器學習、Prompt、RAG 分類突破。</div>
+            </div>
+          </div>
+
+          <div class="quick-feature-card" onclick="startExam('wrong')">
+            <div>
+              <div class="quick-feature-icon">🔁</div>
+              <div class="quick-feature-title">錯題弱點反覆特訓 <span style="font-size:12px;color:var(--warn)">複習 →</span></div>
+              <div class="quick-feature-desc">系統自動收錄歷次答錯題目，針對盲點反覆精練直到完全掌握。</div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- 💡 AITerms 核心增補模組 1：備考 4 步黃金法 -->
-      <div class="info-section">
-        <div class="section-header">
-          <div>
-            <div class="section-title"><span>🎯</span> 科學備考 4 步黃金法</div>
-            <div class="section-desc">照著高效節奏走，把時間花在投報率最高的核心考點上</div>
-          </div>
+      <!-- ════════ 題庫選擇矩陣 ════════ -->
+      <!-- 專區 1：🟣 115 年最新官方真題 -->
+      <div class="qb-section-head">
+        <div class="qb-section-title">
+          <span>🟣</span> 115 年最新官方真題專區（歷次考梯完整收錄）
         </div>
-        <div class="steps-grid">
-          <div class="step-card">
-            <span class="step-num">STEP 01</span>
-            <div class="step-title">診斷測驗找弱項</div>
-            <div class="step-text">以 20 題快速摸底測驗快速定位個人知識盲區，找出薄弱科目，不再浪費時間重複刷已熟題目。</div>
+        <div class="qb-section-sub">各考梯 50 題獨立模擬測驗</div>
+      </div>
+
+      <div class="qb-cards-grid">
+        <!-- 115-3 科目一 -->
+        <div class="qb-exam-card" onclick="startExam('sci1_115_3')">
+          <div>
+            <div class="qb-card-top">
+              <span class="tag t1">科目 1</span>
+              <span class="stag" style="background:rgba(180,100,255,.15);color:#b388ff;border:1px solid rgba(180,100,255,.35)">115-3 最新 🟣</span>
+            </div>
+            <div class="qb-card-subject">科目一：人工智慧基礎概論</div>
+            <div class="qb-card-meta">115年第三次 · 官方真題 50 題 · 滿分 100 分</div>
           </div>
-          <div class="step-card">
-            <span class="step-num">STEP 02</span>
-            <div class="step-title">查術語、抓高頻</div>
-            <div class="step-text">對齊官方 115 最新 L-code 16 大能力指標，掌握投報率最高的關鍵術語（RAG、RLHF、MCP、Guardrails）。</div>
+          <div class="qb-card-btn"><span>開始測驗</span><span>→</span></div>
+        </div>
+
+        <!-- 115-3 科目二 -->
+        <div class="qb-exam-card" onclick="startExam('sci2_115_3')">
+          <div>
+            <div class="qb-card-top">
+              <span class="tag t2">科目 2</span>
+              <span class="stag" style="background:rgba(180,100,255,.15);color:#b388ff;border:1px solid rgba(180,100,255,.35)">115-3 最新 🟣</span>
+            </div>
+            <div class="qb-card-subject">科目二：生成式AI應用與規劃</div>
+            <div class="qb-card-meta">115年第三次 · 官方真題 50 題 · 滿分 100 分</div>
           </div>
-          <div class="step-card">
-            <span class="step-num">STEP 03</span>
-            <div class="step-title">多維度深層理解</div>
-            <div class="step-text">透過白話比喻、新舊技術對比、因果推論三重解析，徹底搞懂原理與技術邊界，告別死記硬背。</div>
+          <div class="qb-card-btn"><span>開始測驗</span><span>→</span></div>
+        </div>
+
+        <!-- 115-2 科目一 -->
+        <div class="qb-exam-card" onclick="startExam('sci1_115_2')">
+          <div>
+            <div class="qb-card-top">
+              <span class="tag t1">科目 1</span>
+              <span class="stag" style="background:rgba(0,229,176,.15);color:var(--accent2);border:1px solid rgba(0,229,176,.35)">115-2 官方 🟢</span>
+            </div>
+            <div class="qb-card-subject">科目一：人工智慧基礎概論</div>
+            <div class="qb-card-meta">115年第二次 · 官方真題 50 題 · 滿分 100 分</div>
           </div>
-          <div class="step-card">
-            <span class="step-num">STEP 04</span>
-            <div class="step-title">真題驗證與模擬考</div>
-            <div class="step-text">歷屆 450 道官方真題全真驗證，搭配每個錯誤選項詳細原因與錯題專區，考前穩拿 70+ 及格！</div>
+          <div class="qb-card-btn"><span>開始測驗</span><span>→</span></div>
+        </div>
+
+        <!-- 115-2 科目二 -->
+        <div class="qb-exam-card" onclick="startExam('sci2_115_2')">
+          <div>
+            <div class="qb-card-top">
+              <span class="tag t2">科目 2</span>
+              <span class="stag" style="background:rgba(0,229,176,.15);color:var(--accent2);border:1px solid rgba(0,229,176,.35)">115-2 官方 🟢</span>
+            </div>
+            <div class="qb-card-subject">科目二：生成式AI應用與規劃</div>
+            <div class="qb-card-meta">115年第二次 · 官方真題 50 題 · 滿分 100 分</div>
           </div>
+          <div class="qb-card-btn"><span>開始測驗</span><span>→</span></div>
+        </div>
+
+        <!-- 115-1 科目一 -->
+        <div class="qb-exam-card" onclick="startExam('sci1_115_1')">
+          <div>
+            <div class="qb-card-top">
+              <span class="tag t1">科目 1</span>
+              <span class="stag stag-115">115-1 官方 🟡</span>
+            </div>
+            <div class="qb-card-subject">科目一：人工智慧基礎概論</div>
+            <div class="qb-card-meta">115年第一次 · 官方真題 50 題 · 滿分 100 分</div>
+          </div>
+          <div class="qb-card-btn"><span>開始測驗</span><span>→</span></div>
+        </div>
+
+        <!-- 115-1 科目二 -->
+        <div class="qb-exam-card" onclick="startExam('sci2_115_1_official')">
+          <div>
+            <div class="qb-card-top">
+              <span class="tag t2">科目 2</span>
+              <span class="stag stag-115">115-1 官方 🟡</span>
+            </div>
+            <div class="qb-card-subject">科目二：生成式AI應用與規劃</div>
+            <div class="qb-card-meta">115年第一次 · 官方公告題 50 題 · 滿分 100 分</div>
+          </div>
+          <div class="qb-card-btn"><span>開始測驗</span><span>→</span></div>
         </div>
       </div>
-      <div class="grid2">
-        <div class="card">
-          <div class="card-hd"><div class="card-title">題庫選擇</div><div>📚</div></div>
-          <div class="subj-list">
-            <!-- 115年第三次（最新） -->
-            <div class="subj-item" onclick="startExam('sci1_115_3')">
-              <div><div class="subj-name">科目一：人工智慧基礎概論</div><div class="subj-cnt">115年第三次・50道官方真題 🟣 最新</div></div>
-              <div style="display:flex;gap:4px;flex-direction:column;align-items:flex-end">
-                <span class="tag t1">科目 1</span>
-                <span class="stag" style="background:rgba(180,100,255,.15);color:#b388ff;border:1px solid rgba(180,100,255,.35)">115-3 官方 🟣</span>
-              </div>
-            </div>
-            <div class="subj-item" onclick="startExam('sci2_115_3')">
-              <div><div class="subj-name">科目二：生成式AI應用與規劃</div><div class="subj-cnt">115年第三次・50道官方真題 🟣 最新</div></div>
-              <div style="display:flex;gap:4px;flex-direction:column;align-items:flex-end">
-                <span class="tag t2">科目 2</span>
-                <span class="stag" style="background:rgba(180,100,255,.15);color:#b388ff;border:1px solid rgba(180,100,255,.35)">115-3 官方 🟣</span>
-              </div>
-            </div>
 
-            <!-- 115年第二次 -->
-            <div class="subj-item" onclick="startExam('sci1_115_2')">
-              <div><div class="subj-name">科目一：人工智慧基礎概論</div><div class="subj-cnt">115年第二次・50道官方真題 🟢</div></div>
-              <div style="display:flex;gap:4px;flex-direction:column;align-items:flex-end">
-                <span class="tag t1">科目 1</span>
-                <span class="stag" style="background:rgba(0,229,176,.15);color:var(--accent2);border:1px solid rgba(0,229,176,.35)">115-2 官方 🟢</span>
-              </div>
-            </div>
-            <div class="subj-item" onclick="startExam('sci2_115_2')">
-              <div><div class="subj-name">科目二：生成式AI應用與規劃</div><div class="subj-cnt">115年第二次・50道官方真題 🟢</div></div>
-              <div style="display:flex;gap:4px;flex-direction:column;align-items:flex-end">
-                <span class="tag t2">科目 2</span>
-                <span class="stag" style="background:rgba(0,229,176,.15);color:var(--accent2);border:1px solid rgba(0,229,176,.35)">115-2 官方 🟢</span>
-              </div>
-            </div>
-
-            <!-- 115年第一次 -->
-            <div class="subj-item" onclick="startExam('sci1_115_1')">
-              <div><div class="subj-name">科目一：人工智慧基礎概論</div><div class="subj-cnt">115年第一次・50道官方真題 🟡</div></div>
-              <div style="display:flex;gap:4px;flex-direction:column;align-items:flex-end">
-                <span class="tag t1">科目 1</span>
-                <span class="stag stag-115">115-1 官方 🟡</span>
-              </div>
-            </div>
-            <div class="subj-item" onclick="startExam('sci2_115_1_official')">
-              <div><div class="subj-name">科目二：生成式AI應用與規劃</div><div class="subj-cnt">115年第一次・50道官方公告試題 🟡</div></div>
-              <div style="display:flex;gap:4px;flex-direction:column;align-items:flex-end">
-                <span class="tag t2">科目 2</span>
-                <span class="stag stag-115">115-1 官方 🟡</span>
-              </div>
-            </div>
-
-            <!-- 114年第四梯次 -->
-            <div class="subj-item" onclick="startExam('sci1_114')">
-              <div><div class="subj-name">科目一：人工智慧基礎概論</div><div class="subj-cnt">114年第四梯次・50道官方真題 🔵</div></div>
-              <div style="display:flex;gap:4px;flex-direction:column;align-items:flex-end">
-                <span class="tag t1">科目 1</span>
-                <span class="stag stag-official">114-4 官方 🔵</span>
-              </div>
-            </div>
-            <div class="subj-item" onclick="startExam('sci2')">
-              <div><div class="subj-name">科目二：生成式AI應用與規劃</div><div class="subj-cnt">114年第四梯次・50道官方真題 🔵</div></div>
-              <div style="display:flex;gap:4px;flex-direction:column;align-items:flex-end">
-                <span class="tag t2">科目 2</span>
-                <span class="stag stag-official">114-4 官方 🔵</span>
-              </div>
-            </div>
-
-            <!-- 全梯次合併練功 -->
-            <div class="subj-item" onclick="startExam('sci1_all')">
-              <div><div class="subj-name">科目一全真題大會考</div><div class="subj-cnt">114Q4＋115三次・共200道官方真題</div></div>
-              <div style="display:flex;gap:4px;flex-direction:column;align-items:flex-end">
-                <span class="tag t1">科目 1</span>
-                <span class="stag stag-both">4梯次200題</span>
-              </div>
-            </div>
-            <div class="subj-item" onclick="startExam('sci2_all')">
-              <div><div class="subj-name">科目二全真題大會考</div><div class="subj-cnt">114Q4＋115三次・共250道官方真題</div></div>
-              <div style="display:flex;gap:4px;flex-direction:column;align-items:flex-end">
-                <span class="tag t2">科目 2</span>
-                <span class="stag stag-both">4梯次250題</span>
-              </div>
-            </div>
-            <div class="subj-item" onclick="startExam('official_all')">
-              <div><div class="subj-name">官方全真題模擬練習</div><div class="subj-cnt">全官方題庫共 450 題・依設定抽題</div></div>
-              <div style="display:flex;gap:4px;flex-direction:column;align-items:flex-end">
-                <span class="tag tg">官方總匯</span>
-                <span class="stag stag-official">450題官方</span>
-              </div>
-            </div>
-            <div class="subj-item" onclick="startExam('random')">
-              <div><div class="subj-name">全庫隨機混合練習</div><div class="subj-cnt">官方 ＋ 樣題 ＋ 模擬共 555 題・依設定抽題</div></div>
-              <div style="display:flex;gap:4px;flex-direction:column;align-items:flex-end">
-                <span class="tag tg">全庫總覽</span>
-                <span class="stag stag-both">555題全庫</span>
-              </div>
-            </div>
-</div>
-      <!-- ⚖️ AITerms 核心增補模組 2：初級 vs 中級 考試等級完整對照指南 -->
-      <div id="level-guide" class="info-section">
-        <div class="section-header">
-          <div>
-            <div class="section-title"><span>⚖️</span> iPAS AI 應用規劃師：初級 vs 中級 完整對照指南</div>
-            <div class="section-desc">經濟部能力鑑定分為非技術與技術兩大體系，選擇最適合你的報考策略</div>
-          </div>
+      <!-- 專區 2：🔵 歷屆真題與全真大會考 -->
+      <div class="qb-section-head">
+        <div class="qb-section-title">
+          <span>🔵</span> 經典真題與全真大會考（綜合跨梯次大考驗）
         </div>
-        <div class="level-compare-card">
-          <table class="level-table">
+        <div class="qb-section-sub">大容量真題綜合練功</div>
+      </div>
+
+      <div class="qb-cards-grid">
+        <!-- 114Q4 科目一 -->
+        <div class="qb-exam-card" onclick="startExam('sci1_114')">
+          <div>
+            <div class="qb-card-top">
+              <span class="tag t1">科目 1</span>
+              <span class="stag stag-official">114-4 官方 🔵</span>
+            </div>
+            <div class="qb-card-subject">114-4 科目一真題試卷</div>
+            <div class="qb-card-meta">114年第四梯次 · 官方真題 50 題</div>
+          </div>
+          <div class="qb-card-btn"><span>開始測驗</span><span>→</span></div>
+        </div>
+
+        <!-- 114Q4 科目二 -->
+        <div class="qb-exam-card" onclick="startExam('sci2')">
+          <div>
+            <div class="qb-card-top">
+              <span class="tag t2">科目 2</span>
+              <span class="stag stag-official">114-4 官方 🔵</span>
+            </div>
+            <div class="qb-card-subject">114-4 科目二真題試卷</div>
+            <div class="qb-card-meta">114年第四梯次 · 官方真題 50 題</div>
+          </div>
+          <div class="qb-card-btn"><span>開始測驗</span><span>→</span></div>
+        </div>
+
+        <!-- 科目一全真題大會考 -->
+        <div class="qb-exam-card" onclick="startExam('sci1_all')">
+          <div>
+            <div class="qb-card-top">
+              <span class="tag t1">科目 1</span>
+              <span class="stag stag-both">4梯次 200 題</span>
+            </div>
+            <div class="qb-card-subject">科目一全真題大會考</div>
+            <div class="qb-card-meta">跨越 114Q4 ＋ 115 年三次，200 題完整刷透</div>
+          </div>
+          <div class="qb-card-btn"><span>隨機抽題測驗</span><span>→</span></div>
+        </div>
+
+        <!-- 科目二全真題大會考 -->
+        <div class="qb-exam-card" onclick="startExam('sci2_all')">
+          <div>
+            <div class="qb-card-top">
+              <span class="tag t2">科目 2</span>
+              <span class="stag stag-both">4梯次 250 題</span>
+            </div>
+            <div class="qb-card-subject">科目二全真題大會考</div>
+            <div class="qb-card-meta">跨越 114Q4 ＋ 115 年三次，250 題完整刷透</div>
+          </div>
+          <div class="qb-card-btn"><span>隨機抽題測驗</span><span>→</span></div>
+        </div>
+
+        <!-- 450 題官方全真題模擬練習 -->
+        <div class="qb-exam-card" onclick="startExam('official_all')">
+          <div>
+            <div class="qb-card-top">
+              <span class="tag tg">官方總匯</span>
+              <span class="stag stag-official">450 題真題池</span>
+            </div>
+            <div class="qb-card-subject">官方全真題模擬大考</div>
+            <div class="qb-card-meta">自官方 450 題真題庫中依設定題數隨機抽出</div>
+          </div>
+          <div class="qb-card-btn"><span>全真考場模擬</span><span>→</span></div>
+        </div>
+
+        <!-- 555 題全庫隨機混合練習 -->
+        <div class="qb-exam-card" onclick="startExam('random')">
+          <div>
+            <div class="qb-card-top">
+              <span class="tag tg">全庫旗艦</span>
+              <span class="stag stag-both">555 題全庫</span>
+            </div>
+            <div class="qb-card-subject">全庫 555 題隨機挑戰</div>
+            <div class="qb-card-meta">真題 450 題 ＋ 樣題 50 題 ＋ 模擬 55 題全覆蓋</div>
+          </div>
+          <div class="qb-card-btn"><span>終極隨機抽題</span><span>→</span></div>
+        </div>
+      </div>
+
+      <!-- 專區 3：📝 樣題與模擬練習 -->
+      <div class="qb-section-head">
+        <div class="qb-section-title">
+          <span>📝</span> 官方公告樣題與專項模擬題
+        </div>
+        <div class="qb-section-sub">經典考點補強</div>
+      </div>
+
+      <div class="qb-cards-grid">
+        <!-- 官方公告樣題 -->
+        <div class="qb-exam-card" onclick="startExam('sample')">
+          <div>
+            <div class="qb-card-top">
+              <span class="tag tg">官方指引</span>
+              <span class="stag" style="background:rgba(255,165,0,.12);color:#ffa500;border:1px solid rgba(255,165,0,.3)">樣題 50 題</span>
+            </div>
+            <div class="qb-card-subject">官方能力指標示範樣題</div>
+            <div class="qb-card-meta">經濟部初版公告指引核心樣題精析 50 題</div>
+          </div>
+          <div class="qb-card-btn"><span>開始測驗</span><span>→</span></div>
+        </div>
+
+        <!-- 專家模擬題庫 -->
+        <div class="qb-exam-card" onclick="startExam('mock')">
+          <div>
+            <div class="qb-card-top">
+              <span class="tag tg">名師押題</span>
+              <span class="stag stag-mock">模擬 55 題</span>
+            </div>
+            <div class="qb-card-subject">考前精選高頻模擬試卷</div>
+            <div class="qb-card-meta">針對 Agentic AI、MCP、Guardrails 擴充模擬題</div>
+          </div>
+          <div class="qb-card-btn"><span>開始測驗</span><span>→</span></div>
+        </div>
+      </div>
+
+      <!-- ════════ 備考指南與出題分析 ════════ -->
+      <div class="section-header" style="margin-top:36px">
+        <div class="section-title"><span>🎯</span> 科學備考 4 步黃金法</div>
+        <div class="section-desc">照著高效節奏走，把時間花在投報率最高的核心考點上</div>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <span class="step-num">STEP 01</span>
+          <div class="step-title">建立架構觀</div>
+          <div class="step-text">掌握「鑑別式 AI（傳統 ML）」與「生成式 AI（LLM/多模態）」分界線，先搞懂整體地圖。</div>
+        </div>
+        <div class="step-card">
+          <span class="step-num">STEP 02</span>
+          <div class="step-title">查術語、抓高頻</div>
+          <div class="step-text">對齊官方 115 最新 16 大能力指標，掌握關鍵術語（RAG、RLHF、MCP、Guardrails、同態加密）。</div>
+        </div>
+        <div class="step-card">
+          <span class="step-num">STEP 03</span>
+          <div class="step-title">多維度深層理解</div>
+          <div class="step-text">透過白話比喻、新舊技術對比、因果推論三重解析，徹底搞懂原理與技術邊界，告別死記硬背。</div>
+        </div>
+        <div class="step-card">
+          <span class="step-num">STEP 04</span>
+          <div class="step-title">真題驗證與模擬考</div>
+          <div class="step-text">歷屆 450 道官方真題全真驗證，搭配每個錯誤選項詳細原因與錯題專區，考前穩拿 70+ 及格！</div>
+        </div>
+      </div>
+
+      <!-- 初級 vs 中級 對照指南 -->
+      <div class="section-header" style="margin-top:36px">
+        <div class="section-title"><span>⚖️</span> iPAS AI 應用規劃師：初級 vs 中級 完整對照指南</div>
+        <div class="section-desc">經濟部能力鑑定分為規劃端與技術端兩大體系，選擇最適合你的報考策略</div>
+      </div>
+
+      <div class="comp-card" style="margin-bottom:24px">
+        <div class="comp-header">
+          <div class="comp-badge">官方架構對照</div>
+          <div style="font-size:15px;font-weight:700">兩大能力鑑定等級核心差異一覽</div>
+          <div style="font-size:12px;color:var(--text-dim);margin-top:2px">初級側重導入規劃與應用評估；中級側重系統建置、微調與程式實作</div>
+        </div>
+        <div class="comp-table-wrap">
+          <table class="comp-table">
             <thead>
               <tr>
-                <th class="td-feat">評鑑面向</th>
-                <th class="td-l1">初級（非技術／跨領域背景）</th>
-                <th class="td-l2">中級（技術／工程開發背景）</th>
+                <th style="width:18%">比較維度</th>
+                <th style="width:41%;background:rgba(217,119,87,.08);color:var(--accent)">🌱 初級 AI 應用規劃師（本系統針對）</th>
+                <th style="width:41%;background:rgba(93,122,146,.08);color:var(--accent2)">🚀 中級 AI 應用規劃師</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td class="td-feat">適合對象</td>
-                <td class="td-l1">商管、行銷、營運、PM、設計、文法商各領域或 AI 應用初學者</td>
-                <td class="td-l2">資工、電機、資管背景、軟體工程師、AI/ML 開發者、數據分析師</td>
+                <td class="dim-col">定位與受眾</td>
+                <td><span class="highlight-kw">應用導入與策略規劃</span><br><span style="font-size:11px;color:var(--text-dim)">專案經理（PM）、數位轉型顧問、產品經理、跨領域商業分析師</span></td>
+                <td><span class="highlight-kw">工程建置與技術實作</span><br><span style="font-size:11px;color:var(--text-dim)">AI 工程師、軟體工程師、資料科學家、MLOps 架構師</span></td>
               </tr>
               <tr>
-                <td class="td-feat">程式能力要求</td>
-                <td class="td-l1"><strong style="color:var(--green)">不需程式能力</strong>，無程式碼題，著重觀念理解與業務應用規劃</td>
-                <td class="td-l2"><strong style="color:var(--accent)">需要程式閱讀能力</strong>，約含 25% Python 程式碼閱讀與演算法分析題</td>
+                <td class="dim-col">程式碼需求</td>
+                <td><strong style="color:var(--green)">零程式碼實作</strong><br><span style="font-size:11px;color:var(--text-dim)">只需具備邏輯理解、API 調用觀念、No-code/Low-code 評估能力</span></td>
+                <td><strong style="color:var(--warn)">需具備寫扣能力</strong><br><span style="font-size:11px;color:var(--text-dim)">Python、LangChain、LlamaIndex 程式撰寫、模型微調腳本實作</span></td>
               </tr>
               <tr>
-                <td class="td-feat">考試科目與題型</td>
-                <td class="td-l1">
-                  <strong>2 科目・各 50 題單選（共 100 題）</strong><br>
-                  • L11 人工智慧基礎概論<br>
-                  • L12 生成式 AI 應用與規劃
+                <td class="dim-col">考試科目</td>
+                <td>
+                  <strong>科目一：人工智慧基礎概論</strong><br>
+                  <strong>科目二：生成式AI應用與規劃</strong>
                 </td>
-                <td class="td-l2">
-                  <strong>3 科目・L21必考 ＋ L22/L23擇一（考2科）</strong><br>
-                  • L21 AI 技術應用與規劃（必考）<br>
-                  • L22 大數據處理分析 或 L23 機器學習技術（擇一）
+                <td>
+                  <strong>科目一：AI 系統架構與工程設計</strong><br>
+                  <strong>科目二：大語言模型應用開發與微調實務</strong>
                 </td>
               </tr>
               <tr>
-                <td class="td-feat">及格標準</td>
-                <td class="td-l1">
-                  • 同時報考：平均達 70 分且單科不低於 60 分<br>
-                  • 分開報考：各科皆需達 70 分（單科成績保留 3 年）
-                </td>
-                <td class="td-l2">
-                  • 報考兩科皆需達 70 分<br>
-                  • 單科成績保留 3 年，合格率約 25%~35%
-                </td>
-              </tr>
-              <tr>
-                <td class="td-feat">報名費用</td>
-                <td class="td-l1">NT$ 400 元 / 科（兩科共 NT$ 800）</td>
-                <td class="td-l2">NT$ 500 元 / 科（115-116年早鳥推廣優惠，原價 1,500 元）</td>
-              </tr>
-              <tr>
-                <td class="td-feat">證書效期</td>
-                <td class="td-l1"><strong style="color:var(--green)">永久有效</strong>，經濟部發證，免換證免展延</td>
-                <td class="td-l2"><strong>5 年有效</strong>，需透過在職持續學習或換證展延</td>
+                <td class="dim-col">題型與及格標準</td>
+                <td>50 題單選題（70 分及格，單科可保留 3 年）</td>
+                <td>單選題 ＋ 實作題／情境題（70 分及格）</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- 📊 AITerms 核心增補模組 3：115 年最新評鑑架構（L-code）出題權重統計 -->
-      <div class="info-section">
-        <div class="section-header">
-          <div>
-            <div class="section-title"><span>📊</span> 115 最新 L-code 官方評鑑架構 · 出題比重趨勢</div>
-            <div class="section-desc">統計 114Q4 ＋ 115年三次真題（450題官方試題）之重點出題領域傾向</div>
+      <!-- FAQ 考前須知 -->
+      <div class="section-header" style="margin-top:36px">
+        <div class="section-title"><span>🧭</span> 考前必讀須知與常態 FAQ</div>
+        <div class="section-desc">彙整官方考場規範與歷屆考生實戰上榜經驗</div>
+      </div>
+
+      <div class="faq-list" style="margin-bottom:24px">
+        <div class="faq-item">
+          <div class="faq-q">Q1. 考試題型與作答時間？</div>
+          <div class="faq-a">
+            每科均為 <strong>50 題單選題</strong>（4 選 1，答錯不倒扣），作答時間為 <strong>60 分鐘</strong>（平均每題有 72 秒時間思考），題庫難度適中，重視觀念精準性。
           </div>
         </div>
-        <div class="card" style="padding:18px 22px;margin-bottom:26px;">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
-            <div>
-              <div style="font-size:12.5px;font-weight:700;color:var(--accent);margin-bottom:10px;">📌 科目一：L11 人工智慧基礎概論（115年出題比重）</div>
-              <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;">
-                <div>
-                  <div style="display:flex;justify-content:space-between;margin-bottom:3px;color:var(--text-dim);"><span>機器學習與深度學習核心原理 (CNN/RNN/Transformer)</span><span style="font-family:'IBM Plex Mono',monospace;color:var(--text);font-weight:600;">28%</span></div>
-                  <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;"><div style="width:28%;height:100%;background:var(--accent);"></div></div>
-                </div>
-                <div>
-                  <div style="display:flex;justify-content:space-between;margin-bottom:3px;color:var(--text-dim);"><span>資料處理、特徵工程與偏誤防範 (SMOTE/Scaling/Leakage)</span><span style="font-family:'IBM Plex Mono',monospace;color:var(--text);font-weight:600;">24%</span></div>
-                  <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;"><div style="width:24%;height:100%;background:var(--accent);"></div></div>
-                </div>
-                <div>
-                  <div style="display:flex;justify-content:space-between;margin-bottom:3px;color:var(--text-dim);"><span>模型評估指標與驗證 (F1-score/Recall/ROC-AUC)</span><span style="font-family:'IBM Plex Mono',monospace;color:var(--text);font-weight:600;">20%</span></div>
-                  <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;"><div style="width:20%;height:100%;background:var(--accent);"></div></div>
-                </div>
-                <div>
-                  <div style="display:flex;justify-content:space-between;margin-bottom:3px;color:var(--text-dim);"><span>可解釋 AI（SHAP/LIME/反事實解釋）與推論部署</span><span style="font-family:'IBM Plex Mono',monospace;color:var(--text);font-weight:600;">16%</span></div>
-                  <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;"><div style="width:16%;height:100%;background:var(--accent);"></div></div>
-                </div>
-                <div>
-                  <div style="display:flex;justify-content:space-between;margin-bottom:3px;color:var(--text-dim);"><span>AI 倫理治理、個資保護與合規標準</span><span style="font-family:'IBM Plex Mono',monospace;color:var(--text);font-weight:600;">12%</span></div>
-                  <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;"><div style="width:12%;height:100%;background:var(--accent);"></div></div>
-                </div>
-              </div>
-            </div>
-            <div>
-              <div style="font-size:12.5px;font-weight:700;color:var(--accent2-bright);margin-bottom:10px;">✨ 科目二：L12 生成式 AI 應用與規劃（115年出題比重）</div>
-              <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;">
-                <div>
-                  <div style="display:flex;justify-content:space-between;margin-bottom:3px;color:var(--text-dim);"><span>RAG 檢索增強生成架構（Chunking/增量索引/向量檢索）</span><span style="font-family:'IBM Plex Mono',monospace;color:var(--text);font-weight:600;">26%</span></div>
-                  <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;"><div style="width:26%;height:100%;background:var(--accent2-bright);"></div></div>
-                </div>
-                <div>
-                  <div style="display:flex;justify-content:space-between;margin-bottom:3px;color:var(--text-dim);"><span>提示工程設計（CoT/ToT/上下文工程/少樣本）</span><span style="font-family:'IBM Plex Mono',monospace;color:var(--text);font-weight:600;">22%</span></div>
-                  <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;"><div style="width:22%;height:100%;background:var(--accent2-bright);"></div></div>
-                </div>
-                <div>
-                  <div style="display:flex;justify-content:space-between;margin-bottom:3px;color:var(--text-dim);"><span>Agent 多代理系統、MCP協議與工作流程自動化</span><span style="font-family:'IBM Plex Mono',monospace;color:var(--text);font-weight:600;">20%</span></div>
-                  <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;"><div style="width:20%;height:100%;background:var(--accent2-bright);"></div></div>
-                </div>
-                <div>
-                  <div style="display:flex;justify-content:space-between;margin-bottom:3px;color:var(--text-dim);"><span>模型微調、知識蒸餾（KD）與量化壓縮</span><span style="font-family:'IBM Plex Mono',monospace;color:var(--text);font-weight:600;">18%</span></div>
-                  <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;"><div style="width:18%;height:100%;background:var(--accent2-bright);"></div></div>
-                </div>
-                <div>
-                  <div style="display:flex;justify-content:space-between;margin-bottom:3px;color:var(--text-dim);"><span>安全性防護（Guardrails/提示注入防禦/MMLU評測）</span><span style="font-family:'IBM Plex Mono',monospace;color:var(--text);font-weight:600;">14%</span></div>
-                  <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;"><div style="width:14%;height:100%;background:var(--accent2-bright);"></div></div>
-                </div>
-              </div>
-            </div>
+        <div class="faq-item">
+          <div class="faq-q">Q2. 及格標準與單科保留制度？</div>
+          <div class="faq-a">
+            兩科滿分各 100 分，<strong>70 分為及格門檻</strong>（需答對 35 題以上）。若單次考試僅一科及格，該科合格成績<strong>可保留 3 年</strong>，在 3 年內通過另一科即可取得證書。
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Q3. 是否需要寫 Python 程式碼？</div>
+          <div class="faq-a">
+            <strong>不需要！</strong>初級規劃師專注於概念理解、架構選型、法規倫理與商業落地，不考程式碼語法（中級才需要撰寫程式碼）。
           </div>
         </div>
       </div>
 
-      <!-- 🧭 AITerms 核心增補模組 4：考前叮嚀與常見 FAQ -->
-      <div class="info-section">
-        <div class="section-header">
-          <div>
-            <div class="section-title"><span>🧭</span> 考前必讀須知與常態 FAQ（高頻精選問答）</div>
-            <div class="section-desc">彙整官方考場規範與歷屆考生實戰上榜經驗</div>
-          </div>
-        </div>
-        <div class="faq-grid">
-          <div class="faq-item" onclick="this.classList.toggle('open')">
-            <div class="faq-q">Q1. 考試當天必須攜帶哪些物品？有計算機規定嗎？</div>
-            <div class="faq-a">
-              <strong>必帶證件：</strong>具照片之身分證、駕照或護照正本（健保卡需有照片），以及准考證列印紙本。<br>
-              <strong>文具配備：</strong>2B 鉛筆（劃卡用）、黑色或藍色原子筆、橡皮擦。<br>
-              <strong>計算機規定：</strong>初級考試若准考證未特別註明，原則上不需也不得使用計算機；試題中之統計與計算（如 F1-score、混淆矩陣）均為簡易整數比值運算。<br>
-              <strong>電子設備：</strong>手機、智慧手錶一律強制關機並置於考場臨時置物區，發出聲響視同違規。
-            </div>
-          </div>
-          <div class="faq-item" onclick="this.classList.toggle('open')">
-            <div class="faq-q">Q2. 初級通過率大約是多少？非技術背景真的能考過嗎？</div>
-            <div class="faq-a">
-              官方統計初級通過率約在 <strong>38% ~ 57%</strong> 之間。所有題目均為四選一單選題，<strong>答錯不倒扣</strong>。<br>
-              初級重點完全在於「概念理解與應用邏輯」，沒有任何程式碼撰寫題。文組、商管、設計背景考生，只要按本系統刷完 450 道官方真題並詳讀解析，通常 2~4 週即可順利通過。
-            </div>
-          </div>
-          <div class="faq-item" onclick="this.classList.toggle('open')">
-            <div class="faq-q">Q3. 考試時間如何分配？有什麼臨場應試技巧？</div>
-            <div class="faq-a">
-              每科考試時間為 <strong>80 分鐘，共 50 題</strong>，平均每題約有 1.6 分鐘。<br>
-              <strong>技巧一【先易後難】：</strong>一眼能確定答案的觀念題（如名詞定義）立即作答；計算題或長情境題目先做記號留待第二輪。<br>
-              <strong>技巧二【小心否定題】：</strong>題目常出現「何者『非』屬」、「何者『不正確』」，務必圈出關鍵字避免粗心。<br>
-              <strong>技巧三【絕不留白】：</strong>單選題不倒扣，最後 5 分鐘檢查劃卡，確保每一題都已填答。
-            </div>
-          </div>
-          <div class="faq-item" onclick="this.classList.toggle('open')">
-            <div class="faq-q">Q4. 如果只通過其中一科，成績可以保留嗎？</div>
-            <div class="faq-a">
-              <strong>可以！單科成績保留 3 年。</strong><br>
-              若同時報考兩科，及格標準為「兩科平均 70 分且單科不低於 60 分」；若分梯次單科報考，該科須達 70 分及格。在 3 年保留期內通過另一科，即可獲發經濟部 iPAS AI 應用規劃師證書。
-            </div>
-          </div>
-        </div>
-      </div>
-
-        </div>
-        <div class="card">
-          <div class="card-hd"><div class="card-title">主題分類進度</div><div>📊</div></div>
-          <div class="prog-list">
-            <div class="prog-item"><div class="prog-lbl"><span>機器學習基礎</span><span id="pg1">0%</span></div><div class="prog-bar"><div class="prog-fill" id="pf1" style="width:0"></div></div></div>
-            <div class="prog-item"><div class="prog-lbl"><span>資料處理工程</span><span id="pg2">0%</span></div><div class="prog-bar"><div class="prog-fill" id="pf2" style="width:0"></div></div></div>
-            <div class="prog-item"><div class="prog-lbl"><span>AI 治理與法規</span><span id="pg3">0%</span></div><div class="prog-bar"><div class="prog-fill" id="pf3" style="width:0"></div></div></div>
-            <div class="prog-item"><div class="prog-lbl"><span>生成式AI與提示</span><span id="pg4">0%</span></div><div class="prog-bar"><div class="prog-fill" id="pf4" style="width:0"></div></div></div>
-            <div class="prog-item"><div class="prog-lbl"><span>AI 系統導入規劃</span><span id="pg5">0%</span></div><div class="prog-bar"><div class="prog-fill" id="pf5" style="width:0"></div></div></div>
-          </div>
-        </div>
-      </div>
-    <!-- HOME FOOTER BANNER -->
-      <div class="card" style="margin-top:16px;background:linear-gradient(135deg,rgba(76,141,255,.05),rgba(0,229,176,.03));border:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;">
+      <!-- 底部考生交流橫幅 -->
+      <div class="card" style="margin-top:16px;background:linear-gradient(135deg,rgba(217,119,87,.08),rgba(93,122,146,.06));border:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;padding:20px 24px;border-radius:14px">
         <div>
-          <div style="font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;">
+          <div style="font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;color:var(--text)">
             <span>💬 考生交流與問題反饋</span>
-            <span style="font-size:10px;background:rgba(0,229,176,.12);color:var(--accent2);border:1px solid rgba(0,229,176,.25);padding:1px 6px;border-radius:4px;">即時互動</span>
+            <span style="font-size:11px;background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent-border);padding:2px 8px;border-radius:var(--pill);">即時互動</span>
           </div>
-          <div style="font-size:11px;color:var(--text-dim);margin-top:4px;">
-            發現題目疑義、解答勘誤或功能建議？支援 GitHub 登入討論，亦可直接免登入快速寄信反饋！
+          <div style="font-size:12px;color:var(--text-dim);margin-top:4px;">
+            發現題目疑義、解答討論或功能建議？支援免登入一鍵快速寄信，亦可登入 GitHub 留言討論！
           </div>
         </div>
-        <div style="display:flex;gap:8px;align-items:center;">
+        <div style="display:flex;gap:10px;align-items:center;">
           <button class="btn btn-ghost" onclick="gp('feedback',document.querySelectorAll('.nav-item')[6])">💬 前往留言區</button>
           <button class="btn btn-primary" onclick="openFeedbackModal('首頁橫幅')">💌 免登入寄信</button>
         </div>
       </div>
     </div>
 
-    
     <!-- SEARCH -->
     <div id="page-search" class="page">
       <div style="margin-bottom:18px">
@@ -1990,51 +2287,90 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
 
     <!-- SETTINGS -->
     <div id="page-settings" class="page">
-      <div style="margin-bottom:20px"><h2 style="font-size:18px;margin-bottom:6px">個人設定</h2></div>
-      <div class="set-group" style="margin-bottom:20px">
-        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px">考試設定</div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:6px">
-          <div><div style="font-size:13px">每次練習題數</div><div style="font-size:11px;color:var(--text-muted);margin-top:1px">隨機混合模式下的題數</div></div>
-          <select style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:7px;font-family:inherit;font-size:12px;cursor:pointer" id="set-cnt">
-            <option value="10">10 題</option><option value="20" selected>20 題</option><option value="30">30 題</option><option value="50">50 題</option>
-          </select>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:6px">
-          <div><div style="font-size:13px">啟用計時器</div></div>
-          <div class="tog on" id="tog-t" onclick="this.classList.toggle('on')" style="width:40px;height:22px;background:var(--accent);border-radius:11px;cursor:pointer;position:relative;border:1px solid var(--accent);transition:background .2s"></div>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:6px">
-          <div><div style="font-size:13px">即時顯示解析</div></div>
-          <div class="tog on" id="tog-e" onclick="this.classList.toggle('on')" style="width:40px;height:22px;background:var(--accent);border-radius:11px;cursor:pointer;position:relative;border:1px solid var(--accent);transition:background .2s"></div>
-        </div>
-      </div>
-      <div>
-        <div class="set-group" style="margin-bottom:20px">
-        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px">作答輔助設定</div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:6px">
-          <div>
-            <div style="font-size:13px">鍵盤快捷鍵作答</div>
-            <div style="font-size:11px;color:var(--text-muted);margin-top:1px">支援按鍵 1/2/3/4 或 A/B/C/D 作答，←/→ 切換題目，Enter 下一題</div>
-          </div>
-          <div class="tog on" id="tog-k" onclick="toggleShortcuts(this)" style="width:40px;height:22px;background:var(--accent);border-radius:11px;cursor:pointer;position:relative;border:1px solid var(--accent);transition:background .2s"></div>
-        </div>
+      <div style="margin-bottom:20px">
+        <h2 style="font-size:20px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px">
+          ⚙️ 個人偏好與作答設定
+        </h2>
+        <p style="font-size:13px;color:var(--text-dim)">
+          自訂做題題數、計時器、即時解析反饋與鍵盤快捷鍵，打造最順手的刷題體驗。
+        </p>
       </div>
 
-      <div class="set-group" style="margin-bottom:20px">
-        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px">進度備份與資料管理</div>
-        
+      <!-- 考試與作答設定 -->
+      <div class="set-group" style="margin-bottom:24px">
+        <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px">
+          作答輔助與考試設定
+        </div>
+
+        <!-- 每次練習題數 -->
+        <div class="setting-item-row" style="cursor:default">
+          <div>
+            <div class="setting-info-title">📊 每次隨機練習題數</div>
+            <div class="setting-info-desc">全真題模擬與隨機混合抽題時的預設測驗題數</div>
+          </div>
+          <select style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 14px;border-radius:8px;font-family:inherit;font-size:13px;cursor:pointer;outline:none" id="set-cnt" onchange="saveSettingsCnt(this.value)">
+            <option value="10">10 題（極速暖身）</option>
+            <option value="20" selected>20 題（標準日常）</option>
+            <option value="30">30 題（深度精練）</option>
+            <option value="50">50 題（全真模考）</option>
+          </select>
+        </div>
+
+        <!-- 啟用計時器（超靈敏全列開關） -->
+        <label class="setting-item-row" for="switch-timer">
+          <div>
+            <div class="setting-info-title">⏱️ 啟用作答倒數計時器</div>
+            <div class="setting-info-desc">測驗中顯示倒數碼錶（每題分配 72 秒），支援隨時暫停與繼續</div>
+          </div>
+          <div class="modern-switch">
+            <input type="checkbox" id="switch-timer" checked onchange="toggleSettingTimer(this.checked)">
+            <span class="modern-slider"></span>
+          </div>
+        </label>
+
+        <!-- 即時顯示解析（超靈敏全列開關） -->
+        <label class="setting-item-row" for="switch-exp">
+          <div>
+            <div class="setting-info-title">💡 答題後即時顯示解析</div>
+            <div class="setting-info-desc">選擇答案後立即展示官方考點詳析與破題關鍵，適合平時理解記憶</div>
+          </div>
+          <div class="modern-switch">
+            <input type="checkbox" id="switch-exp" checked onchange="toggleSettingExp(this.checked)">
+            <span class="modern-slider"></span>
+          </div>
+        </label>
+
+        <!-- 鍵盤快捷鍵作答（超靈敏全列開關） -->
+        <label class="setting-item-row" for="switch-shortcuts">
+          <div>
+            <div class="setting-info-title">⌨️ 鍵盤快捷鍵極速刷題</div>
+            <div class="setting-info-desc">支援按鍵 1/2/3/4 或 A/B/C/D 秒選選項，←/→ 翻題，Enter 下一題</div>
+          </div>
+          <div class="modern-switch">
+            <input type="checkbox" id="switch-shortcuts" checked onchange="toggleSettingShortcuts(this.checked)">
+            <span class="modern-slider"></span>
+          </div>
+        </label>
+      </div>
+
+      <!-- 進度備份與資料管理 -->
+      <div class="set-group" style="margin-bottom:24px">
+        <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px">
+          進度備份與本機資料管理
+        </div>
+
         <div class="backup-card">
           <div>
-            <div style="font-size:13px;font-weight:600">📥 匯出個人刷題備份 (JSON)</div>
-            <div style="font-size:11px;color:var(--text-dim);margin-top:2px">包含總答題數、正確率、全部錯題紀錄與收藏題目</div>
+            <div style="font-size:14px;font-weight:600;color:var(--text)">📥 匯出個人刷題備份 (JSON)</div>
+            <div style="font-size:12px;color:var(--text-dim);margin-top:2px">打包總答題數、正確率、所有錯題紀錄與收藏星號題庫</div>
           </div>
           <button class="btn btn-ghost btn-sm" onclick="exportBackupData()">匯出備份</button>
         </div>
 
         <div class="backup-card">
           <div>
-            <div style="font-size:13px;font-weight:600">📤 匯入刷題進度備份 (JSON)</div>
-            <div style="font-size:11px;color:var(--text-dim);margin-top:2px">跨裝置或更換瀏覽器時，可一鍵還原所有紀錄</div>
+            <div style="font-size:14px;font-weight:600;color:var(--text)">📤 匯入刷題進度備份 (JSON)</div>
+            <div style="font-size:12px;color:var(--text-dim);margin-top:2px">換新手機、更換電腦或清理瀏覽器快取後，一鍵即刻復原紀錄</div>
           </div>
           <label class="btn btn-ghost btn-sm" style="margin:0;cursor:pointer">
             選擇檔案
@@ -2044,29 +2380,22 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
 
         <div class="backup-card">
           <div>
-            <div style="font-size:13px;font-weight:600">📄 匯出錯題精析筆記 (TXT)</div>
-            <div style="font-size:11px;color:var(--text-dim);margin-top:2px">將目前所有答錯題目整理為清晰考前衝刺講義</div>
+            <div style="font-size:14px;font-weight:600;color:var(--text)">📄 匯出錯題精析筆記 (TXT)</div>
+            <div style="font-size:12px;color:var(--text-dim);margin-top:2px">將目前所有答錯題目整理為清晰考前衝刺講義文字檔</div>
           </div>
           <button class="btn btn-ghost btn-sm" onclick="exportWrongNotes()">下載筆記</button>
         </div>
 
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px">
+        <div class="setting-item-row" style="border-color:rgba(239,68,68,0.25);cursor:default">
           <div>
-            <div style="font-size:13px">重設所有練習紀錄</div>
-            <div style="font-size:11px;color:var(--text-muted)">清除已答題數、正確率、錯題清單與收藏</div>
+            <div style="font-size:14px;font-weight:600;color:var(--warn)">⚠️ 重設所有練習紀錄</div>
+            <div style="font-size:12px;color:var(--text-dim);margin-top:2px">清除已答題數、正確率、錯題清單與收藏（此操作無法復原）</div>
           </div>
-          <button class="btn btn-sm" style="background:rgba(255,95,95,.1);color:var(--warn);border:1px solid rgba(255,95,95,.25)" onclick="clearAll()">重設紀錄</button>
-        </div>
-      </div>
-<!-- orig -->
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px">
-          <div><div style="font-size:13px">清除練習紀錄</div></div>
-          <button class="btn btn-sm" style="background:rgba(255,95,95,.1);color:var(--warn);border:1px solid rgba(255,95,95,.25)" onclick="clearAll()">清除</button>
+          <button class="btn btn-sm" style="background:rgba(239,68,68,0.12);color:var(--warn);border:1px solid rgba(239,68,68,0.3)" onclick="clearAll()">重設紀錄</button>
         </div>
       </div>
     </div>
-
-  </div>
+</div>
 </main>
 </div>
 <script>
@@ -2812,6 +3141,55 @@ const TOPICS = [
 ];
 
 
+
+// ═══════ 現代設定開關事件處理與持久化 ═══════
+function initSettingsUI(){
+  const savedCnt = safeStorage.getItem('ipas_cnt') || '20';
+  const cntEl = document.getElementById('set-cnt');
+  if(cntEl) cntEl.value = savedCnt;
+
+  const timerOn = safeStorage.getItem('ipas_timer_on');
+  const timerSw = document.getElementById('switch-timer');
+  if(timerSw) timerSw.checked = (timerOn !== 'false');
+
+  const expOn = safeStorage.getItem('ipas_exp_on');
+  const expSw = document.getElementById('switch-exp');
+  if(expSw) expSw.checked = (expOn !== 'false');
+
+  const scOn = safeStorage.getItem('ipas_shortcuts');
+  const scSw = document.getElementById('switch-shortcuts');
+  if(scSw) scSw.checked = (scOn !== 'false');
+  S.shortcutsEnabled = (scOn !== 'false');
+}
+
+function saveSettingsCnt(val){
+  safeStorage.setItem('ipas_cnt', val);
+}
+
+function toggleSettingTimer(checked){
+  safeStorage.setItem('ipas_timer_on', String(checked));
+}
+
+function toggleSettingExp(checked){
+  safeStorage.setItem('ipas_exp_on', String(checked));
+}
+
+function toggleSettingShortcuts(checked){
+  S.shortcutsEnabled = checked;
+  safeStorage.setItem('ipas_shortcuts', String(checked));
+  if(S.qs && S.qs.length > 0) renderQ();
+}
+
+function isTimerEnabled(){
+  const sw = document.getElementById('switch-timer');
+  return sw ? sw.checked : (safeStorage.getItem('ipas_timer_on') !== 'false');
+}
+
+function isExpEnabled(){
+  const sw = document.getElementById('switch-exp');
+  return sw ? sw.checked : (safeStorage.getItem('ipas_exp_on') !== 'false');
+}
+
 // ═══════ 安全性防禦層：Safe Storage Proxy & HTML Escape ═══════
 const safeStorage = {
   getItem: function(k){
@@ -2993,7 +3371,7 @@ function startExam(mode){
         :(mode==='sample')?Math.min(50,pool.length)
         :Math.min(cnt,pool.length);
   S.qs=pool.slice(0,n);S.ans=new Array(n).fill(null);S.cur=0;S.correct=0;
-  const timerOn=document.getElementById('tog-t').classList.contains('on');
+  const timerOn = isTimerEnabled();
   if(timerOn){S.timeLeft=n*72;startTimer();}else{clearInterval(S.timer);document.getElementById('timer').textContent='∞';}
   gp('exam',document.querySelectorAll('.nav-item')[1]);
   document.getElementById('exam-area').style.display='block';
@@ -3023,7 +3401,7 @@ function srcBorderColor(q){
 
 function renderQ(){
   const q=S.qs[S.cur],ua=S.ans[S.cur];
-  const expOn=document.getElementById('tog-e').classList.contains('on');
+  const expOn = isExpEnabled();
   document.getElementById('eq-n').textContent=S.cur+1;
   document.getElementById('qprog').textContent=`${S.cur+1} / ${S.qs.length}`;
   const keys=['A','B','C','D'];
@@ -3133,7 +3511,7 @@ function startTopicExam(tid){
   const pool=QB_ALL.filter(q=>q.topic===tid).sort(()=>Math.random()-.5);
   const cnt=parseInt(document.getElementById('set-cnt').value)||10;
   S.qs=pool.slice(0,Math.min(cnt,pool.length));S.ans=new Array(S.qs.length).fill(null);S.cur=0;S.correct=0;lastMode='topic_'+tid;
-  const timerOn=document.getElementById('tog-t').classList.contains('on');
+  const timerOn = isTimerEnabled();
   if(timerOn){S.timeLeft=S.qs.length*72;startTimer();}else{clearInterval(S.timer);document.getElementById('timer').textContent='∞';}
   gp('exam',document.querySelectorAll('.nav-item')[1]);
   document.getElementById('exam-area').style.display='block';
@@ -5496,7 +5874,7 @@ initKeyboardShortcuts();
 if(document.readyState === 'loading'){
   document.addEventListener('DOMContentLoaded', initTheme);
 } else {
-  initTheme();
+  initTheme(); initSettingsUI();
 }
 
 </script>
