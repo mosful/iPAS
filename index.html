@@ -1560,6 +1560,112 @@ details.faq-item[open] .faq-icon-arrow {
   padding-top: 14px;
 }
 
+
+/* ─── 全域現代自訂通用彈窗 (App Dialog Modal) ─── */
+.app-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.app-dialog-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.app-dialog-card {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 18px;
+  max-width: 440px;
+  width: 100%;
+  padding: 28px 24px 22px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  transform: scale(0.94) translateY(10px);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.app-dialog-overlay.active .app-dialog-card {
+  transform: scale(1) translateY(0);
+}
+.dialog-icon-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  margin-bottom: 16px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+}
+.dialog-icon-wrap.error {
+  background: var(--warn-soft);
+  border-color: rgba(239, 68, 68, 0.35);
+  color: var(--warn);
+}
+.dialog-icon-wrap.success {
+  background: var(--green-soft);
+  border-color: rgba(16, 185, 129, 0.35);
+  color: var(--green);
+}
+.dialog-icon-wrap.warning {
+  background: var(--gold-soft);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: var(--gold);
+}
+.dialog-icon-wrap.info {
+  background: var(--accent-soft);
+  border-color: var(--accent-border);
+  color: var(--accent);
+}
+.dialog-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+  line-height: 1.35;
+}
+.dialog-message {
+  font-size: 13.5px;
+  color: var(--text-dim);
+  line-height: 1.65;
+  margin-bottom: 22px;
+  white-space: pre-line;
+  word-break: break-word;
+  max-height: 55vh;
+  overflow-y: auto;
+  padding: 0 6px;
+}
+.dialog-actions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  justify-content: center;
+}
+.dialog-actions button {
+  flex: 1;
+  padding: 11px 18px;
+  font-size: 13.5px;
+  font-weight: 600;
+  border-radius: 10px;
+}
+
 </style>
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </head>
@@ -3450,6 +3556,138 @@ function isExpEnabled(){
   return sw ? sw.checked : (safeStorage.getItem('ipas_exp_on') !== 'false');
 }
 
+
+// ═══════ 全域現代通用 Modal 彈窗引擎 ═══════
+let currentDialogResolver = null;
+
+function showAppModal(opts){
+  if(typeof opts === 'string') opts = { message: opts };
+  const overlay = document.getElementById('appDialogOverlay');
+  const iconWrap = document.getElementById('dialogIconWrap');
+  const icon = document.getElementById('dialogIcon');
+  const title = document.getElementById('dialogTitle');
+  const msg = document.getElementById('dialogMessage');
+  const cancelBtn = document.getElementById('dialogCancelBtn');
+  const confirmBtn = document.getElementById('dialogConfirmBtn');
+
+  if(!overlay) return;
+
+  const msgText = opts.message || '';
+  const type = opts.type || (
+    (msgText.includes('❌') || msgText.includes('失敗') || msgText.includes('錯誤')) ? 'error' :
+    (msgText.includes('🎉') || msgText.includes('成功') || msgText.includes('感謝')) ? 'success' :
+    (msgText.includes('⚠️') || msgText.includes('注意') || msgText.includes('為空')) ? 'warning' : 'info'
+  );
+
+  iconWrap.className = 'dialog-icon-wrap ' + type;
+  if(type === 'error') icon.textContent = '❌';
+  else if(type === 'success') icon.textContent = '🎉';
+  else if(type === 'warning') icon.textContent = '⚠️';
+  else icon.textContent = 'ℹ️';
+
+  title.textContent = opts.title || (type === 'error' ? '系統提示' : (type === 'success' ? '操作成功' : (type === 'warning' ? '注意事項' : '系統提示')));
+  msg.textContent = msgText;
+
+  cancelBtn.style.display = 'none';
+  confirmBtn.textContent = opts.confirmText || '我知道了';
+  confirmBtn.className = 'btn btn-primary btn-dialog-confirm';
+  confirmBtn.style.background = '';
+  confirmBtn.style.borderColor = '';
+  confirmBtn.style.color = '';
+
+  overlay.classList.add('active');
+  setTimeout(() => confirmBtn.focus(), 60);
+
+  return new Promise(resolve => {
+    currentDialogResolver = (res) => {
+      if(opts.onConfirm) opts.onConfirm();
+      resolve(res);
+    };
+  });
+}
+
+function showConfirmModal(opts){
+  if(typeof opts === 'string') opts = { message: opts };
+  const overlay = document.getElementById('appDialogOverlay');
+  const iconWrap = document.getElementById('dialogIconWrap');
+  const icon = document.getElementById('dialogIcon');
+  const title = document.getElementById('dialogTitle');
+  const msg = document.getElementById('dialogMessage');
+  const cancelBtn = document.getElementById('dialogCancelBtn');
+  const confirmBtn = document.getElementById('dialogConfirmBtn');
+
+  if(!overlay) return;
+
+  const type = opts.type || 'warning';
+  iconWrap.className = 'dialog-icon-wrap ' + (type === 'danger' ? 'error' : type);
+  icon.textContent = type === 'danger' ? '🗑️' : (type === 'error' ? '❌' : '⚠️');
+
+  title.textContent = opts.title || (type === 'danger' ? '確認刪除' : '確認操作');
+  msg.textContent = opts.message || '';
+
+  cancelBtn.style.display = 'block';
+  cancelBtn.textContent = opts.cancelText || '取消';
+  confirmBtn.textContent = opts.confirmText || '確定執行';
+
+  if(type === 'danger'){
+    confirmBtn.className = 'btn btn-dialog-confirm';
+    confirmBtn.style.background = 'var(--warn)';
+    confirmBtn.style.borderColor = 'var(--warn)';
+    confirmBtn.style.color = '#ffffff';
+  } else {
+    confirmBtn.className = 'btn btn-primary btn-dialog-confirm';
+    confirmBtn.style.background = '';
+    confirmBtn.style.borderColor = '';
+    confirmBtn.style.color = '';
+  }
+
+  overlay.classList.add('active');
+  setTimeout(() => confirmBtn.focus(), 60);
+
+  return new Promise(resolve => {
+    currentDialogResolver = (res) => {
+      if(res && opts.onConfirm) opts.onConfirm();
+      if(!res && opts.onCancel) opts.onCancel();
+      resolve(res);
+    };
+  });
+}
+
+function closeAppDialog(result){
+  const overlay = document.getElementById('appDialogOverlay');
+  if(overlay) overlay.classList.remove('active');
+  if(currentDialogResolver){
+    const fn = currentDialogResolver;
+    currentDialogResolver = null;
+    fn(result);
+  }
+}
+
+function handleDialogBackdrop(e){
+  if(e.target === document.getElementById('appDialogOverlay')){
+    closeAppDialog(false);
+  }
+}
+
+// 支援 ESC 關閉與 Enter 鍵確認
+window.addEventListener('keydown', (e) => {
+  const overlay = document.getElementById('appDialogOverlay');
+  if(overlay && overlay.classList.contains('active')){
+    if(e.key === 'Escape'){
+      closeAppDialog(false);
+      e.preventDefault();
+    } else if(e.key === 'Enter'){
+      closeAppDialog(true);
+      e.preventDefault();
+    }
+  }
+});
+
+// 全域安全攔截替換原生 window.alert
+window.alert = function(msg){
+  showAppModal({ message: msg });
+};
+
 // ═══════ 安全性防禦層：Safe Storage Proxy & HTML Escape ═══════
 const safeStorage = {
   getItem: function(k){
@@ -3579,12 +3817,24 @@ const PAGE_SUBTITLES = {
 
 function gp(id,el){
   if(id !== 'exam' && S.qs && S.qs.length > 0 && S.ans.some(a => a === null)){
-    if(!confirm('⚠️ 測驗正在進行中且尚未交卷，確定要離開目前測驗嗎？（離開將結束本輪作答）')){
-      return;
-    }
-    clearInterval(S.timer);
-    S.qs = [];
+    showConfirmModal({
+      title: '測驗進行中確認',
+      message: '您目前正在進行測驗且尚未交卷，確定要離開嗎？\n（離開將結束本輪作答，進度不會儲存）',
+      type: 'warning',
+      confirmText: '確定離開',
+      cancelText: '繼續作答',
+      onConfirm: () => {
+        clearInterval(S.timer);
+        S.qs = [];
+        executePageSwitch(id, el);
+      }
+    });
+    return;
   }
+  executePageSwitch(id, el);
+}
+
+function executePageSwitch(id, el){
   const sub = PAGE_SUBTITLES[id] ? `<span style="color:var(--text-dim);font-weight:400;margin-left:10px;font-size:12px">${PAGE_SUBTITLES[id]}</span>` : '';
   document.getElementById('ptitle').innerHTML = (PAGE_TITLES[id]||id) + ' ' + sub;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -3621,7 +3871,7 @@ function startExam(mode){
   else if(mode==='random') pool=[...QB_ALL];
   else if(mode==='wrong') pool=QB_ALL.filter(q=>S.wrongIds.includes(q.id));
   else pool=[...QB_ALL];
-  if(!pool.length){alert('此題庫目前為空，或沒有錯題記錄！');return;}
+  if(!pool.length){showAppModal({title:'題庫提示',message:'此題庫目前為空，或尚無錯題紀錄！',type:'warning'});return;}
   pool=pool.sort(()=>Math.random()-.5);
   const n=(mode==='sci1_115_1'||mode==='sci2_115_1'||mode==='sci2_115_1_official'||mode==='sci1_114'||mode==='sci2')?Math.min(50,pool.length)
         :(mode==='full50')?Math.min(250,pool.length)
@@ -5622,7 +5872,23 @@ function switchTab(id,btn){
   if(ch)ch.classList.add('active');
 }
 
-function clearAll(){if(!confirm('確認清除所有練習紀錄？'))return;S.totalDone=0;S.totalCorrect=0;S.wrongIds=[];save();alert('已清除！');}
+function clearAll(){
+  showConfirmModal({
+    title: '重設所有練習紀錄',
+    message: '確定要清除所有練習紀錄與錯題庫嗎？\n此動作將清空已答題數、正確率與收藏紀錄，且無法復原。',
+    type: 'danger',
+    confirmText: '確定清除',
+    cancelText: '取消保留',
+    onConfirm: () => {
+      S.totalDone = 0;
+      S.totalCorrect = 0;
+      S.wrongIds = [];
+      S.favIds = [];
+      save();
+      showAppModal({ title: '已重設', message: '所有練習與錯題紀錄已成功清除！', type: 'success' });
+    }
+  });
+}
 
 // Toggle button visual fix
 document.querySelectorAll('.tog').forEach(el=>{
@@ -6190,6 +6456,24 @@ if(document.readyState === 'loading'){
         <button type="submit" class="btn btn-primary" id="modalSubmitBtn" style="flex:1.5;">🚀 免登入送出</button>
       </div>
     </form>
+  </div>
+</div>
+
+
+<!-- 現代自訂全域通用彈窗 (Alert / Confirm) -->
+<div class="app-dialog-overlay" id="appDialogOverlay" onclick="handleDialogBackdrop(event)" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
+  <div class="app-dialog-card" id="appDialogCard">
+    <div class="dialog-icon-wrap" id="dialogIconWrap">
+      <span id="dialogIcon">ℹ️</span>
+    </div>
+    <div class="dialog-content" style="width:100%">
+      <h3 class="dialog-title" id="dialogTitle">系統提示</h3>
+      <div class="dialog-message" id="dialogMessage">提示內容</div>
+    </div>
+    <div class="dialog-actions" id="dialogActions">
+      <button class="btn btn-ghost btn-dialog-cancel" id="dialogCancelBtn" onclick="closeAppDialog(false)">取消</button>
+      <button class="btn btn-primary btn-dialog-confirm" id="dialogConfirmBtn" onclick="closeAppDialog(true)">確定</button>
+    </div>
   </div>
 </div>
 
