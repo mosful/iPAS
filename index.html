@@ -183,7 +183,7 @@
   background: transparent;
   color: var(--text-dim);
   cursor: pointer;
-  transition: all .18s ease;
+  transition: transform .18s ease, opacity .18s ease, background-color .18s ease, border-color .18s ease;
   font-family: inherit;
   font-size: 13.5px;
   line-height: 1;
@@ -264,7 +264,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   padding: 9px 12px; border-radius: 10px;
   cursor: pointer; font-size: 13px; font-weight: 500;
   color: var(--text-dim);
-  transition: all .18s ease;
+  transition: transform .18s ease, opacity .18s ease, background-color .18s ease, border-color .18s ease;
   margin-bottom: 2px;
   border: 1px solid transparent;
 }
@@ -334,7 +334,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   padding: 8px 16px; border-radius: var(--pill);
   font-size: 12px; font-weight: 600; cursor: pointer;
-  border: none; transition: all .18s ease;
+  border: none; transition: transform .18s ease, opacity .18s ease, background-color .18s ease, border-color .18s ease;
   font-family: inherit;
 }
 .btn-ghost {
@@ -403,7 +403,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
 .btn-hero {
   padding: 10px 22px; border-radius: var(--pill);
   font-size: 13px; font-weight: 600; cursor: pointer;
-  border: none; font-family: inherit; transition: all .2s ease;
+  border: none; font-family: inherit; transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
   display: inline-flex; align-items: center; gap: 8px;
 }
 .btn-hero-p {
@@ -454,7 +454,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
 .step-card {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--r); padding: 18px 16px;
-  position: relative; transition: all .2s ease;
+  position: relative; transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 .step-card:hover {
   border-color: var(--accent-border);
@@ -501,7 +501,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
 }
 .faq-item {
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: 10px; overflow: hidden; transition: all .2s;
+  border-radius: 10px; overflow: hidden; transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 .faq-item:hover { border-color: var(--border2); }
 .faq-q {
@@ -523,7 +523,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
 .card {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--r); padding: 20px;
-  transition: all .2s cubic-bezier(.16, 1, .3, 1);
+  transition: transform .2s cubic-bezier(.16, 1, .3, 1), opacity .2s cubic-bezier(.16, 1, .3, 1), background-color .2s cubic-bezier(.16, 1, .3, 1), border-color .2s cubic-bezier(.16, 1, .3, 1);
 }
 .card-hd {
   display: flex; align-items: center; justify-content: space-between;
@@ -540,7 +540,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   padding: 11px 14px; background: var(--surface2);
   border-radius: 10px; cursor: pointer;
   border: 1px solid var(--border);
-  transition: all .18s ease;
+  transition: transform .18s ease, opacity .18s ease, background-color .18s ease, border-color .18s ease;
 }
 .subj-item:hover {
   border-color: var(--accent-border);
@@ -632,7 +632,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   display: flex; align-items: flex-start; gap: 12px;
   padding: 13px 16px; border-radius: 10px;
   border: 1px solid var(--border); cursor: pointer;
-  transition: all .16s ease; background: var(--surface2);
+  transition: transform .16s ease, opacity .16s ease, background-color .16s ease, border-color .16s ease; background: var(--surface2);
   font-size: 13.5px; line-height: 1.6; color: var(--text);
 }
 .opt:hover {
@@ -656,7 +656,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   font-size: 11.5px; font-weight: 700; width: 28px; height: 28px; min-width: 28px;
   display: flex; align-items: center; justify-content: center;
   border-radius: 6px; background: var(--surface3); color: var(--text-dim);
-  transition: all .16s ease;
+  transition: transform .16s ease, opacity .16s ease, background-color .16s ease, border-color .16s ease;
 }
 .opt.sel .opt-k { background: var(--accent); color: #fff; }
 .opt.ok .opt-k { background: var(--green); color: #fff; }
@@ -687,7 +687,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--r); padding: 18px;
   display: flex; flex-direction: column; gap: 12px;
-  transition: all .2s;
+  transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 .source-card:hover {
   border-color: var(--border2);
@@ -711,7 +711,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   font-size: 11.5px; padding: 7px 12px; border-radius: 8px;
   cursor: pointer; border: none; font-family: inherit;
   background: var(--surface2); color: var(--text-dim);
-  border: 1px solid var(--border); transition: all .15s; text-align: center;
+  border: 1px solid var(--border); transition: transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease; text-align: center;
   font-weight: 500;
 }
 .source-btn:hover { color: var(--accent); border-color: var(--accent-border); }
@@ -722,7 +722,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   padding: 8px 16px; border-radius: var(--pill);
   font-size: 12px; font-weight: 600; cursor: pointer;
   border: 1px solid var(--border); background: var(--surface2);
-  color: var(--text-dim); transition: all .18s; font-family: inherit;
+  color: var(--text-dim); transition: transform 0.18s ease, background-color 0.18s ease, border-color 0.18s ease; font-family: inherit;
 }
 .stab-btn:hover { color: var(--text); border-color: var(--accent-border); }
 .stab-btn.active {
@@ -796,7 +796,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   cursor: pointer; font-size: 20px; font-weight: 700;
   display: flex; align-items: center; justify-content: center;
   z-index: 9999; box-shadow: var(--shadow-warm);
-  transition: all .2s;
+  transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 #scroll-top-btn:hover {
   background: var(--accent-hover); transform: translateY(-3px);
@@ -811,7 +811,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   padding: 9px 18px; font-size: 12px; font-weight: 600;
   display: flex; align-items: center; gap: 7px;
   box-shadow: var(--shadow-sm); cursor: pointer;
-  transition: all .2s cubic-bezier(.175, .885, .32, 1.275);
+  transition: transform .2s cubic-bezier(.175, .885, .32, 1.275), opacity .2s cubic-bezier(.175, .885, .32, 1.275), background-color .2s cubic-bezier(.175, .885, .32, 1.275), border-color .2s cubic-bezier(.175, .885, .32, 1.275);
   backdrop-filter: blur(10px); font-family: inherit;
 }
 .feedback-fab:hover {
@@ -840,7 +840,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   width: 100%; background: var(--surface2);
   border: 1px solid var(--border); border-radius: 8px;
   padding: 10px 12px; color: var(--text); font-size: 13px;
-  font-family: inherit; outline: none; transition: border-color .18s;
+  font-family: inherit; outline: 2px solid transparent; outline-offset: 2px; transition: border-color .18s;
 }
 .fb-input:focus, .fb-select:focus, .fb-textarea:focus {
   border-color: var(--accent);
@@ -932,7 +932,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   color: var(--text);
   border-radius: var(--pill);
   padding: 6px 14px;
-  transition: all .2s;
+  transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 .btn-home:hover {
   background: var(--accent-soft);
@@ -953,7 +953,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   border: 1px solid var(--border2);
   color: var(--text);
   cursor: pointer;
-  transition: all .2s;
+  transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 .btn-theme:hover {
   background: var(--surface3);
@@ -993,7 +993,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   border-radius: 6px;
   cursor: pointer;
   margin-top: 4px;
-  transition: all .2s ease;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 .timer-ctrl-btn:hover {
   color: var(--text);
@@ -1032,7 +1032,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   padding: 12px 16px;
   border-radius: 10px;
   font-size: 14px;
-  outline: none;
+  outline: 2px solid transparent; outline-offset: 2px;
   transition: border-color .2s ease, box-shadow .2s ease;
 }
 .search-input:focus {
@@ -1053,7 +1053,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   border: 1px solid var(--border);
   color: var(--text-dim);
   cursor: pointer;
-  transition: all .2s ease;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 .tag-pill:hover, .tag-pill.active {
   background: var(--accent-soft);
@@ -1133,7 +1133,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   margin-bottom: 10px;
   cursor: pointer;
   user-select: none;
-  transition: all .2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .setting-item-row:hover {
   border-color: var(--border2);
@@ -1180,7 +1180,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   bottom: 0;
   background-color: var(--surface3);
   border: 1px solid var(--border);
-  transition: all .25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 28px;
 }
 .modern-slider:before {
@@ -1191,7 +1191,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   left: 3px;
   bottom: 3px;
   background-color: #ffffff;
-  transition: all .25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 50%;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
 }
@@ -1267,7 +1267,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   border-radius: 14px;
   padding: 18px 20px;
   cursor: pointer;
-  transition: all .25s ease;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -1329,7 +1329,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   border-radius: 14px;
   padding: 18px 20px;
   cursor: pointer;
-  transition: all .2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -1394,12 +1394,107 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   box-shadow: 0 4px 14px rgba(217, 119, 87, 0.4);
 }
 
+
+/* ─── Vercel Web Interface Guidelines 現代設計體系 ─── */
+
+/* 1. 無障礙跳至主要內容 (Skip to content) */
+.skip-to-content {
+  position: absolute;
+  top: -60px;
+  left: 16px;
+  z-index: 1000;
+  padding: 10px 18px;
+  background: var(--accent);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 13px;
+  border-radius: 8px;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  transition: top 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.skip-to-content:focus {
+  top: 16px;
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+/* 2. 全局通用焦點樣式 (Focus-visible ring) */
+:focus {
+  outline: 2px solid transparent; outline-offset: 2px;
+}
+:focus-visible {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: 2px !important;
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.btn:focus-visible,
+.qb-exam-card:focus-visible,
+.quick-feature-card:focus-visible,
+.nav-item:focus-visible {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px var(--accent-soft) !important;
+}
+
+/* 3. 等寬數字與排版防抖動 (Tabular Nums & Typographic Balance) */
+#timer,
+.em-v,
+.stat-box .v,
+.step-num,
+.opt-k,
+.q-num,
+.ring-num,
+.search-mark,
+#search-result-count,
+.tag,
+.stag,
+.kbd-badge {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+h1, h2, h3, .section-title, .hero-pro-title, .qb-section-title {
+  text-wrap: balance;
+  letter-spacing: -0.015em;
+}
+
+/* 4. 尊重大腦/前庭系統 Reduced Motion 偏好 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 5. 錨點標題防遮擋 (Scroll Margin Top) */
+[id^="page-"],
+.section-header,
+.qb-section-head {
+  scroll-margin-top: 80px;
+}
+
+/* 6. 長列表渲染效能優化 (Content Visibility) */
+#search-results-list .search-item-card,
+#wrong-list .q-card {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 140px;
+}
+
 </style>
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </head>
 <body>
+<a href="#main" class="skip-to-content">跳至主要內容 (Skip to main content)</a>
 <div id="scroll-sentinel" style="position:absolute;top:0;left:0;height:1px;width:1px;pointer-events:none;"></div>
-<button class="hbg" onclick="toggleSB()" title="開啟選單" aria-label="切換選單">
+<button class="hbg" onclick="toggleSB()" aria-label="切換導覽功能表" title="開啟選單">
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
     <line x1="3" y1="6" x2="21" y2="6"></line>
     <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -1433,21 +1528,21 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   <nav>
     <div class="nav-section">
       <div class="nav-label">主選單</div>
-      <div class="nav-item active" onclick="gp('home',this)"><span class="nav-icon">🏠</span>首頁總覽</div>
-      <div class="nav-item" onclick="gp('search',this)"><span class="nav-icon">🔍</span>題庫搜尋</div>
-      <div class="nav-item" onclick="gp('exam',this)"><span class="nav-icon">📝</span>模擬考試</div>
-      <div class="nav-item" onclick="gp('practice',this)"><span class="nav-icon">🎯</span>分科練習</div>
-      <div class="nav-item" onclick="gp('review',this)"><span class="nav-icon">🔁</span>錯題複習</div>
+      <div class="nav-item active" onclick="gp('home',this)" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){gp('home',this);event.preventDefault();}"><span class="nav-icon">🏠</span>首頁總覽</div>
+      <div class="nav-item" onclick="gp('search',this)" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){gp('search',this);event.preventDefault();}"><span class="nav-icon">🔍</span>題庫搜尋</div>
+      <div class="nav-item" onclick="gp('exam',this)" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){gp('exam',this);event.preventDefault();}"><span class="nav-icon">📝</span>模擬考試</div>
+      <div class="nav-item" onclick="gp('practice',this)" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){gp('practice',this);event.preventDefault();}"><span class="nav-icon">🎯</span>分科練習</div>
+      <div class="nav-item" onclick="gp('review',this)" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){gp('review',this);event.preventDefault();}"><span class="nav-icon">🔁</span>錯題複習</div>
     </div>
     <div class="nav-section">
       <div class="nav-label">學習資源</div>
-      <div class="nav-item" onclick="gp('study',this)"><span class="nav-icon">📖</span>考試重點</div>
-      <div class="nav-item" onclick="gp('sources',this)">
+      <div class="nav-item" onclick="gp('study',this)" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){gp('study',this);event.preventDefault();}"><span class="nav-icon">📖</span>考試重點</div>
+      <div class="nav-item" onclick="gp('sources',this)" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){gp('sources',this);event.preventDefault();}">
         <span class="nav-icon">📁</span>學習資源庫
         <span class="nav-badge">10</span>
       </div>
-      <div class="nav-item" onclick="gp('feedback',this)"><span class="nav-icon">💬</span>留言回饋</div>
-      <div class="nav-item" onclick="gp('settings',this)"><span class="nav-icon">⚙️</span>個人設定</div>
+      <div class="nav-item" onclick="gp('feedback',this)" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){gp('feedback',this);event.preventDefault();}"><span class="nav-icon">💬</span>留言回饋</div>
+      <div class="nav-item" onclick="gp('settings',this)" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){gp('settings',this);event.preventDefault();}"><span class="nav-icon">⚙️</span>個人設定</div>
     </div>
   </nav>
   <div class="sidebar-stats">
@@ -1456,8 +1551,8 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
       <div class="stat-box"><div class="v" id="s-acc">─</div><div class="l">正確率</div></div>
     </div>
     <div class="stats-row" style="margin-top:6px;">
-      <div class="stat-box" title="不蒜子全站造訪人數 (UV)"><div class="v" id="busuanzi_value_site_uv" style="font-size:14px;color:var(--accent2)">...</div><div class="l">👥 訪客人次</div></div>
-      <div class="stat-box" title="不蒜子全站總瀏覽次數 (PV)"><div class="v" id="busuanzi_value_site_pv" style="font-size:14px;color:var(--gold)">...</div><div class="l">👁️ 瀏覽量</div></div>
+      <div class="stat-box" title="不蒜子全站造訪人數 (UV)"><div class="v" id="busuanzi_value_site_uv" style="font-size:14px;color:var(--accent2)">…</div><div class="l">👥 訪客人次</div></div>
+      <div class="stat-box" title="不蒜子全站總瀏覽次數 (PV)"><div class="v" id="busuanzi_value_site_pv" style="font-size:14px;color:var(--gold)">…</div><div class="l">👁️ 瀏覽量</div></div>
     </div>
   </div>
 </aside>
@@ -1477,10 +1572,10 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
     <div class="top-btns">
       <!-- 色彩模式切換按鈕（純圖示） -->
       <div class="theme-switch-group" id="theme-switch-group" title="切換色彩模式：深色 / 淺色">
-        <button type="button" class="theme-opt active" id="theme-btn-dark" onclick="setTheme('dark')" title="深色墨黑模式">
+        <button type="button" class="theme-opt active" id="theme-btn-dark" onclick="setTheme('dark')" title="深色墨黑模式" aria-label="切換為深色模式" title="切換為深色模式">
           <span>🌙</span>
         </button>
-        <button type="button" class="theme-opt" id="theme-btn-light" onclick="setTheme('light')" title="淺色暖白模式">
+        <button type="button" class="theme-opt" id="theme-btn-light" onclick="setTheme('light')" title="淺色暖白模式" aria-label="切換為淺色模式" title="切換為淺色模式">
           <span>☀️</span>
         </button>
       </div>
@@ -1509,7 +1604,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
 
         <!-- 頂部 4 大核心捷徑卡片 -->
         <div class="hero-quick-grid">
-          <div class="quick-feature-card" onclick="startExam('sci1_115_3')">
+          <div class="quick-feature-card" onclick="startExam('sci1_115_3')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('sci1_115_3');event.preventDefault();}">
             <div>
               <div class="quick-feature-icon">🔥</div>
               <div class="quick-feature-title">115-3 最新真題 <span style="font-size:12px;color:var(--accent)">立即測驗 →</span></div>
@@ -1517,7 +1612,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
             </div>
           </div>
 
-          <div class="quick-feature-card" onclick="gp('search',document.querySelectorAll('.nav-item')[1])">
+          <div class="quick-feature-card" onclick="gp('search',document.querySelectorAll('.nav-item')[1])" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){gp('search',document.querySelectorAll('.nav-item')[1]);event.preventDefault();}">
             <div>
               <div class="quick-feature-icon">🔍</div>
               <div class="quick-feature-title">全庫關鍵字檢索 <span style="font-size:12px;color:var(--accent2)">查閱 →</span></div>
@@ -1525,7 +1620,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
             </div>
           </div>
 
-          <div class="quick-feature-card" onclick="gp('practice',document.querySelectorAll('.nav-item')[2])">
+          <div class="quick-feature-card" onclick="gp('practice',document.querySelectorAll('.nav-item')[2])" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){gp('practice',document.querySelectorAll('.nav-item')[2]);event.preventDefault();}">
             <div>
               <div class="quick-feature-icon">🎯</div>
               <div class="quick-feature-title">分科主題精準衝刺 <span style="font-size:12px;color:var(--green)">練習 →</span></div>
@@ -1533,7 +1628,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
             </div>
           </div>
 
-          <div class="quick-feature-card" onclick="startExam('wrong')">
+          <div class="quick-feature-card" onclick="startExam('wrong')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('wrong');event.preventDefault();}">
             <div>
               <div class="quick-feature-icon">🔁</div>
               <div class="quick-feature-title">錯題弱點反覆特訓 <span style="font-size:12px;color:var(--warn)">複習 →</span></div>
@@ -1554,7 +1649,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
 
       <div class="qb-cards-grid">
         <!-- 115-3 科目一 -->
-        <div class="qb-exam-card" onclick="startExam('sci1_115_3')">
+        <div class="qb-exam-card" onclick="startExam('sci1_115_3')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('sci1_115_3');event.preventDefault();}">
           <div>
             <div class="qb-card-top">
               <span class="tag t1">科目 1</span>
@@ -1567,7 +1662,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
         </div>
 
         <!-- 115-3 科目二 -->
-        <div class="qb-exam-card" onclick="startExam('sci2_115_3')">
+        <div class="qb-exam-card" onclick="startExam('sci2_115_3')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('sci2_115_3');event.preventDefault();}">
           <div>
             <div class="qb-card-top">
               <span class="tag t2">科目 2</span>
@@ -1580,7 +1675,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
         </div>
 
         <!-- 115-2 科目一 -->
-        <div class="qb-exam-card" onclick="startExam('sci1_115_2')">
+        <div class="qb-exam-card" onclick="startExam('sci1_115_2')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('sci1_115_2');event.preventDefault();}">
           <div>
             <div class="qb-card-top">
               <span class="tag t1">科目 1</span>
@@ -1593,7 +1688,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
         </div>
 
         <!-- 115-2 科目二 -->
-        <div class="qb-exam-card" onclick="startExam('sci2_115_2')">
+        <div class="qb-exam-card" onclick="startExam('sci2_115_2')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('sci2_115_2');event.preventDefault();}">
           <div>
             <div class="qb-card-top">
               <span class="tag t2">科目 2</span>
@@ -1606,7 +1701,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
         </div>
 
         <!-- 115-1 科目一 -->
-        <div class="qb-exam-card" onclick="startExam('sci1_115_1')">
+        <div class="qb-exam-card" onclick="startExam('sci1_115_1')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('sci1_115_1');event.preventDefault();}">
           <div>
             <div class="qb-card-top">
               <span class="tag t1">科目 1</span>
@@ -1619,7 +1714,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
         </div>
 
         <!-- 115-1 科目二 -->
-        <div class="qb-exam-card" onclick="startExam('sci2_115_1_official')">
+        <div class="qb-exam-card" onclick="startExam('sci2_115_1_official')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('sci2_115_1_official');event.preventDefault();}">
           <div>
             <div class="qb-card-top">
               <span class="tag t2">科目 2</span>
@@ -1642,7 +1737,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
 
       <div class="qb-cards-grid">
         <!-- 114Q4 科目一 -->
-        <div class="qb-exam-card" onclick="startExam('sci1_114')">
+        <div class="qb-exam-card" onclick="startExam('sci1_114')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('sci1_114');event.preventDefault();}">
           <div>
             <div class="qb-card-top">
               <span class="tag t1">科目 1</span>
@@ -1655,7 +1750,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
         </div>
 
         <!-- 114Q4 科目二 -->
-        <div class="qb-exam-card" onclick="startExam('sci2')">
+        <div class="qb-exam-card" onclick="startExam('sci2')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('sci2');event.preventDefault();}">
           <div>
             <div class="qb-card-top">
               <span class="tag t2">科目 2</span>
@@ -1668,7 +1763,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
         </div>
 
         <!-- 科目一全真題大會考 -->
-        <div class="qb-exam-card" onclick="startExam('sci1_all')">
+        <div class="qb-exam-card" onclick="startExam('sci1_all')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('sci1_all');event.preventDefault();}">
           <div>
             <div class="qb-card-top">
               <span class="tag t1">科目 1</span>
@@ -1681,7 +1776,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
         </div>
 
         <!-- 科目二全真題大會考 -->
-        <div class="qb-exam-card" onclick="startExam('sci2_all')">
+        <div class="qb-exam-card" onclick="startExam('sci2_all')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('sci2_all');event.preventDefault();}">
           <div>
             <div class="qb-card-top">
               <span class="tag t2">科目 2</span>
@@ -1694,7 +1789,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
         </div>
 
         <!-- 450 題官方全真題模擬練習 -->
-        <div class="qb-exam-card" onclick="startExam('official_all')">
+        <div class="qb-exam-card" onclick="startExam('official_all')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('official_all');event.preventDefault();}">
           <div>
             <div class="qb-card-top">
               <span class="tag tg">官方總匯</span>
@@ -1707,7 +1802,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
         </div>
 
         <!-- 555 題全庫隨機混合練習 -->
-        <div class="qb-exam-card" onclick="startExam('random')">
+        <div class="qb-exam-card" onclick="startExam('random')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('random');event.preventDefault();}">
           <div>
             <div class="qb-card-top">
               <span class="tag tg">全庫旗艦</span>
@@ -1730,7 +1825,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
 
       <div class="qb-cards-grid">
         <!-- 官方公告樣題 -->
-        <div class="qb-exam-card" onclick="startExam('sample')">
+        <div class="qb-exam-card" onclick="startExam('sample')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('sample');event.preventDefault();}">
           <div>
             <div class="qb-card-top">
               <span class="tag tg">官方指引</span>
@@ -1743,7 +1838,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
         </div>
 
         <!-- 專家模擬題庫 -->
-        <div class="qb-exam-card" onclick="startExam('mock')">
+        <div class="qb-exam-card" onclick="startExam('mock')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('mock');event.preventDefault();}">
           <div>
             <div class="qb-card-top">
               <span class="tag tg">名師押題</span>
@@ -1894,7 +1989,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
       </div>
 
       <div class="search-bar-wrap">
-        <input type="text" id="global-search-input" class="search-input" placeholder="請輸入關鍵字（例如：ReAct、同態加密、SMOTE、寬深模型、聯邦學習、MCP、資料漂移...）" oninput="debounceSearch()">
+        <input type="text" id="global-search-input" class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="請輸入關鍵字（例如：ReAct、同態加密、SMOTE、寬深模型、聯邦學習、MCP、資料漂移…）" oninput="debounceSearch()">
         <button class="btn btn-ghost" onclick="clearSearch()">清除</button>
       </div>
 
@@ -2211,8 +2306,8 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
         <h2>考生交流 <em>× 意見反饋</em></h2>
         <p>歡迎提出考題疑義、答案討論、系統 Bug 回報或功能許願。提供「不登入免帳號直接寄信」與「登入 GitHub 進行開源討論」兩種管道！</p>
         <div style="display:flex;gap:16px;margin-top:14px;font-size:12px;color:var(--text-dim);flex-wrap:wrap;">
-          <div>👥 累計訪客人次：<strong id="busuanzi_value_site_uv_2" style="color:var(--accent2)">...</strong></div>
-          <div>👁️ 累計總瀏覽量：<strong id="busuanzi_value_site_pv_2" style="color:var(--gold)">...</strong></div>
+          <div>👥 累計訪客人次：<strong id="busuanzi_value_site_uv_2" style="color:var(--accent2)">…</strong></div>
+          <div>👁️ 累計總瀏覽量：<strong id="busuanzi_value_site_pv_2" style="color:var(--gold)">…</strong></div>
         </div>
       </div>
 
@@ -2355,7 +2450,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
             <div class="setting-info-title">📊 每次隨機練習題數</div>
             <div class="setting-info-desc">全真題模擬與隨機混合抽題時的預設測驗題數</div>
           </div>
-          <select style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 14px;border-radius:8px;font-family:inherit;font-size:13px;cursor:pointer;outline:none" id="set-cnt" onchange="saveSettingsCnt(this.value)">
+          <select style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 14px;border-radius:8px;font-family:inherit;font-size:13px;cursor:pointer;outline:2px solid transparent;outline-offset:2px" id="set-cnt" onchange="saveSettingsCnt(this.value)">
             <option value="10">10 題（極速暖身）</option>
             <option value="20" selected>20 題（標準日常）</option>
             <option value="30">30 題（深度精練）</option>
@@ -5498,7 +5593,7 @@ async function handleFeedbackSubmit(e, formPrefix){
 
   const origBtnText=submitBtn.innerHTML;
   submitBtn.disabled=true;
-  submitBtn.innerHTML='🚀 傳送中...';
+  submitBtn.innerHTML='🚀 傳送中…';
 
   const payload={
     appName:'iPAS AI 應用規劃師 智慧練習系統',
@@ -5553,13 +5648,13 @@ window.addEventListener('load',function(){
       const pv=document.getElementById('busuanzi_value_site_pv');
       const uv2=document.getElementById('busuanzi_value_site_uv_2');
       const pv2=document.getElementById('busuanzi_value_site_pv_2');
-      if(uv && uv2 && uv.textContent && uv.textContent!=='...') uv2.textContent=uv.textContent;
+      if(uv && uv2 && uv.textContent && uv.textContent!=='…') uv2.textContent=uv.textContent;
       // 容錯防護：若 3.5 秒後仍為 '...'，平滑替換為就緒狀態
-      if(uv && uv.textContent === '...') uv.textContent = '已連線';
-      if(pv && pv.textContent === '...') pv.textContent = '累計中';
-      if(uv2 && uv2.textContent === '...') uv2.textContent = '已連線';
-      if(pv2 && pv2.textContent === '...') pv2.textContent = '累計中';
-      if(pv && pv2 && pv.textContent && pv.textContent!=='...') pv2.textContent=pv.textContent;
+      if(uv && uv.textContent === '…') uv.textContent = '已連線';
+      if(pv && pv.textContent === '…') pv.textContent = '累計中';
+      if(uv2 && uv2.textContent === '…') uv2.textContent = '已連線';
+      if(pv2 && pv2.textContent === '…') pv2.textContent = '累計中';
+      if(pv && pv2 && pv.textContent && pv.textContent!=='…') pv2.textContent=pv.textContent;
     }catch(e){}
   },2000);
 });
@@ -5925,10 +6020,10 @@ if(document.readyState === 'loading'){
 }
 
 </script>
-<button id="scroll-top-btn" title="回到頂端">↑</button>
+<button id="scroll-top-btn" aria-label="回到頁面頂部" title="回到頂端">↑</button>
 
 <!-- 懸浮反饋按鈕 (FAB) -->
-<button class="feedback-fab" id="feedbackFab" onclick="openFeedbackModal('懸浮按鈕')" title="提出考題疑義或回饋">
+<button class="feedback-fab" id="feedbackFab" onclick="openFeedbackModal('懸浮按鈕')" aria-label="提出考題疑義或意見回饋" title="提出考題疑義或回饋">
   <span>💌</span><span>回饋 / 留言</span>
 </button>
 
@@ -5957,19 +6052,19 @@ if(document.readyState === 'loading'){
       </div>
       <div class="fb-group">
         <label>📖 關聯考科或題號（選填）</label>
-        <input type="text" class="fb-input" id="modalFbUnit" placeholder="例如：115-3 科目一 Q42、當前測驗題目">
+        <input type="text" class="fb-input" id="modalFbUnit" name="feedback_unit" autocomplete="off" spellcheck="false" placeholder="例如：115-3 科目一 Q42、當前測驗題目…">
       </div>
       <div class="fb-group">
         <label>👤 您的稱呼（選填）</label>
-        <input type="text" class="fb-input" id="modalFbName" placeholder="例如：熱心考生、台中王同學">
+        <input type="text" class="fb-input" id="modalFbName" name="feedback_name" autocomplete="name" spellcheck="false" placeholder="例如：熱心考生、台中王同學…">
       </div>
       <div class="fb-group">
         <label>✉️ 聯絡 Email（選填，便於管理者回信）</label>
-        <input type="email" class="fb-input" id="modalFbEmail" placeholder="your-email@example.com">
+        <input type="email" class="fb-input" id="modalFbEmail" name="feedback_email" autocomplete="email" spellcheck="false" placeholder="your-email@example.com…">
       </div>
       <div class="fb-group">
         <label>📝 詳細內容 <span style="color:var(--warn)">*</span></label>
-        <textarea class="fb-textarea" id="modalFbContent" rows="4" placeholder="請詳細描述您的想法或遇到的狀況..." required></textarea>
+        <textarea class="fb-textarea" id="modalFbContent" name="feedback_content" rows="4" spellcheck="false" placeholder="請詳細描述您的想法或遇到的狀況…" required></textarea>
       </div>
       <div class="fb-actions">
         <button type="button" class="btn btn-ghost" onclick="closeFeedbackModal()" style="flex:1;">取消</button>
