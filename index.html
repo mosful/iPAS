@@ -1488,6 +1488,78 @@ h1, h2, h3, .section-title, .hero-pro-title, .qb-section-title {
   contain-intrinsic-size: 0 140px;
 }
 
+
+/* ─── 現代極致無障礙 FAQ 手風琴 (Accessible Accordion) ─── */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+details.faq-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+details.faq-item:hover {
+  border-color: var(--border2);
+  background: var(--surface2);
+}
+details.faq-item[open] {
+  border-color: var(--accent-border);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+summary.faq-q {
+  padding: 16px 20px;
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text);
+  user-select: none;
+  list-style: none;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+summary.faq-q::-webkit-details-marker {
+  display: none;
+}
+summary.faq-q:focus-visible {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: -2px !important;
+}
+.faq-icon-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--surface3);
+  color: var(--accent);
+  flex-shrink: 0;
+  margin-left: 14px;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease;
+}
+details.faq-item[open] .faq-icon-arrow {
+  transform: rotate(180deg);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.faq-a {
+  padding: 0 20px 18px;
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.75;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+}
+
 </style>
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </head>
@@ -1938,25 +2010,71 @@ h1, h2, h3, .section-title, .hero-pro-title, .qb-section-title {
         <div class="section-desc">彙整官方考場規範與歷屆考生實戰上榜經驗</div>
       </div>
 
-      <div class="faq-list" style="margin-bottom:24px">
-        <div class="faq-item">
-          <div class="faq-q">Q1. 考試題型與作答時間？</div>
+      <div class="faq-list" style="margin-bottom:28px">
+        <!-- Q1 (預設展開) -->
+        <details class="faq-item" open>
+          <summary class="faq-q">
+            <span>Q1. 考試題型、作答時間與配分規定？</span>
+            <span class="faq-icon-arrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
           <div class="faq-a">
-            每科均為 <strong>50 題單選題</strong>（4 選 1，答錯不倒扣），作答時間為 <strong>60 分鐘</strong>（平均每題有 72 秒時間思考），題庫難度適中，重視觀念精準性。
+            每科均為 <strong>50 題單選題</strong>（4 選 1，答錯不倒扣），作答時間為 <strong>60 分鐘</strong>（平均每題有 72 秒時間思考），題庫難度適中，重視核心觀念理解與情境判讀。
           </div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q">Q2. 及格標準與單科保留制度？</div>
+        </details>
+
+        <!-- Q2 -->
+        <details class="faq-item">
+          <summary class="faq-q">
+            <span>Q2. 及格標準與單科成績保留制度？</span>
+            <span class="faq-icon-arrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
           <div class="faq-a">
-            兩科滿分各 100 分，<strong>70 分為及格門檻</strong>（需答對 35 題以上）。若單次考試僅一科及格，該科合格成績<strong>可保留 3 年</strong>，在 3 年內通過另一科即可取得證書。
+            兩科滿分各 100 分，<strong>70 分為及格門檻</strong>（需答對 35 題以上）。若單次考試僅通過一科，合格成績<strong>可完整保留 3 年</strong>，在 3 年保留期內通過另一科即可取得經濟部 iPAS 正式證書。
           </div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q">Q3. 是否需要寫 Python 程式碼？</div>
+        </details>
+
+        <!-- Q3 -->
+        <details class="faq-item">
+          <summary class="faq-q">
+            <span>Q3. 是否需要撰寫 Python 程式碼？</span>
+            <span class="faq-icon-arrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
           <div class="faq-a">
-            <strong>不需要！</strong>初級規劃師專注於概念理解、架構選型、法規倫理與商業落地，不考程式碼語法（中級才需要撰寫程式碼）。
+            <strong>不需要！</strong>初級規劃師定位於非技術/商業管理端，專注於概念理解、架構選型（RAG、Fine-tuning、No-code/Low-code、MCP）、法規倫理與專案導入，絕不考寫程式碼語法（中級才需要編寫 Python 程式）。
           </div>
-        </div>
+        </details>
+
+        <!-- Q4 -->
+        <details class="faq-item">
+          <summary class="faq-q">
+            <span>Q4. 考場是否可以使用計算機？</span>
+            <span class="faq-icon-arrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <div class="faq-a">
+            依據官方考場規範，初級測驗以觀念題為主，不需複雜數值計算，<strong>考場不提供亦不允許攜帶個人計算機</strong>。涉及指標計算題（如 Precision/Recall 混淆矩陣）均為簡單心算整除數值。
+          </div>
+        </details>
+
+        <!-- Q5 -->
+        <details class="faq-item">
+          <summary class="faq-q">
+            <span>Q5. iPAS 證書取得後是否有有效期限？</span>
+            <span class="faq-icon-arrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <div class="faq-a">
+            <strong>永久有效！</strong>通過經濟部 iPAS 產業人才能力鑑定取得之證書為國家級專業認證，無過期失效問題，登錄於經濟部產業人才能力鑑定體系並受企業廣泛採認。
+          </div>
+        </details>
       </div>
 
       <!-- 底部考生交流橫幅 -->
