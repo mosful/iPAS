@@ -8,7 +8,7 @@
 })();
 </script>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com https://fonts.gstatic.com https://busuanzi.ibruce.info https://giscus.app https://script.google.com https://script.googleusercontent.com data: blob:;">
 <meta name="theme-color" content="#d97757">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23d97757'/><path d='M8 23L16 9L24 23M11 18H21' stroke='%23ffffff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/><circle cx='16' cy='9' r='2' fill='%23ffffff'/><circle cx='8' cy='23' r='1.8' fill='%23ffffff'/><circle cx='24' cy='23' r='1.8' fill='%23ffffff'/></svg>">
@@ -200,12 +200,13 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
+html { color-scheme: dark; --header-offset: 88px; scroll-padding-top: var(--header-offset); }
+html[data-theme="light"] { color-scheme: light; }
 body {
   font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
-  overflow-x: hidden;
   line-height: 1.6;
   letter-spacing: -0.01em;
 }
@@ -214,7 +215,7 @@ body {
 ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--border2); }
 
-#app { display: flex; min-height: 100vh; }
+#app { display: flex; min-height: 100vh; min-height: 100dvh; }
 
 /* ── 側邊欄 Sidebar ── */
 #sidebar {
@@ -222,8 +223,10 @@ body {
   background: var(--surface);
   border-right: 1px solid var(--border);
   display: flex; flex-direction: column;
-  position: fixed; top: 0; left: 0; height: 100vh;
-  z-index: 100;
+  position: fixed; top: 0; left: 0; height: 100vh; height: 100dvh;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 120;
   transition: transform .28s cubic-bezier(.4, 0, .2, 1);
 }
 
@@ -252,7 +255,7 @@ body {
   font-style: normal;
 }
 
-nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
+nav { flex: 1; min-height: 0; padding: 16px 12px; overflow-y: auto; overscroll-behavior: contain; }
 .nav-section { margin-bottom: 22px; }
 .nav-label {
   font-size: 10px; font-weight: 700; color: var(--text-muted);
@@ -267,6 +270,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   transition: transform .18s ease, opacity .18s ease, background-color .18s ease, border-color .18s ease;
   margin-bottom: 2px;
   border: 1px solid transparent;
+  width: 100%; background: transparent; font-family: inherit; text-align: left;
 }
 .nav-item:hover {
   background: var(--surface2);
@@ -310,6 +314,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
 /* ── 主要工作區 Main ── */
 #main {
   margin-left: 240px; flex: 1;
+  min-width: 0;
   display: flex; flex-direction: column;
   min-height: 100vh;
 }
@@ -319,15 +324,17 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   background: rgba(16, 16, 15, 0.85);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--border);
-  padding: 0 32px; height: 58px;
+  padding: max(10px, env(safe-area-inset-top)) 24px 10px;
+  min-height: 68px; gap: 16px;
   display: flex; align-items: center; justify-content: space-between;
 }
-.page-title { font-size: 14px; font-weight: 700; color: var(--text); }
+.topbar-heading { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1; }
+.page-title { min-width: 0; font-size: 14px; font-weight: 700; color: var(--text); }
 .page-title span {
   color: var(--text-dim); font-weight: 400;
   margin-left: 10px; font-size: 12px;
 }
-.top-btns { display: flex; gap: 8px; align-items: center; }
+.top-btns { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
 
 /* ── 通用按鈕 ── */
 .btn {
@@ -356,7 +363,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
 }
 .btn-sm { padding: 5px 12px; font-size: 11px; }
 
-#content { flex: 1; padding: 32px; max-width: 960px; margin: 0 auto; width: 100%; }
+#content { flex: 1; min-width: 0; padding: 32px; max-width: 960px; margin: 0 auto; width: 100%; overflow-wrap: anywhere; }
 .page { display: none; }
 .page.active { display: block; }
 
@@ -448,7 +455,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
 
 /* 備考4步卡片格線 */
 .steps-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr);
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px; margin-bottom: 24px;
 }
 .step-card {
@@ -519,7 +526,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
 .faq-item.open .faq-a { display: block; }
 
 /* ── 題庫卡片與格線 ── */
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 26px; }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-bottom: 26px; }
 .card {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--r); padding: 20px;
@@ -680,7 +687,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
 
 /* ── 資源庫與表格 ── */
 .source-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
   gap: 14px; margin-bottom: 26px;
 }
 .source-card {
@@ -760,42 +767,27 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
 .kv-table .kv-key { font-weight: 600; color: var(--text); white-space: nowrap; width: 28%; min-width: 120px; }
 
 /* ── 響應式佈局 ── */
-.hbg {
-  display: none; position: fixed; top: 14px; left: 14px; z-index: 200;
+.hbg, .sidebar-close {
+  display: none;
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: 8px; width: 38px; height: 38px;
+  border-radius: 8px; width: 44px; height: 44px; flex-shrink: 0;
   align-items: center; justify-content: center; cursor: pointer; font-size: 16px;
   color: var(--text);
 }
 #overlay {
-  display: none; position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 90;
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 110;
   backdrop-filter: blur(4px);
 }
 #overlay.show { display: block; }
 
-@media(max-width: 860px) {
-  .steps-grid { grid-template-columns: 1fr 1fr; }
-}
-@media(max-width: 768px) {
-  #sidebar { transform: translateX(-100%); }
-  #sidebar.open { transform: none; }
-  #main { margin-left: 0; }
-  #content { padding: 16px; }
-  .grid2 { grid-template-columns: 1fr; }
-  .steps-grid { grid-template-columns: 1fr; }
-  .hbg { display: flex; }
-  #topbar { padding: 0 16px 0 60px; }
-  .level-table th, .level-table td { padding: 8px; font-size: 11px; }
-}
-
 /* 回到頂端浮動按鈕 */
 #scroll-top-btn {
-  position: fixed; bottom: 32px; right: 32px;
+  position: fixed; bottom: max(20px, env(safe-area-inset-bottom)); right: max(20px, env(safe-area-inset-right));
   width: 46px; height: 46px; border-radius: 50%;
   background: var(--accent); color: #fff; border: none;
   cursor: pointer; font-size: 20px; font-weight: 700;
   display: flex; align-items: center; justify-content: center;
-  z-index: 9999; box-shadow: var(--shadow-warm);
+  z-index: 60; box-shadow: var(--shadow-warm);
   transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 #scroll-top-btn:hover {
@@ -805,7 +797,8 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
 
 /* 留言回饋按鈕 */
 .feedback-fab {
-  position: fixed; bottom: 26px; right: 88px; z-index: 990;
+  position: fixed; bottom: max(20px, env(safe-area-inset-bottom)); right: calc(max(20px, env(safe-area-inset-right)) + 58px); z-index: 60;
+  min-height: 46px;
   background: var(--surface2); color: var(--text);
   border: 1px solid var(--border2); border-radius: var(--pill);
   padding: 9px 18px; font-size: 12px; font-weight: 600;
@@ -830,6 +823,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   background: var(--surface); border: 1px solid var(--border2);
   border-radius: var(--r); width: 100%; max-width: 520px;
   padding: 28px; box-shadow: 0 25px 50px rgba(0,0,0,.7); position: relative;
+  max-height: 100%; overflow-y: auto; overscroll-behavior: contain;
 }
 .fb-group { margin-bottom: 14px; text-align: left; }
 .fb-group label {
@@ -933,6 +927,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
   border-radius: var(--pill);
   padding: 6px 14px;
   transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  flex-shrink: 0; cursor: pointer;
 }
 .btn-home:hover {
   background: var(--accent-soft);
@@ -1026,6 +1021,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
 }
 .search-input {
   flex: 1;
+  min-width: 0;
   background: var(--surface);
   border: 1px solid var(--border);
   color: var(--text);
@@ -1209,7 +1205,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
 
 /* ── 旗艦級首頁排版現代樣式 ── */
 .home-hero-pro {
-  background: linear-gradient(135deg, rgba(217, 119, 87, 0.12) 0%, rgba(93, 122, 146, 0.1) 50%, rgba(23, 22, 20, 0.8) 100%);
+  background: linear-gradient(135deg, rgba(217, 119, 87, 0.12) 0%, rgba(93, 122, 146, 0.1) 50%, var(--surface) 100%);
   border: 1px solid var(--border2);
   border-radius: 18px;
   padding: 32px 30px;
@@ -1257,7 +1253,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
 }
 .hero-quick-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
   margin-bottom: 28px;
 }
@@ -1320,7 +1316,7 @@ nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
 }
 .qb-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr));
   gap: 14px;
 }
 .qb-exam-card {
@@ -1666,22 +1662,173 @@ details.faq-item[open] .faq-icon-arrow {
   border-radius: 10px;
 }
 
+/* 三種裝置共用的內容邊界、觸控與捲動行為 */
+button, input, select, textarea { font-family: inherit; }
+button, a, summary, label, [role="button"] {
+  touch-action: manipulation;
+  scroll-margin-block: var(--header-offset) 88px;
+  -webkit-tap-highlight-color: rgba(217, 119, 87, 0.18);
+}
+button:focus-visible, a:focus-visible, input:focus-visible,
+select:focus-visible, textarea:focus-visible, [tabindex="0"]:focus-visible {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: 3px !important;
+}
+button:disabled { cursor: default; opacity: .55; }
+.btn, .btn-home, .btn-hero, .source-btn, .stag, .tag { flex-shrink: 0; }
+.btn, .btn-home, .btn-hero, .source-btn { text-align: center; }
+.nav-item, .btn, .btn-home, .btn-hero, .source-btn, .stab-btn,
+.tag-pill, .star-btn, .timer-ctrl-btn { min-height: 44px; }
+.theme-opt { width: 44px; height: 38px; flex-shrink: 0; }
+.star-btn { min-width: 44px; flex-shrink: 0; }
+.quick-feature-card, .qb-exam-card { min-width: 0; text-align: left; font: inherit; }
+.hero-quick-grid > *, .qb-cards-grid > *, .source-grid > *,
+.grid2 > *, .steps-grid > *, .feedback-grid > * { min-width: 0; }
+.section-header, .qb-section-head, .card-hd, .qb-card-top,
+.q-meta, .search-stats-bar, .search-item-meta { flex-wrap: wrap; gap: 10px; }
+.section-header, .qb-section-head { align-items: flex-start; }
+.section-desc, .qb-section-sub { flex-basis: 100%; }
+.q-meta > *, .opt > span, .search-item-meta > div,
+.setting-item-row > div:first-child, .backup-card > div { min-width: 0; }
+.setting-item-row { gap: 16px; }
+.setting-item-row > select, .backup-card > .btn { flex-shrink: 0; }
+.backup-card { flex-wrap: wrap; }
+.feedback-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 16px; margin-bottom: 20px;
+}
+.topic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 12px; }
+.topic-card { min-width: 0; width: 100%; text-align: left; font: inherit; color: inherit; cursor: pointer; }
+.topic-card:hover { border-color: var(--accent); }
+.topic-analysis-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 10px; }
+.feedback-banner-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.table-scroll, .comp-table-wrap {
+  max-width: 100%; min-width: 0; overflow-x: auto;
+  overscroll-behavior-x: contain; margin-bottom: 18px;
+  border: 1px solid var(--border); border-radius: 10px;
+  scroll-margin-top: var(--header-offset);
+}
+.table-scroll > table, .comp-table-wrap > table { width: 100%; min-width: 560px; margin-bottom: 0; }
+.table-scroll-hint { font-size: 12px; color: var(--text-dim); margin: 0 0 8px; }
+.cmp-table, .comp-table { border-collapse: collapse; font-size: 13px; }
+.cmp-table th, .comp-table th { background: var(--surface2); text-align: left; }
+.cmp-table th, .cmp-table td, .comp-table th, .comp-table td {
+  padding: 12px 14px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.7;
+}
+.kv-table .kv-key { white-space: normal; }
+details[open] > .faq-a { display: block; }
+summary.faq-q::after { content: none; }
+.faq-q > span:first-child { min-width: 0; }
+#exam-area { position: relative; }
+.exam-hd { flex-wrap: wrap; gap: 16px; }
+.exam-meta { flex-wrap: wrap; gap: 12px; }
+.q-num, .opt-k, .kbd-badge { flex-shrink: 0; }
+.opt { width: 100%; text-align: left; font-family: inherit; }
+.exam-nav { gap: 8px; }
+.exam-pause-overlay { padding: 20px; text-align: center; }
+.result-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 20px 0; }
+.rs { padding: 16px 8px; text-align: center; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); }
+.rs .v { font-size: 24px; font-weight: 700; }
+.rs .l { font-size: 12px; color: var(--text-dim); }
+.result-hero { text-align: center; }
+.ring-wrap { position: relative; width: 130px; margin: 0 auto 16px; }
+.ring-bg { fill: none; stroke: var(--surface3); stroke-width: 10px; }
+.ring-fill { fill: none; stroke-width: 10px; transform: rotate(-90deg); transform-origin: center; }
+.ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; }
+.ring-num { font-size: 30px; font-weight: 700; }
+.ring-sub { font-size: 12px; color: var(--text-dim); }
+.rev-item { padding: 18px; margin-bottom: 14px; background: var(--surface); border-radius: 10px; }
+.modal-overlay, .app-dialog-overlay {
+  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+    max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  overflow-y: auto; overscroll-behavior: contain;
+}
+.app-dialog-card { max-height: 100%; overflow-y: auto; overscroll-behavior: contain; }
+.dialog-icon-wrap { flex-shrink: 0; }
+.dialog-message { max-height: none; overflow: visible; }
+.fb-input, .fb-select, .fb-textarea { min-width: 0; max-width: 100%; }
+.fb-textarea { resize: vertical; }
+.feedback-modal-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 14px; }
+.modal-close { min-width: 44px; min-height: 44px; background: none; border: none; font-size: 18px; color: var(--text-dim); cursor: pointer; }
+body.interaction-locked { overflow: hidden; }
+#content { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
+
+@media (max-width: 1280px) {
+  .page-title span { display: none; }
+  .steps-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 1024px) {
+  #sidebar { width: min(300px, 100%); min-width: 0; transform: translateX(-100%); }
+  #sidebar.open { transform: none; }
+  #main { margin-left: 0; }
+  #topbar { padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+  .hbg, .sidebar-close { display: inline-flex; }
+  .sidebar-close { position: absolute; top: calc(12px + env(safe-area-inset-top)); right: 12px; }
+  #sidebar .logo { padding-right: 60px; }
+  .sidebar-stats, #sidebar .logo { flex-shrink: 0; }
+  #content { padding-left: max(24px, env(safe-area-inset-left)); padding-right: max(24px, env(safe-area-inset-right)); }
+}
+@media (max-width: 640px) {
+  html { --header-offset: 144px; }
+  #topbar {
+    display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 8px 12px;
+    padding: max(8px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) 8px max(12px, env(safe-area-inset-left));
+  }
+  .topbar-heading { gap: 10px; }
+  .page-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .top-btns { grid-column: 1 / -1; justify-content: space-between; gap: 6px; }
+  .top-btns .btn { padding: 8px 10px; font-size: 12px; white-space: nowrap; }
+  .theme-opt { height: 36px; }
+  #content { padding-top: 20px; padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+  .home-hero-pro, .hero { padding: 22px 18px; }
+  .hero-pro-title, .hero h2 { font-size: 23px; line-height: 1.5; }
+  .hero-pro-subtitle { font-size: 14px; }
+  .hero-actions > .btn-hero { width: 100%; justify-content: center; }
+  .grid2, .hero-quick-grid { grid-template-columns: minmax(0, 1fr); }
+  .card, .q-card, .search-item-card, .level-compare-card { padding: 18px 16px; }
+  .qb-exam-card, .quick-feature-card { padding: 18px 16px; }
+  .chapter-header { padding: 18px 16px; }
+  .chapter-header h3 { font-size: 17px; }
+  .study-tab-nav { gap: 8px; }
+  .stab-btn { max-width: 100%; padding: 8px 12px; }
+  .exam-hd { padding: 14px; gap: 12px; }
+  .exam-meta { flex: 1; justify-content: space-between; }
+  .exam-hd > .btn { width: 100%; }
+  .exam-meta .em-v, #timer { font-size: 18px; }
+  .q-meta { gap: 6px 10px; }
+  .q-text { font-size: 16px; }
+  .opt { padding: 12px; gap: 10px; font-size: 14px; }
+  .kbd-badge { display: none; }
+  .setting-item-row { padding: 16px; gap: 12px; }
+  .setting-item-row:has(select) { flex-wrap: wrap; }
+  .setting-item-row > select { width: 100%; min-height: 44px; }
+  .search-input, .fb-input, .fb-select, .fb-textarea, #set-cnt { font-size: 16px !important; }
+  .modal-card { padding: 18px 16px; }
+  .fb-actions > .btn { flex: 1 1 100% !important; }
+  .feedback-fab { width: 46px; padding: 0; justify-content: center; }
+  .feedback-fab > span:last-child { display: none; }
+  #scroll-top-btn { right: max(16px, env(safe-area-inset-right)); }
+  .feedback-fab { right: calc(max(16px, env(safe-area-inset-right)) + 58px); }
+}
+@media (max-width: 380px) {
+  .steps-grid { grid-template-columns: minmax(0, 1fr); }
+  .em-sep { display: none; }
+  .exam-meta { gap: 8px; }
+}
+@media (pointer: coarse) {
+  .theme-opt { height: 44px; }
+}
+
 </style>
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </head>
 <body>
 <a href="#main" class="skip-to-content">跳至主要內容 (Skip to main content)</a>
 <div id="scroll-sentinel" style="position:absolute;top:0;left:0;height:1px;width:1px;pointer-events:none;"></div>
-<button class="hbg" onclick="toggleSB()" aria-label="切換導覽功能表" title="開啟選單">
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-    <line x1="3" y1="6" x2="21" y2="6"></line>
-    <line x1="3" y1="12" x2="21" y2="12"></line>
-    <line x1="3" y1="18" x2="21" y2="18"></line>
-  </svg>
-</button>
-<div id="overlay" onclick="closeSB()"></div>
+<div id="overlay" onclick="closeSB()" aria-hidden="true"></div>
 <div id="app">
-<aside id="sidebar">
+<aside id="sidebar" aria-label="主要導覽">
+  <button class="sidebar-close" type="button" onclick="closeSB()" aria-label="關閉導覽選單">✕</button>
   <div class="logo" onclick="goHome()" title="點擊回到首頁總覽">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
       <div class="logo-icon-box">
@@ -1706,21 +1853,21 @@ details.faq-item[open] .faq-icon-arrow {
   <nav>
     <div class="nav-section">
       <div class="nav-label">主選單</div>
-      <div class="nav-item active" onclick="gp('home',this)" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){gp('home',this);event.preventDefault();}"><span class="nav-icon">🏠</span>首頁總覽</div>
-      <div class="nav-item" onclick="gp('search',this)" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){gp('search',this);event.preventDefault();}"><span class="nav-icon">🔍</span>題庫搜尋</div>
-      <div class="nav-item" onclick="gp('exam',this)" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){gp('exam',this);event.preventDefault();}"><span class="nav-icon">📝</span>模擬考試</div>
-      <div class="nav-item" onclick="gp('practice',this)" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){gp('practice',this);event.preventDefault();}"><span class="nav-icon">🎯</span>分科練習</div>
-      <div class="nav-item" onclick="gp('review',this)" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){gp('review',this);event.preventDefault();}"><span class="nav-icon">🔁</span>錯題複習</div>
+      <button type="button" class="nav-item active" onclick="gp('home',this)"><span class="nav-icon">🏠</span>首頁總覽</button>
+      <button type="button" class="nav-item" onclick="gp('search',this)"><span class="nav-icon">🔍</span>題庫搜尋</button>
+      <button type="button" class="nav-item" onclick="gp('exam',this)"><span class="nav-icon">📝</span>模擬考試</button>
+      <button type="button" class="nav-item" onclick="gp('practice',this)"><span class="nav-icon">🎯</span>分科練習</button>
+      <button type="button" class="nav-item" onclick="gp('review',this)"><span class="nav-icon">🔁</span>錯題複習</button>
     </div>
     <div class="nav-section">
       <div class="nav-label">學習資源</div>
-      <div class="nav-item" onclick="gp('study',this)" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){gp('study',this);event.preventDefault();}"><span class="nav-icon">📖</span>考試重點</div>
-      <div class="nav-item" onclick="gp('sources',this)" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){gp('sources',this);event.preventDefault();}">
+      <button type="button" class="nav-item" onclick="gp('study',this)"><span class="nav-icon">📖</span>考試重點</button>
+      <button type="button" class="nav-item" onclick="gp('sources',this)">
         <span class="nav-icon">📁</span>學習資源庫
         <span class="nav-badge">10</span>
-      </div>
-      <div class="nav-item" onclick="gp('feedback',this)" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){gp('feedback',this);event.preventDefault();}"><span class="nav-icon">💬</span>留言回饋</div>
-      <div class="nav-item" onclick="gp('settings',this)" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){gp('settings',this);event.preventDefault();}"><span class="nav-icon">⚙️</span>個人設定</div>
+      </button>
+      <button type="button" class="nav-item" onclick="gp('feedback',this)"><span class="nav-icon">💬</span>留言回饋</button>
+      <button type="button" class="nav-item" onclick="gp('settings',this)"><span class="nav-icon">⚙️</span>個人設定</button>
     </div>
   </nav>
   <div class="sidebar-stats">
@@ -1736,7 +1883,14 @@ details.faq-item[open] .faq-icon-arrow {
 </aside>
 <main id="main">
   <div id="topbar">
-    <div style="display:flex;align-items:center;gap:12px;min-width:0;">
+    <button class="hbg" type="button" onclick="toggleSB()" aria-label="開啟導覽選單" aria-expanded="false" aria-controls="sidebar" title="開啟選單">
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+    <div class="topbar-heading">
       <!-- 左上角專用回首頁按鈕 -->
       <!-- 左上角專用回首頁按鈕 -->
       <button class="btn-home" onclick="goHome()" title="點擊立即回到首頁總覽">
@@ -1745,15 +1899,15 @@ details.faq-item[open] .faq-icon-arrow {
         </svg>
         <span>首頁</span>
       </button>
-      <div class="page-title" id="ptitle">首頁總覽 <span>450道官方真題（114Q4＋115三次真題）＋ 樣題與模擬105題 · 全庫共555題</span></div>
+      <div class="page-title" id="ptitle" tabindex="-1">首頁總覽 <span>450道官方真題（114Q4＋115三次真題）＋ 樣題與模擬105題 · 全庫共555題</span></div>
     </div>
     <div class="top-btns">
       <!-- 色彩模式切換按鈕（純圖示） -->
       <div class="theme-switch-group" id="theme-switch-group" title="切換色彩模式：深色 / 淺色">
-        <button type="button" class="theme-opt active" id="theme-btn-dark" onclick="setTheme('dark')" title="深色墨黑模式" aria-label="切換為深色模式" title="切換為深色模式">
+        <button type="button" class="theme-opt active" id="theme-btn-dark" onclick="setTheme('dark')" title="深色墨黑模式" aria-label="切換為深色模式">
           <span>🌙</span>
         </button>
-        <button type="button" class="theme-opt" id="theme-btn-light" onclick="setTheme('light')" title="淺色暖白模式" aria-label="切換為淺色模式" title="切換為淺色模式">
+        <button type="button" class="theme-opt" id="theme-btn-light" onclick="setTheme('light')" title="淺色暖白模式" aria-label="切換為淺色模式">
           <span>☀️</span>
         </button>
       </div>
@@ -1782,37 +1936,37 @@ details.faq-item[open] .faq-icon-arrow {
 
         <!-- 頂部 4 大核心捷徑卡片 -->
         <div class="hero-quick-grid">
-          <div class="quick-feature-card" onclick="startExam('sci1_115_3')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('sci1_115_3');event.preventDefault();}">
+          <button type="button" class="quick-feature-card" onclick="startExam('sci1_115_3')">
             <div>
               <div class="quick-feature-icon">🔥</div>
               <div class="quick-feature-title">115-3 最新真題 <span style="font-size:12px;color:var(--accent)">立即測驗 →</span></div>
               <div class="quick-feature-desc">經濟部最新公告 115 年第三次初級完整 100 道試題專項精練。</div>
             </div>
-          </div>
+          </button>
 
-          <div class="quick-feature-card" onclick="gp('search',document.querySelectorAll('.nav-item')[1])" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){gp('search',document.querySelectorAll('.nav-item')[1]);event.preventDefault();}">
+          <button type="button" class="quick-feature-card" onclick="gp('search',document.querySelectorAll('.nav-item')[1])">
             <div>
               <div class="quick-feature-icon">🔍</div>
               <div class="quick-feature-title">全庫關鍵字檢索 <span style="font-size:12px;color:var(--accent2)">查閱 →</span></div>
               <div class="quick-feature-desc">555 題全文搜尋、高頻考點標籤、高亮匹配與詳盡解析速查。</div>
             </div>
-          </div>
+          </button>
 
-          <div class="quick-feature-card" onclick="gp('practice',document.querySelectorAll('.nav-item')[2])" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){gp('practice',document.querySelectorAll('.nav-item')[2]);event.preventDefault();}">
+          <button type="button" class="quick-feature-card" onclick="gp('practice',document.querySelectorAll('.nav-item')[2])">
             <div>
               <div class="quick-feature-icon">🎯</div>
               <div class="quick-feature-title">分科主題精準衝刺 <span style="font-size:12px;color:var(--green)">練習 →</span></div>
               <div class="quick-feature-desc">對齊官方 16 大能力指標，機器學習、Prompt、RAG 分類突破。</div>
             </div>
-          </div>
+          </button>
 
-          <div class="quick-feature-card" onclick="startExam('wrong')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('wrong');event.preventDefault();}">
+          <button type="button" class="quick-feature-card" onclick="startExam('wrong')">
             <div>
               <div class="quick-feature-icon">🔁</div>
               <div class="quick-feature-title">錯題弱點反覆特訓 <span style="font-size:12px;color:var(--warn)">複習 →</span></div>
               <div class="quick-feature-desc">系統自動收錄歷次答錯題目，針對盲點反覆精練直到完全掌握。</div>
             </div>
-          </div>
+          </button>
         </div>
       </div>
 
@@ -1827,7 +1981,7 @@ details.faq-item[open] .faq-icon-arrow {
 
       <div class="qb-cards-grid">
         <!-- 115-3 科目一 -->
-        <div class="qb-exam-card" onclick="startExam('sci1_115_3')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('sci1_115_3');event.preventDefault();}">
+        <button type="button" class="qb-exam-card" onclick="startExam('sci1_115_3')">
           <div>
             <div class="qb-card-top">
               <span class="tag t1">科目 1</span>
@@ -1837,10 +1991,10 @@ details.faq-item[open] .faq-icon-arrow {
             <div class="qb-card-meta">115年第三次 · 官方真題 50 題 · 滿分 100 分</div>
           </div>
           <div class="qb-card-btn"><span>開始測驗</span><span>→</span></div>
-        </div>
+        </button>
 
         <!-- 115-3 科目二 -->
-        <div class="qb-exam-card" onclick="startExam('sci2_115_3')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('sci2_115_3');event.preventDefault();}">
+        <button type="button" class="qb-exam-card" onclick="startExam('sci2_115_3')">
           <div>
             <div class="qb-card-top">
               <span class="tag t2">科目 2</span>
@@ -1850,10 +2004,10 @@ details.faq-item[open] .faq-icon-arrow {
             <div class="qb-card-meta">115年第三次 · 官方真題 50 題 · 滿分 100 分</div>
           </div>
           <div class="qb-card-btn"><span>開始測驗</span><span>→</span></div>
-        </div>
+        </button>
 
         <!-- 115-2 科目一 -->
-        <div class="qb-exam-card" onclick="startExam('sci1_115_2')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('sci1_115_2');event.preventDefault();}">
+        <button type="button" class="qb-exam-card" onclick="startExam('sci1_115_2')">
           <div>
             <div class="qb-card-top">
               <span class="tag t1">科目 1</span>
@@ -1863,10 +2017,10 @@ details.faq-item[open] .faq-icon-arrow {
             <div class="qb-card-meta">115年第二次 · 官方真題 50 題 · 滿分 100 分</div>
           </div>
           <div class="qb-card-btn"><span>開始測驗</span><span>→</span></div>
-        </div>
+        </button>
 
         <!-- 115-2 科目二 -->
-        <div class="qb-exam-card" onclick="startExam('sci2_115_2')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('sci2_115_2');event.preventDefault();}">
+        <button type="button" class="qb-exam-card" onclick="startExam('sci2_115_2')">
           <div>
             <div class="qb-card-top">
               <span class="tag t2">科目 2</span>
@@ -1876,10 +2030,10 @@ details.faq-item[open] .faq-icon-arrow {
             <div class="qb-card-meta">115年第二次 · 官方真題 50 題 · 滿分 100 分</div>
           </div>
           <div class="qb-card-btn"><span>開始測驗</span><span>→</span></div>
-        </div>
+        </button>
 
         <!-- 115-1 科目一 -->
-        <div class="qb-exam-card" onclick="startExam('sci1_115_1')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('sci1_115_1');event.preventDefault();}">
+        <button type="button" class="qb-exam-card" onclick="startExam('sci1_115_1')">
           <div>
             <div class="qb-card-top">
               <span class="tag t1">科目 1</span>
@@ -1889,10 +2043,10 @@ details.faq-item[open] .faq-icon-arrow {
             <div class="qb-card-meta">115年第一次 · 官方真題 50 題 · 滿分 100 分</div>
           </div>
           <div class="qb-card-btn"><span>開始測驗</span><span>→</span></div>
-        </div>
+        </button>
 
         <!-- 115-1 科目二 -->
-        <div class="qb-exam-card" onclick="startExam('sci2_115_1_official')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('sci2_115_1_official');event.preventDefault();}">
+        <button type="button" class="qb-exam-card" onclick="startExam('sci2_115_1_official')">
           <div>
             <div class="qb-card-top">
               <span class="tag t2">科目 2</span>
@@ -1902,7 +2056,7 @@ details.faq-item[open] .faq-icon-arrow {
             <div class="qb-card-meta">115年第一次 · 官方公告題 50 題 · 滿分 100 分</div>
           </div>
           <div class="qb-card-btn"><span>開始測驗</span><span>→</span></div>
-        </div>
+        </button>
       </div>
 
       <!-- 專區 2：🔵 歷屆真題與全真大會考 -->
@@ -1915,7 +2069,7 @@ details.faq-item[open] .faq-icon-arrow {
 
       <div class="qb-cards-grid">
         <!-- 114Q4 科目一 -->
-        <div class="qb-exam-card" onclick="startExam('sci1_114')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('sci1_114');event.preventDefault();}">
+        <button type="button" class="qb-exam-card" onclick="startExam('sci1_114')">
           <div>
             <div class="qb-card-top">
               <span class="tag t1">科目 1</span>
@@ -1925,10 +2079,10 @@ details.faq-item[open] .faq-icon-arrow {
             <div class="qb-card-meta">114年第四梯次 · 官方真題 50 題</div>
           </div>
           <div class="qb-card-btn"><span>開始測驗</span><span>→</span></div>
-        </div>
+        </button>
 
         <!-- 114Q4 科目二 -->
-        <div class="qb-exam-card" onclick="startExam('sci2')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('sci2');event.preventDefault();}">
+        <button type="button" class="qb-exam-card" onclick="startExam('sci2')">
           <div>
             <div class="qb-card-top">
               <span class="tag t2">科目 2</span>
@@ -1938,10 +2092,10 @@ details.faq-item[open] .faq-icon-arrow {
             <div class="qb-card-meta">114年第四梯次 · 官方真題 50 題</div>
           </div>
           <div class="qb-card-btn"><span>開始測驗</span><span>→</span></div>
-        </div>
+        </button>
 
         <!-- 科目一全真題大會考 -->
-        <div class="qb-exam-card" onclick="startExam('sci1_all')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('sci1_all');event.preventDefault();}">
+        <button type="button" class="qb-exam-card" onclick="startExam('sci1_all')">
           <div>
             <div class="qb-card-top">
               <span class="tag t1">科目 1</span>
@@ -1951,10 +2105,10 @@ details.faq-item[open] .faq-icon-arrow {
             <div class="qb-card-meta">跨越 114Q4 ＋ 115 年三次，200 題完整刷透</div>
           </div>
           <div class="qb-card-btn"><span>隨機抽題測驗</span><span>→</span></div>
-        </div>
+        </button>
 
         <!-- 科目二全真題大會考 -->
-        <div class="qb-exam-card" onclick="startExam('sci2_all')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('sci2_all');event.preventDefault();}">
+        <button type="button" class="qb-exam-card" onclick="startExam('sci2_all')">
           <div>
             <div class="qb-card-top">
               <span class="tag t2">科目 2</span>
@@ -1964,10 +2118,10 @@ details.faq-item[open] .faq-icon-arrow {
             <div class="qb-card-meta">跨越 114Q4 ＋ 115 年三次，250 題完整刷透</div>
           </div>
           <div class="qb-card-btn"><span>隨機抽題測驗</span><span>→</span></div>
-        </div>
+        </button>
 
         <!-- 450 題官方全真題模擬練習 -->
-        <div class="qb-exam-card" onclick="startExam('official_all')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('official_all');event.preventDefault();}">
+        <button type="button" class="qb-exam-card" onclick="startExam('official_all')">
           <div>
             <div class="qb-card-top">
               <span class="tag tg">官方總匯</span>
@@ -1977,10 +2131,10 @@ details.faq-item[open] .faq-icon-arrow {
             <div class="qb-card-meta">自官方 450 題真題庫中依設定題數隨機抽出</div>
           </div>
           <div class="qb-card-btn"><span>全真考場模擬</span><span>→</span></div>
-        </div>
+        </button>
 
         <!-- 555 題全庫隨機混合練習 -->
-        <div class="qb-exam-card" onclick="startExam('random')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('random');event.preventDefault();}">
+        <button type="button" class="qb-exam-card" onclick="startExam('random')">
           <div>
             <div class="qb-card-top">
               <span class="tag tg">全庫旗艦</span>
@@ -1990,7 +2144,7 @@ details.faq-item[open] .faq-icon-arrow {
             <div class="qb-card-meta">真題 450 題 ＋ 樣題 50 題 ＋ 模擬 55 題全覆蓋</div>
           </div>
           <div class="qb-card-btn"><span>終極隨機抽題</span><span>→</span></div>
-        </div>
+        </button>
       </div>
 
       <!-- 專區 3：📝 樣題與模擬練習 -->
@@ -2003,7 +2157,7 @@ details.faq-item[open] .faq-icon-arrow {
 
       <div class="qb-cards-grid">
         <!-- 官方公告樣題 -->
-        <div class="qb-exam-card" onclick="startExam('sample')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('sample');event.preventDefault();}">
+        <button type="button" class="qb-exam-card" onclick="startExam('sample')">
           <div>
             <div class="qb-card-top">
               <span class="tag tg">官方指引</span>
@@ -2013,10 +2167,10 @@ details.faq-item[open] .faq-icon-arrow {
             <div class="qb-card-meta">經濟部初版公告指引核心樣題精析 50 題</div>
           </div>
           <div class="qb-card-btn"><span>開始測驗</span><span>→</span></div>
-        </div>
+        </button>
 
         <!-- 專家模擬題庫 -->
-        <div class="qb-exam-card" onclick="startExam('mock')" tabindex="0" role="button" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){startExam('mock');event.preventDefault();}">
+        <button type="button" class="qb-exam-card" onclick="startExam('mock')">
           <div>
             <div class="qb-card-top">
               <span class="tag tg">名師押題</span>
@@ -2026,7 +2180,7 @@ details.faq-item[open] .faq-icon-arrow {
             <div class="qb-card-meta">針對 Agentic AI、MCP、Guardrails 擴充模擬題</div>
           </div>
           <div class="qb-card-btn"><span>開始測驗</span><span>→</span></div>
-        </div>
+        </button>
       </div>
 
       <!-- ════════ 備考指南與出題分析 ════════ -->
@@ -2194,7 +2348,7 @@ details.faq-item[open] .faq-icon-arrow {
             發現題目疑義、解答討論或功能建議？支援免登入一鍵快速寄信，亦可登入 GitHub 留言討論！
           </div>
         </div>
-        <div style="display:flex;gap:10px;align-items:center;">
+        <div class="feedback-banner-actions">
           <button class="btn btn-ghost" onclick="gp('feedback',document.querySelectorAll('.nav-item')[6])">💬 前往留言區</button>
           <button class="btn btn-primary" onclick="openFeedbackModal('首頁橫幅')">💌 免登入寄信</button>
         </div>
@@ -2213,30 +2367,30 @@ details.faq-item[open] .faq-icon-arrow {
       </div>
 
       <div class="search-bar-wrap">
-        <input type="text" id="global-search-input" class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="請輸入關鍵字（例如：ReAct、同態加密、SMOTE、寬深模型、聯邦學習、MCP、資料漂移…）" oninput="debounceSearch()">
+        <input type="search" id="global-search-input" class="search-input" aria-label="搜尋題目、選項與解析" name="search" autocomplete="off" spellcheck="false" placeholder="搜尋題目或考點，例如 ReAct…" oninput="debounceSearch()">
         <button class="btn btn-ghost" onclick="clearSearch()">清除</button>
       </div>
 
       <div class="search-tags" id="search-quick-tags">
-        <span class="tag-pill active" onclick="filterSearchCategory('all', this)">全部 555 題</span>
-        <span class="tag-pill" onclick="filterSearchCategory('fav', this)">⭐ 我的收藏</span>
-        <span class="tag-pill" onclick="filterSearchCategory('wrong', this)">❌ 我的錯題</span>
-        <span class="tag-pill" onclick="filterSearchCategory('sci1', this)">📘 科目一</span>
-        <span class="tag-pill" onclick="filterSearchCategory('sci2', this)">📗 科目二</span>
-        <span class="tag-pill" onclick="setSearchKeyword('ReAct')">#ReAct</span>
-        <span class="tag-pill" onclick="setSearchKeyword('同態加密')">#同態加密</span>
-        <span class="tag-pill" onclick="setSearchKeyword('聯邦學習')">#聯邦學習</span>
-        <span class="tag-pill" onclick="setSearchKeyword('SMOTE')">#SMOTE</span>
-        <span class="tag-pill" onclick="setSearchKeyword('寬深模型')">#寬深模型</span>
-        <span class="tag-pill" onclick="setSearchKeyword('MCP')">#MCP</span>
-        <span class="tag-pill" onclick="setSearchKeyword('資料漂移')">#資料漂移</span>
-        <span class="tag-pill" onclick="setSearchKeyword('LoRA')">#LoRA</span>
-        <span class="tag-pill" onclick="setSearchKeyword('VAE')">#VAE</span>
-        <span class="tag-pill" onclick="setSearchKeyword('多模態')">#多模態</span>
+        <button type="button" class="tag-pill active" onclick="filterSearchCategory('all', this)">全部 555 題</button>
+        <button type="button" class="tag-pill" onclick="filterSearchCategory('fav', this)">⭐ 我的收藏</button>
+        <button type="button" class="tag-pill" onclick="filterSearchCategory('wrong', this)">❌ 我的錯題</button>
+        <button type="button" class="tag-pill" onclick="filterSearchCategory('sci1', this)">📘 科目一</button>
+        <button type="button" class="tag-pill" onclick="filterSearchCategory('sci2', this)">📗 科目二</button>
+        <button type="button" class="tag-pill" onclick="setSearchKeyword('ReAct')">#ReAct</button>
+        <button type="button" class="tag-pill" onclick="setSearchKeyword('同態加密')">#同態加密</button>
+        <button type="button" class="tag-pill" onclick="setSearchKeyword('聯邦學習')">#聯邦學習</button>
+        <button type="button" class="tag-pill" onclick="setSearchKeyword('SMOTE')">#SMOTE</button>
+        <button type="button" class="tag-pill" onclick="setSearchKeyword('寬深模型')">#寬深模型</button>
+        <button type="button" class="tag-pill" onclick="setSearchKeyword('MCP')">#MCP</button>
+        <button type="button" class="tag-pill" onclick="setSearchKeyword('資料漂移')">#資料漂移</button>
+        <button type="button" class="tag-pill" onclick="setSearchKeyword('LoRA')">#LoRA</button>
+        <button type="button" class="tag-pill" onclick="setSearchKeyword('VAE')">#VAE</button>
+        <button type="button" class="tag-pill" onclick="setSearchKeyword('多模態')">#多模態</button>
       </div>
 
       <div class="search-stats-bar">
-        <div>共找到 <strong id="search-result-count" style="color:var(--accent)">0</strong> 道相符題目</div>
+        <div>共找到 <strong id="search-result-count" aria-live="polite" style="color:var(--accent)">0</strong> 道相符題目</div>
         <div style="display:flex;gap:8px;">
           <button class="btn btn-ghost btn-sm" onclick="exportSearchResultsTxt()">📄 匯出搜尋結果</button>
         </div>
@@ -2282,7 +2436,7 @@ details.faq-item[open] .faq-icon-arrow {
     <!-- PRACTICE -->
     <div id="page-practice" class="page">
       <div style="margin-bottom:20px"><h2 style="font-size:18px;margin-bottom:6px">分科主題練習</h2><p style="color:var(--text-dim);font-size:13px">依官方評鑑主題精準練習</p></div>
-      <div id="topic-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px"></div>
+      <div id="topic-grid" class="topic-grid"></div>
     </div>
 
     <!-- REVIEW -->
@@ -2535,7 +2689,7 @@ details.faq-item[open] .faq-icon-arrow {
         </div>
       </div>
 
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-bottom:20px;">
+      <div class="feedback-grid">
         <!-- 方法一：免登入直接寄信 -->
         <div class="card" style="display:flex;flex-direction:column;">
           <div class="card-hd">
@@ -2547,8 +2701,8 @@ details.faq-item[open] .faq-icon-arrow {
           </p>
           <form id="inlineFeedbackForm" onsubmit="handleFeedbackSubmit(event, 'inline')">
             <div class="fb-group">
-              <label>📌 反饋類型</label>
-              <select class="fb-select" id="inlineFbType" required>
+              <label for="inlineFbType">📌 反饋類型</label>
+              <select class="fb-select" id="inlineFbType" name="feedback_type" required>
                 <option value="💡 題目疑義與解答討論">💡 題目疑義與解答討論</option>
                 <option value="🐛 系統錯誤與文字排版 (Bug)">🐛 系統錯誤與文字排版 (Bug)</option>
                 <option value="✨ 題庫擴充與功能建議">✨ 題庫擴充與功能建議</option>
@@ -2557,20 +2711,20 @@ details.faq-item[open] .faq-icon-arrow {
               </select>
             </div>
             <div class="fb-group">
-              <label>📖 關聯考科或題號（選填）</label>
-              <input type="text" class="fb-input" id="inlineFbUnit" placeholder="例如：115-3 第二科 Q25、RAG 重排序考點">
+              <label for="inlineFbUnit">📖 關聯考科或題號（選填）</label>
+              <input type="text" class="fb-input" id="inlineFbUnit" name="feedback_unit" placeholder="例如：115-3 第二科 Q25、RAG 重排序考點">
             </div>
             <div class="fb-group">
-              <label>👤 您的稱呼（選填）</label>
-              <input type="text" class="fb-input" id="inlineFbName" placeholder="例如：台北考生林同學、AI 規劃師應試者">
+              <label for="inlineFbName">👤 您的稱呼（選填）</label>
+              <input type="text" class="fb-input" id="inlineFbName" name="feedback_name" placeholder="例如：台北考生林同學、AI 規劃師應試者">
             </div>
             <div class="fb-group">
-              <label>✉️ 聯絡 Email（選填，便於管理者回信回覆）</label>
-              <input type="email" class="fb-input" id="inlineFbEmail" placeholder="your-email@example.com">
+              <label for="inlineFbEmail">✉️ 聯絡 Email（選填，便於管理者回信回覆）</label>
+              <input type="email" class="fb-input" id="inlineFbEmail" name="feedback_email" placeholder="your-email@example.com">
             </div>
             <div class="fb-group">
-              <label>📝 詳細內容 <span style="color:var(--warn)">*</span></label>
-              <textarea class="fb-textarea" id="inlineFbContent" rows="4" placeholder="請詳細描述您的想法、發現的疑義或遇到的狀況..." required></textarea>
+              <label for="inlineFbContent">📝 詳細內容 <span style="color:var(--warn)">*</span></label>
+              <textarea class="fb-textarea" id="inlineFbContent" name="feedback_content" rows="4" placeholder="請詳細描述您的想法、發現的疑義或遇到的狀況..." required></textarea>
             </div>
             <div class="fb-actions">
               <button type="submit" class="btn btn-primary" id="inlineSubmitBtn" style="flex:1;">🚀 免登入送出反饋</button>
@@ -2612,7 +2766,7 @@ details.faq-item[open] .faq-icon-arrow {
         <!-- 首次安裝 Giscus App 友善指引條 -->
         <div id="giscus-setup-guide" style="background:rgba(217,119,87,0.08);border:1px solid var(--accent-border);border-radius:10px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;">
           <div style="font-size:24px;line-height:1;">⚙️</div>
-          <div style="flex:1;min-width:240px;">
+          <div style="flex:1;min-width:min(100%,240px);">
             <div style="font-size:13.5px;font-weight:700;color:var(--text);margin-bottom:4px;">Giscus 留言區啟用提示</div>
             <div style="font-size:12px;color:var(--text-dim);line-height:1.65;margin-bottom:10px;">
               若下方顯示「<strong style="color:var(--accent);">giscus is not installed on this repository</strong>」，表示您的 GitHub 儲存庫尚未授權安裝 Giscus 官方 App。<br>
@@ -2674,7 +2828,7 @@ details.faq-item[open] .faq-icon-arrow {
             <div class="setting-info-title">📊 每次隨機練習題數</div>
             <div class="setting-info-desc">全真題模擬與隨機混合抽題時的預設測驗題數</div>
           </div>
-          <select style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 14px;border-radius:8px;font-family:inherit;font-size:13px;cursor:pointer;outline:2px solid transparent;outline-offset:2px" id="set-cnt" onchange="saveSettingsCnt(this.value)">
+          <select aria-label="每次隨機練習題數" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 14px;border-radius:8px;font-family:inherit;font-size:13px;cursor:pointer;outline:2px solid transparent;outline-offset:2px" id="set-cnt" onchange="saveSettingsCnt(this.value)">
             <option value="10">10 題（極速暖身）</option>
             <option value="20" selected>20 題（標準日常）</option>
             <option value="30">30 題（深度精練）</option>
@@ -3595,7 +3749,9 @@ function showAppModal(opts){
   confirmBtn.style.borderColor = '';
   confirmBtn.style.color = '';
 
+  if(!overlay.classList.contains('active')) dialogReturnFocus = document.activeElement;
   overlay.classList.add('active');
+  syncInteractionState();
   setTimeout(() => confirmBtn.focus(), 60);
 
   return new Promise(resolve => {
@@ -3641,7 +3797,9 @@ function showConfirmModal(opts){
     confirmBtn.style.color = '';
   }
 
+  if(!overlay.classList.contains('active')) dialogReturnFocus = document.activeElement;
   overlay.classList.add('active');
+  syncInteractionState();
   setTimeout(() => confirmBtn.focus(), 60);
 
   return new Promise(resolve => {
@@ -3656,6 +3814,8 @@ function showConfirmModal(opts){
 function closeAppDialog(result){
   const overlay = document.getElementById('appDialogOverlay');
   if(overlay) overlay.classList.remove('active');
+  syncInteractionState();
+  dialogReturnFocus?.focus({preventScroll:true});
   if(currentDialogResolver){
     const fn = currentDialogResolver;
     currentDialogResolver = null;
@@ -3668,20 +3828,6 @@ function handleDialogBackdrop(e){
     closeAppDialog(false);
   }
 }
-
-// 支援 ESC 關閉與 Enter 鍵確認
-window.addEventListener('keydown', (e) => {
-  const overlay = document.getElementById('appDialogOverlay');
-  if(overlay && overlay.classList.contains('active')){
-    if(e.key === 'Escape'){
-      closeAppDialog(false);
-      e.preventDefault();
-    } else if(e.key === 'Enter'){
-      closeAppDialog(true);
-      e.preventDefault();
-    }
-  }
-});
 
 // 全域安全攔截替換原生 window.alert
 window.alert = function(msg){
@@ -3711,7 +3857,7 @@ function escapeHtml(str){
     .replace(/'/g, '&#039;');
 }
 
-let S={qs:[],cur:0,ans:[],correct:0,timer:null,timeLeft:0,totalDone:0,totalCorrect:0,wrongIds:[],favIds:[],isPaused:false,shortcutsEnabled:true};
+let S={qs:[],cur:0,ans:[],correct:0,timer:null,timeLeft:0,totalDone:0,totalCorrect:0,wrongIds:[],favIds:[],isPaused:false,examActive:false,shortcutsEnabled:true};
 
 let lastMode='random';
 try {
@@ -3799,7 +3945,6 @@ function goHome(){
     }
   }
   gp('home', homeNavItem);
-  window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
 // 頁面切換更新標題強化（支援 innerHTML 保留精美副標）
@@ -3816,7 +3961,8 @@ const PAGE_SUBTITLES = {
 };
 
 function gp(id,el){
-  if(id !== 'exam' && S.qs && S.qs.length > 0 && S.ans.some(a => a === null)){
+  if(id === 'exam' && !S.qs.length){ startExam('random'); return; }
+  if(id !== 'exam' && S.examActive){
     showConfirmModal({
       title: '測驗進行中確認',
       message: '您目前正在進行測驗且尚未交卷，確定要離開嗎？\n（離開將結束本輪作答，進度不會儲存）',
@@ -3825,6 +3971,7 @@ function gp(id,el){
       cancelText: '繼續作答',
       onConfirm: () => {
         clearInterval(S.timer);
+        S.examActive = false;
         S.qs = [];
         executePageSwitch(id, el);
       }
@@ -3839,16 +3986,122 @@ function executePageSwitch(id, el){
   document.getElementById('ptitle').innerHTML = (PAGE_TITLES[id]||id) + ' ' + sub;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
-  if(el){document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));el.classList.add('active');}
+  document.querySelectorAll('.nav-item').forEach(n=>{
+    const active = (n.getAttribute('onclick') || '').includes("gp('" + id + "'");
+    n.classList.toggle('active', active);
+    if(active) n.setAttribute('aria-current', 'page');
+    else n.removeAttribute('aria-current');
+  });
   if(id==='practice')renderTopics();
   if(id==='review')renderWrong();
   if(id==='study')renderStudy();
   if(id==='sources')renderTopicAnalysis();
   if(id==='search')renderSearchDefault();
-  closeSB();
+  closeSB(false);
+  window.scrollTo(0, 0);
+  document.getElementById('ptitle').focus({preventScroll:true});
 }
-function toggleSB(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('show');}
-function closeSB(){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('show');}
+
+// 抽屜與彈窗共用的捲動鎖定、焦點限制與裝置切換處理。
+let dialogReturnFocus = null;
+let feedbackReturnFocus = null;
+const drawerMedia = window.matchMedia('(max-width: 1024px)');
+
+function syncInteractionState(){
+  const sidebar = document.getElementById('sidebar');
+  const feedback = document.getElementById('feedbackModal');
+  const dialog = document.getElementById('appDialogOverlay');
+  const drawerOpen = drawerMedia.matches && sidebar.classList.contains('open');
+  const feedbackOpen = !!feedback?.classList.contains('active');
+  const dialogOpen = !!dialog?.classList.contains('active');
+  document.body.classList.toggle('interaction-locked', drawerOpen || feedbackOpen || dialogOpen);
+  document.getElementById('main').inert = drawerOpen || feedbackOpen || dialogOpen;
+  sidebar.inert = (drawerMedia.matches && !drawerOpen) || feedbackOpen || dialogOpen;
+  sidebar.setAttribute('aria-hidden', String(sidebar.inert));
+  const toggle = document.querySelector('.hbg');
+  toggle.setAttribute('aria-expanded', String(drawerOpen));
+  toggle.setAttribute('aria-label', drawerOpen ? '關閉導覽選單' : '開啟導覽選單');
+  document.getElementById('overlay').classList.toggle('show', drawerOpen);
+  if(feedback){
+    feedback.inert = !feedbackOpen || dialogOpen;
+    feedback.setAttribute('aria-hidden', String(feedback.inert));
+  }
+  if(dialog){
+    dialog.inert = !dialogOpen;
+    dialog.setAttribute('aria-hidden', String(!dialogOpen));
+  }
+  ['feedbackFab', 'scroll-top-btn'].forEach(id=>{
+    const button = document.getElementById(id);
+    if(button) button.inert = drawerOpen || feedbackOpen || dialogOpen;
+  });
+}
+
+function toggleSB(){
+  const sidebar = document.getElementById('sidebar');
+  if(sidebar.classList.contains('open')){ closeSB(); return; }
+  if(!drawerMedia.matches) return;
+  sidebar.classList.add('open');
+  syncInteractionState();
+  sidebar.querySelector('.sidebar-close').focus({preventScroll:true});
+}
+
+function closeSB(restoreFocus = true){
+  const sidebar = document.getElementById('sidebar');
+  const wasOpen = sidebar.classList.contains('open');
+  sidebar.classList.remove('open');
+  syncInteractionState();
+  if(wasOpen && restoreFocus && drawerMedia.matches) document.querySelector('.hbg').focus({preventScroll:true});
+}
+
+drawerMedia.addEventListener('change', ()=>{
+  const focusedInSidebar = document.getElementById('sidebar').contains(document.activeElement);
+  closeSB(false);
+  if(drawerMedia.matches && focusedInSidebar) document.querySelector('.hbg').focus({preventScroll:true});
+});
+
+document.addEventListener('keydown', e=>{
+  const surface = document.querySelector('#appDialogOverlay.active') ||
+    document.querySelector('#feedbackModal.active') ||
+    (drawerMedia.matches && document.querySelector('#sidebar.open'));
+  if(!surface) return;
+  if(e.key === 'Escape'){
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    if(surface.id === 'appDialogOverlay') closeAppDialog(false);
+    else if(surface.id === 'feedbackModal') closeFeedbackModal();
+    else closeSB();
+  } else if(e.key === 'Tab'){
+    const controls = [...surface.querySelectorAll('button, a[href], input, select, textarea, [tabindex="0"]')]
+      .filter(el=>!el.disabled && el.getClientRects().length);
+    const first = controls[0], last = controls[controls.length - 1];
+    if(e.shiftKey && (document.activeElement === first || !surface.contains(document.activeElement))){
+      e.preventDefault(); last?.focus();
+    } else if(!e.shiftKey && (document.activeElement === last || !surface.contains(document.activeElement))){
+      e.preventDefault(); first?.focus();
+    }
+  }
+}, true);
+
+function prepareResponsiveTables(root){
+  root.querySelectorAll('table.kv-table, table.cmp-table, table.comp-table').forEach(table=>{
+    if(table.parentElement.classList.contains('table-scroll')) return;
+    const wrapper = document.createElement('div');
+    wrapper.className = 'table-scroll';
+    wrapper.tabIndex = 0;
+    wrapper.setAttribute('role', 'region');
+    wrapper.setAttribute('aria-label', '資料表格，可左右捲動查看完整內容');
+    const hint = document.createElement('p');
+    hint.className = 'table-scroll-hint';
+    hint.textContent = '表格可左右捲動，查看完整內容';
+    table.before(hint, wrapper);
+    wrapper.append(table);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  prepareResponsiveTables(document.getElementById('page-home'));
+  syncInteractionState();
+});
 
 function startExam(mode){
   lastMode=mode;
@@ -3881,6 +4134,11 @@ function startExam(mode){
         :(mode==='sample')?Math.min(50,pool.length)
         :Math.min(cnt,pool.length);
   S.qs=pool.slice(0,n);S.ans=new Array(n).fill(null);S.cur=0;S.correct=0;
+  S.examActive=true;
+  S.isPaused=false;
+  document.getElementById('pause-mask').classList.remove('active');
+  document.getElementById('btn-timer-pause').textContent='⏸️ 暫停';
+  document.getElementById('eq-c').textContent='0';
   const timerOn = isTimerEnabled();
   if(timerOn){S.timeLeft=n*72;startTimer();}else{clearInterval(S.timer);document.getElementById('timer').textContent='∞';}
   gp('exam',document.querySelectorAll('.nav-item')[1]);
@@ -3925,7 +4183,7 @@ function renderQ(){
     if(ua!==null){if(i===q.ans)cls+=' ok';else if(i===ua&&i!==q.ans)cls+=' no';}
     else if(i===ua)cls+=' sel';
     const kbdBadge = S.shortcutsEnabled ? `<span class="kbd-badge">${keys[i]} · [${i+1}]</span>` : '';
-    html+=`<div class="${cls}" onclick="pick(${i})"><span class="opt-k">${keys[i]}</span><span style="flex:1">${escapeHtml(o)}</span>${kbdBadge}</div>`;
+    html+=`<button type="button" class="${cls}" onclick="pick(${i})" aria-pressed="${ua===i}" aria-disabled="${ua!==null}"><span class="opt-k">${keys[i]}</span><span style="flex:1">${escapeHtml(o)}</span>${kbdBadge}</button>`;
   });
   html+=`</div>`;
   if(ua!==null&&expOn)html+=`<div class="exp-box show"><strong>📌 解析：</strong>${q.exp}</div>`;
@@ -3934,10 +4192,12 @@ function renderQ(){
   document.getElementById('btn-prev').disabled=S.cur===0;
   document.getElementById('btn-next').textContent=S.cur===S.qs.length-1?'交卷 ✓':'下一題 →';
 }
-function pick(i){if(S.ans[S.cur]!==null)return;S.ans[S.cur]=i;if(i===S.qs[S.cur].ans){S.correct++;document.getElementById('eq-c').textContent=S.correct;}renderQ();}
+function pick(i){if(S.isPaused||S.ans[S.cur]!==null)return;S.ans[S.cur]=i;if(i===S.qs[S.cur].ans){S.correct++;document.getElementById('eq-c').textContent=S.correct;}renderQ();document.querySelectorAll('#qcon .opt')[i]?.focus({preventScroll:true});}
 function nextQ(){if(S.cur===S.qs.length-1)endExam();else{S.cur++;renderQ();}}
 function prevQ(){if(S.cur>0){S.cur--;renderQ();}}
 function endExam(){
+  if(!S.examActive)return;
+  S.examActive=false;
   clearInterval(S.timer);
   const n=S.qs.length;
   const correct=S.ans.filter((a,i)=>a===S.qs[i].ans).length;
@@ -4001,7 +4261,7 @@ function renderTopics(){
     const mockCnt=[...QB_MOCK,...QB_SAMPLE].filter(q=>q.topic===t.id).length;
     const total=cnt114+cnt115+mockCnt;
     if(!total)return '';
-    return `<div class="card" style="cursor:pointer;transition:border-color .18s;padding:18px" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'" onclick="startTopicExam('${t.id}')">
+    return `<button type="button" class="card topic-card" style="padding:18px" onclick="startTopicExam('${t.id}')">
       <div style="font-size:24px;margin-bottom:10px">${t.icon}</div>
       <div style="font-size:13.5px;font-weight:600;margin-bottom:8px;line-height:1.35;color:var(--text)">${t.name}</div>
       <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
@@ -4013,7 +4273,7 @@ function renderTopics(){
       <div style="font-size:11px;color:var(--text-muted);display:flex;justify-content:space-between;border-top:1px solid var(--border);padding-top:10px">
         <span>收錄 ${total} 題</span><span style="color:var(--accent);font-weight:600">進入練習 →</span>
       </div>
-    </div>`;
+    </button>`;
   }).filter(Boolean).join('');
   document.getElementById('topic-grid').innerHTML=html;
 }
@@ -4021,6 +4281,10 @@ function startTopicExam(tid){
   const pool=QB_ALL.filter(q=>q.topic===tid).sort(()=>Math.random()-.5);
   const cnt=parseInt(document.getElementById('set-cnt').value)||10;
   S.qs=pool.slice(0,Math.min(cnt,pool.length));S.ans=new Array(S.qs.length).fill(null);S.cur=0;S.correct=0;lastMode='topic_'+tid;
+  S.examActive=true;S.isPaused=false;
+  document.getElementById('pause-mask').classList.remove('active');
+  document.getElementById('btn-timer-pause').textContent='⏸️ 暫停';
+  document.getElementById('eq-c').textContent='0';
   const timerOn = isTimerEnabled();
   if(timerOn){S.timeLeft=S.qs.length*72;startTimer();}else{clearInterval(S.timer);document.getElementById('timer').textContent='∞';}
   gp('exam',document.querySelectorAll('.nav-item')[1]);
@@ -4064,7 +4328,7 @@ function renderTopicAnalysis(){
     'ai-concept':{name:'AI基礎概念',icon:'💡'},'data':{name:'資料基礎',icon:'🗄️'},'disc-ai':{name:'鑑別式AI',icon:'🎯'},
   };
   const allIds=[...new Set(QB_ALL.map(q=>q.topic))];
-  let html=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px">`;
+  let html=`<div class="topic-analysis-grid">`;
   allIds.forEach(tid=>{
     const off114=QB_114_ALL.filter(q=>q.topic===tid).length;
     const off115=QB_115_ALL.filter(q=>q.topic===tid).length;
@@ -5863,6 +6127,7 @@ function renderStudy(){
   const firstCh=document.getElementById('study-s115_3');
   if(firstBtn)firstBtn.classList.add('active');
   if(firstCh)firstCh.classList.add('active');
+  prepareResponsiveTables(con);
 }
 function switchTab(id,btn){
   document.querySelectorAll('.stab-btn').forEach(b=>b.classList.remove('active'));
@@ -5930,12 +6195,17 @@ function openFeedbackModal(defaultContext){
       unitInput.value=defaultContext||'全站 / 題目回饋';
     }
   }
+  feedbackReturnFocus = document.activeElement;
   modal.classList.add('active');
+  syncInteractionState();
+  modal.querySelector('.modal-close').focus({preventScroll:true});
 }
 
 function closeFeedbackModal(){
   const modal=document.getElementById('feedbackModal');
   if(modal)modal.classList.remove('active');
+  syncInteractionState();
+  feedbackReturnFocus?.focus({preventScroll:true});
 }
 
 function handleModalBackdrop(e){
@@ -6231,11 +6501,14 @@ function initKeyboardShortcuts(){
     // 若在輸入框、文字區塊中打字，不觸發快捷鍵
     const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : '';
     if(tag === 'input' || tag === 'textarea' || tag === 'select') return;
+    if(e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.target?.isContentEditable) return;
+    if(document.body.classList.contains('interaction-locked')) return;
 
     // 僅在測驗頁面且測驗進行中生效
     const examPage = document.getElementById('page-exam');
     if(!examPage || !examPage.classList.contains('active')) return;
-    if(!S.qs || S.qs.length === 0 || S.isPaused) return;
+    if(!S.examActive || !S.qs || S.qs.length === 0 || S.isPaused || !S.shortcutsEnabled) return;
+    if(tag === 'button' && (e.key === 'Enter' || e.key === ' ')) return;
 
     const key = e.key;
 
@@ -6272,7 +6545,7 @@ function toggleShortcuts(el){
 
 // ═══════ 新增功能：測驗計時器暫停與繼續 ═══════
 function toggleTimerPause(){
-  if(!S.qs || S.qs.length === 0) return;
+  if(!S.examActive || !S.qs || S.qs.length === 0) return;
   S.isPaused = !S.isPaused;
   const btn = document.getElementById('btn-timer-pause');
   const mask = document.getElementById('pause-mask');
@@ -6412,21 +6685,21 @@ if(document.readyState === 'loading'){
 </button>
 
 <!-- 免登入回饋彈窗 (Modal) -->
-<div class="modal-overlay" id="feedbackModal" onclick="handleModalBackdrop(event)">
+<div class="modal-overlay" id="feedbackModal" onclick="handleModalBackdrop(event)" role="dialog" aria-modal="true" aria-labelledby="feedbackModalTitle" aria-hidden="true" inert>
   <div class="modal-card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-      <h3 style="margin:0;font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;color:var(--text);">
+    <div class="feedback-modal-header">
+      <h3 id="feedbackModalTitle" style="margin:0;font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;color:var(--text);">
         💌 考生意見與疑義反饋
       </h3>
-      <button onclick="closeFeedbackModal()" style="background:none;border:none;font-size:16px;color:var(--text-muted);cursor:pointer;padding:4px 8px;">✕</button>
+      <button type="button" class="modal-close" onclick="closeFeedbackModal()" aria-label="關閉回饋表單">✕</button>
     </div>
     <p style="font-size:12px;color:var(--text-dim);margin-bottom:16px;line-height:1.6;">
       免登入直接填寫！無論是考題勘誤、答案疑義、功能許願或心得分享，皆非常歡迎！
     </p>
     <form id="modalFeedbackForm" onsubmit="handleFeedbackSubmit(event, 'modal')">
       <div class="fb-group">
-        <label>📌 反饋類型</label>
-        <select class="fb-select" id="modalFbType" required>
+        <label for="modalFbType">📌 反饋類型</label>
+        <select class="fb-select" id="modalFbType" name="feedback_type" required>
           <option value="💡 題目疑義與解答討論">💡 題目疑義與解答討論</option>
           <option value="🐛 系統錯誤與文字排版 (Bug)">🐛 系統錯誤與文字排版 (Bug)</option>
           <option value="✨ 題庫擴充與功能建議">✨ 題庫擴充與功能建議</option>
@@ -6435,19 +6708,19 @@ if(document.readyState === 'loading'){
         </select>
       </div>
       <div class="fb-group">
-        <label>📖 關聯考科或題號（選填）</label>
+        <label for="modalFbUnit">📖 關聯考科或題號（選填）</label>
         <input type="text" class="fb-input" id="modalFbUnit" name="feedback_unit" autocomplete="off" spellcheck="false" placeholder="例如：115-3 科目一 Q42、當前測驗題目…">
       </div>
       <div class="fb-group">
-        <label>👤 您的稱呼（選填）</label>
+        <label for="modalFbName">👤 您的稱呼（選填）</label>
         <input type="text" class="fb-input" id="modalFbName" name="feedback_name" autocomplete="name" spellcheck="false" placeholder="例如：熱心考生、台中王同學…">
       </div>
       <div class="fb-group">
-        <label>✉️ 聯絡 Email（選填，便於管理者回信）</label>
+        <label for="modalFbEmail">✉️ 聯絡 Email（選填，便於管理者回信）</label>
         <input type="email" class="fb-input" id="modalFbEmail" name="feedback_email" autocomplete="email" spellcheck="false" placeholder="your-email@example.com…">
       </div>
       <div class="fb-group">
-        <label>📝 詳細內容 <span style="color:var(--warn)">*</span></label>
+        <label for="modalFbContent">📝 詳細內容 <span style="color:var(--warn)">*</span></label>
         <textarea class="fb-textarea" id="modalFbContent" name="feedback_content" rows="4" spellcheck="false" placeholder="請詳細描述您的想法或遇到的狀況…" required></textarea>
       </div>
       <div class="fb-actions">
@@ -6461,7 +6734,7 @@ if(document.readyState === 'loading'){
 
 
 <!-- 現代自訂全域通用彈窗 (Alert / Confirm) -->
-<div class="app-dialog-overlay" id="appDialogOverlay" onclick="handleDialogBackdrop(event)" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
+<div class="app-dialog-overlay" id="appDialogOverlay" onclick="handleDialogBackdrop(event)" role="dialog" aria-modal="true" aria-labelledby="dialogTitle" aria-hidden="true" inert>
   <div class="app-dialog-card" id="appDialogCard">
     <div class="dialog-icon-wrap" id="dialogIconWrap">
       <span id="dialogIcon">ℹ️</span>

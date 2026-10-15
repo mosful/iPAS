@@ -56,6 +56,34 @@
 
 ---
 
+## 📱 響應式版面與回歸測試
+
+- 手機：頁首分列排列，卡片依可用寬度縮放，輸入欄位維持 16px 字級，避免輸入時自動放大。
+- 平板：視窗寬度 1024px 以下使用抽屜導覽，保留閱讀與作答空間；旋轉或調整視窗時同步重設選單狀態。
+- 電腦：保留固定側邊欄與多欄卡片。寬表格在自己的區塊內橫向捲動，不會撐開整個頁面。
+- 回饋與確認彈窗限制在可視範圍內，內容可捲動，支援 Tab 焦點循環及 Esc 關閉。
+- PWA 頁面在連線時優先取得新版，離線時使用快取題庫。
+
+瀏覽器回歸測試使用 Node.js 20 以上版本與 Playwright，網站執行本身不需要 Node.js 或其他套件：
+
+```powershell
+npm ci
+npx playwright install chromium webkit
+npm test
+```
+
+預設使用 Chromium。若要同時驗證 WebKit，或使用電腦已安裝的 Edge／Chrome：
+
+```powershell
+$env:IPAS_TEST_BROWSERS = 'chromium,webkit'
+npm test
+
+$env:IPAS_TEST_BROWSERS = 'msedge,chrome,webkit'
+npm test
+```
+
+測試涵蓋 320–1920px 共 12 組尺寸（含手機橫向）、深淺色、所有主要頁面、14 個考點章節，以及導覽、搜尋、收藏、答題、暫停、錯題、彈窗、鍵盤與離線流程。手機、平板與電腦的預覽截圖存放於 `test-results/`。測試使用獨立瀏覽器資料，不會送出回饋或變更外部服務。
+
 ## 🚀 部署說明
 
 本專案採用 **GitHub Pages** 搭配 **GitHub Actions** 自動化 CI/CD：

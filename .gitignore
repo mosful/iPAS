@@ -33,3 +33,7 @@ Document/
 .idea/
 .DS_Store
 Thumbs.db
+
+# 瀏覽器回歸測試
+node_modules/
+test-results/
