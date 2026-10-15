@@ -21,7 +21,7 @@ before(async () => {
       let body = await fs.readFile(file);
       const ext = path.extname(file);
       if (ext === '.html') body = Buffer.from(body.toString().replace('<html lang=', `<html data-test-revision="${revision}" lang=`));
-      res.setHeader('Content-Type', ({ '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.json': 'application/json' })[ext] || 'application/octet-stream');
+      res.setHeader('Content-Type', ({ '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.png': 'image/png', '.svg': 'image/svg+xml', '.json': 'application/json' })[ext] || 'application/octet-stream');
       res.end(body);
     } catch { res.writeHead(404); res.end(); }
   });
@@ -96,10 +96,13 @@ for (const browserName of browserNames) {
               await checkLayout(page, `${id} / ${theme} / ${width}`);
               if (id === 'study') {
                 for (const button of await page.locator('.stab-btn').all()) {
-                  await button.click();
+                  if (await button.isVisible()) await button.click();
+                  else await page.locator('#study-chapter-select').selectOption(await button.getAttribute('data-study-id'));
                   await checkLayout(page, `${await button.textContent()} / ${width}`);
                 }
-                await page.locator('.stab-btn').first().click();
+                const firstStudyButton = page.locator('.stab-btn').first();
+                if (await firstStudyButton.isVisible()) await firstStudyButton.click();
+                else await page.locator('#study-chapter-select').selectOption(await firstStudyButton.getAttribute('data-study-id'));
               }
               if (id === 'home' && theme === 'dark') await snapshot(page, 'home', width, browserName);
               if (id === 'study' && theme === 'light') await snapshot(page, 'study-light', width, browserName);
@@ -117,6 +120,15 @@ for (const browserName of browserNames) {
         const { context, page, errors } = await openPage(browsers.get(browserName), width, height);
         try {
           await navigate(page, 'home');
+          const doneBeforeSample = await page.evaluate(() => S.totalDone);
+          await page.locator('.sample-option').first().click();
+          assert.ok((await page.locator('#sample-feedback').textContent()).includes('不會計入練習紀錄'));
+          assert.equal(await page.evaluate(() => S.totalDone), doneBeforeSample);
+          await page.locator('#bank-tab-other').click();
+          assert.equal(await page.locator('#bank-other .qb-exam-card').count(), 2);
+          await page.keyboard.press('ArrowLeft');
+          assert.equal(await page.locator('#bank-tab-all').getAttribute('aria-selected'), 'true');
+          await page.locator('#bank-tab-latest').click();
           const faq = page.locator('details.faq-item').first();
           assert.equal(await faq.locator('.faq-a').isVisible(), true);
           await faq.locator('summary').click();
@@ -126,7 +138,7 @@ for (const browserName of browserNames) {
           await page.waitForFunction(() => Number(document.querySelector('#search-result-count').textContent) > 0 && document.querySelector('.search-mark'));
           await page.locator('.star-btn').first().click();
           assert.equal(await page.locator('.star-btn').first().evaluate(el => el.classList.contains('active')), true);
-          await page.getByRole('button', { name: '⭐ 我的收藏', exact: true }).click();
+          await page.getByRole('button', { name: '我的收藏', exact: true }).click();
           assert.equal(await page.locator('#search-result-count').textContent(), '1');
           await checkLayout(page, '搜尋與收藏');
 
@@ -144,7 +156,7 @@ for (const browserName of browserNames) {
           await page.locator('#btn-prev').click();
           await page.locator('#btn-timer-pause').click();
           assert.equal(await page.locator('#pause-mask').isVisible(), true);
-          await page.getByRole('button', { name: '▶️ 繼續作答', exact: true }).click();
+          await page.getByRole('button', { name: '繼續作答', exact: true }).click();
           assert.equal(await page.locator('#pause-mask').isVisible(), false);
           await checkLayout(page, '作答與暫停');
           await snapshot(page, 'exam', width, browserName);
@@ -233,7 +245,7 @@ test('PWA：連線時取得新版頁面，離線仍能開啟題庫', async () =>
   const { context, page, errors } = await openPage(chromiumBrowser, 390, 844, 'allow');
   try {
     await page.waitForFunction(() => !!navigator.serviceWorker.controller);
-    assert.ok(await page.evaluate(() => caches.has('ipas-cache-v2')));
+    assert.ok(await page.evaluate(() => caches.has('ipas-cache-v3')));
     revision = 2;
     await page.reload({ waitUntil: 'load' });
     assert.equal(await page.locator('html').getAttribute('data-test-revision'), '2');

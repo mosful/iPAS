@@ -1,9 +1,15 @@
 // iPAS 智慧練習系統 Service Worker
-const CACHE_NAME = 'ipas-cache-v2';
+const CACHE_NAME = 'ipas-cache-v3';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './manifest.json'
+  './manifest.json',
+  './styles.css',
+  './design.js',
+  './assets/search-preview.png',
+  './assets/study-preview.png',
+  './assets/exam-preview.png',
+  './assets/review-preview.png'
 ];
 
 self.addEventListener('install', (event) => {
